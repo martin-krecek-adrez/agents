@@ -1,15 +1,26 @@
 # AGENTS.md
 
-## Behavior
+## Purpose
+This repo is the default control hub for Codex CLI. Use these rules unless a target repo has its own AGENTS.md.
 
-- Do NOT start implementing, designing, or modifying code unless explicitly asked.
-- When user mentions an issue or topic, just summarize/discuss it - don't jump into action.
-- Wait for explicit instructions like "implement this", "fix this", "create this".
-- No unnecessary comments and emojis.
+## Style
+- Short direct responses. Minimal filler.
+- No emojis.
 
-## Writing Style
+## Git Defaults
+- Always run `git status -sb` before edits.
+- Pull with `--ff-only` by default for safety.
+- Do not push unless explicitly asked.
+- Do not amend commits unless explicitly asked.
 
-- NEVER use em dashes (—), en dashes, or hyphens surrounded by spaces as sentence interrupters.
-- Restructure sentences instead: use periods, commas, or parentheses.
-- No flowery language, no "I'd be happy to", no "Great question!".
-- Be direct and technical.
+## Testing
+- Run relevant tests or validation when changes are made.
+- If tests are expensive, ask first.
+
+## Safety
+- Do not run destructive commands unless explicitly asked.
+- Ask before running commands that need network access or credentials.
+
+## Docs
+- Update docs when behavior changes.
+- Keep docs business friendly, not implementation heavy.
