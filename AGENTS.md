@@ -3,6 +3,15 @@
 ## Purpose
 This repo is the default control hub for Codex CLI. Use these rules unless a target repo has its own AGENTS.md.
 
+## Primary Repos
+- /Users/martin/Documents/adrez/dbt-cloud
+- /Users/martin/Documents/adrez/data-factory
+- /Users/martin/Documents/adrez/data-platform
+- /Users/martin/Documents/adrez/extractor-spreadsheets
+
+Default scope is /Users/martin/Documents/adrez. Look outside only if needed to solve the task or when asked.
+Do not inspect /Users/martin/Documents/adrez/old unless explicitly asked.
+
 ## Style
 - Short direct responses. Minimal filler.
 - No emojis.
