@@ -57,7 +57,11 @@ Use these skills when intent clearly matches:
 
 ## Task Memory
 - Track execution status in Asana.
-- Keep durable technical context in repo task notes (for example `docs/tasks/` where available).
+- Default note split:
+  - Repo-local `docs/tasks/`: task execution notes, WIP analysis, temporary investigation context.
+  - `/Users/martin/Documents/adrez/docs/`: durable cross-repo documentation.
+- Promote notes to `/Users/martin/Documents/adrez/docs/` only when they describe current operational/business state that should be reused across tasks (for example "how we currently operate parking reservations/revenue", city tax policy, reconciliation operating rules).
+- Keep modeling-only implementation notes (SQL-level mechanics tied to one repo) in that repo unless they are broadly reusable.
 - Suggested task note naming: `YYYY-MM-DD-short-task-name.md`.
 - Cross-link Asana <-> task note <-> changed model/code paths.
 
