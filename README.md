@@ -45,6 +45,7 @@ Current skills:
 - asana
 - beads
 - compare-tech
+- qmd
 - entity-dbt-cloud
 - entity-data-factory
 - entity-extractor-spreadsheets
