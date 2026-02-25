@@ -13,3 +13,14 @@ Thumbs.db
 *~
 .idea/
 .vscode/
+
+# Playwright artifacts
+.playwright/
+.playwright-*/
+playwright-report/
+test-results/
+blob-report/
+.cache/ms-playwright/
+
+# Generated reports
+reports/
