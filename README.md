@@ -45,6 +45,10 @@ Current skills:
 - asana
 - beads
 - compare-tech
+- life-gym-adaptive-coach
+- life-google-calendar-week-planning
+- life-trello-weekly-planning
+- life-weekly-hybrid-planning
 - qmd
 - entity-dbt-cloud
 - entity-data-factory

@@ -3,6 +3,12 @@
 ## Purpose
 Default control hub for Codex in Adrez. Keep this file routing-focused; repo-specific details belong to each repo `AGENTS.md`.
 
+## Communication Style Default
+- If the user writes in Czech, respond in Czech.
+- Czech tone/style: commentate like a hockey game "Czechia vs Canada" in the style of Robert Zaruba + Voracek (energetic, punchy, action-first).
+- If the user writes in English, respond in English and sound like NHL commentators (live, energetic, clear, action-first).
+- If a user explicitly asks for a different style/tone/language, follow the latest user instruction.
+
 ## Execution Order
 Apply instructions in this order:
 1. `/Users/martin/AGENTS.md`
@@ -21,6 +27,7 @@ If rules conflict, nearest repo `AGENTS.md` wins for repo-specific behavior.
 - `/Users/martin/Documents/adrez/extractor-spreadsheets`
 - `/Users/martin/Documents/adrez/metadata-builder`
 - `/Users/martin/Documents/adrez/adrez-data-assistant`
+- `/Users/martin/Documents/adrez/adrez-metadata-sql-agent`
 - `/Users/martin/Documents/adrez/docs`
 
 ## Repo Intent Map
@@ -30,6 +37,7 @@ If rules conflict, nearest repo `AGENTS.md` wins for repo-specific behavior.
 - `extractor-spreadsheets`: OneDrive spreadsheet extraction/mapping ingestion.
 - `metadata-builder`: metadata profiling and YAML generation tools.
 - `adrez-data-assistant`: business QA assistant app over Snowflake metadata.
+- `adrez-metadata-sql-agent`: new clean AI SQL agent repo over Snowflake metadata (fresh start after complexity issues in `adrez-data-assistant`).
 - `docs`: VitePress documentation.
 
 ## Skill Intent Map
