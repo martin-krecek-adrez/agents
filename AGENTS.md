@@ -26,19 +26,27 @@ If rules conflict, nearest repo `AGENTS.md` wins for repo-specific behavior.
 - `/Users/martin/Documents/adrez/data-platform`
 - `/Users/martin/Documents/adrez/extractor-spreadsheets`
 - `/Users/martin/Documents/adrez/metadata-builder`
+- `/Users/martin/Documents/adrez/avalanche-mcp`
+- `/Users/martin/Documents/adrez/powerbi`
+- `/Users/martin/Documents/adrez/docs`
+
+## Legacy Repos
 - `/Users/martin/Documents/adrez/adrez-data-assistant`
 - `/Users/martin/Documents/adrez/adrez-metadata-sql-agent`
-- `/Users/martin/Documents/adrez/docs`
 
 ## Repo Intent Map
 - `dbt-cloud`: dbt models, tests, docs, Snowflake analytics debugging.
 - `data-factory`: ingestion/orchestration and external-table/load config.
 - `data-platform`: shared Snowflake/Terraform/platform tooling.
 - `extractor-spreadsheets`: OneDrive spreadsheet extraction/mapping ingestion.
-- `metadata-builder`: metadata profiling and YAML generation tools.
-- `adrez-data-assistant`: business QA assistant app over Snowflake metadata.
-- `adrez-metadata-sql-agent`: new clean AI SQL agent repo over Snowflake metadata (fresh start after complexity issues in `adrez-data-assistant`).
+- `metadata-builder`: metadata contract build/export for Avalanche catalog and related eval assets.
+- `avalanche-mcp`: active MCP analytics platform and current agent-facing orchestration surface.
+- `powerbi`: Power BI / Fabric semantic models, reports, and deployment validation.
 - `docs`: VitePress documentation.
+
+## Legacy Repo Intent Map
+- `adrez-data-assistant`: legacy prototype repo; no new feature work unless explicitly requested.
+- `adrez-metadata-sql-agent`: legacy SQL-agent repo; no new feature work unless explicitly requested.
 
 ## Skill Intent Map
 Use these skills when intent clearly matches:
@@ -46,11 +54,12 @@ Use these skills when intent clearly matches:
 - `asana`: update/comment in Asana tasks.
 - `write-commit`: prepare commit message from actual diff.
 - `write-docs`: write/update docs.
+- `qmd`: cross-repo retrieval over docs and notes before analysis or answer generation.
 - `compare-tech`: compare tool options.
-- `beads`: persistent multi-session task memory.
 - `entity-extractor-spreadsheets`: add/update spreadsheet/mapping entities in extractor-spreadsheets.
 - `entity-data-factory`: add/update external-table entities/configs in data-factory.
 - `entity-dbt-cloud`: add/update dbt entities/models (default `l1_raw` first).
+- `avalanche-metadata-update`: rebuild/export Avalanche metadata bundle and sync catalog artifacts.
 - `snowflake-analysis-playbook` (in progress): structured mode-based Snowflake analysis with mandatory scope clarification for broad asks.
 
 ## Snowflake Defaults
@@ -61,6 +70,8 @@ Use these skills when intent clearly matches:
 ## Routing Rules
 - Decide target repo + skill before editing.
 - If user says "check dbt", default to `/Users/martin/Documents/adrez/dbt-cloud`.
+- If user asks about Avalanche MCP, MCP analytics flow, or current agent behavior, default to `/Users/martin/Documents/adrez/avalanche-mcp`.
+- If user asks to rebuild metadata/catalog for Avalanche, default to `/Users/martin/Documents/adrez/metadata-builder`.
 - If ambiguous across repos, ask one short clarifying question.
 
 ## Task Memory

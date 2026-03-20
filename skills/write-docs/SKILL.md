@@ -7,6 +7,11 @@ description: Write AI-scannable technical documentation.
 
 Documentation that is scannable, consistent, and actionable for AI agents.
 
+## Override Rule
+
+- If the current repo or subfolder has a local `AGENTS.md` for documentation, follow that file first.
+- Use this skill as the generic fallback only when no repo-local docs rules are more specific.
+
 ## Structure
 
 - Max 150 lines per file, one concept per file

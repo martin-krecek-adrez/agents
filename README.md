@@ -6,11 +6,10 @@ Configuration for Codex CLI usage.
 
 ### [Codex](https://developers.openai.com/codex)
 
-Copy skills (Codex [ignores symlinked directories](https://developers.openai.com/codex/skills/create-skill#skill-doesnt-appear))
+Sync the managed setup:
 
 ```bash
-ln -sf {baseDir}/AGENTS.md ~/.codex/AGENTS.md
-cp -r {baseDir}/skills/ ~/.codex/skills/
+bash /Users/martin/Documents/adrez/agents/scripts/sync_codex_setup.sh
 ```
 
 See [Skills](https://developers.openai.com/codex/skills) and [AGENTS.md](https://developers.openai.com/codex/guides/agents-md) for details.
@@ -25,35 +24,42 @@ Main routing is defined in `AGENTS.md`.
   - `data-factory` for ingestion/orchestration pipelines
   - `data-platform` for shared platform/data tooling
   - `extractor-spreadsheets` for spreadsheet extractors/mappings
+  - `avalanche-mcp` for current MCP analytics / agent work
+  - `metadata-builder` for Avalanche metadata/catalog build
+  - `powerbi` for Power BI / Fabric work
+- Legacy repos:
+  - `adrez-data-assistant`
+  - `adrez-metadata-sql-agent`
 - Skill routing highlights:
   - Snowflake-related requests -> `snowcli`
   - Asana updates/comments -> `asana`
   - Commit message drafting -> `write-commit`
   - Documentation requests -> `write-docs`
   - Tech comparisons -> `compare-tech`
-  - Multi-session memory workflows -> `beads`
   - Add/update spreadsheet entity -> `entity-extractor-spreadsheets`
   - Add/update external-table entity -> `entity-data-factory`
   - Add/update dbt entity/model -> `entity-dbt-cloud`
+  - Rebuild/export Avalanche metadata -> `avalanche-metadata-update`
   - Broad Snowflake investigations -> `snowflake-analysis-playbook` (in progress)
 
 ## Skills
 
-This repo keeps a focused set of skills.
+Business skills live in:
+- `/Users/martin/Documents/adrez/agents/skills`
 
-Current skills:
+Personal skills live in:
+- `/Users/martin/Documents/live/agent/skills`
+
+Use `scripts/sync_codex_setup.sh` to sync both sets into `~/.codex/skills`.
+
+Current business skills:
 - asana
-- beads
 - compare-tech
-- life-gym-adaptive-coach
-- life-google-calendar-week-planning
-- life-trello-weekly-planning
-- life-weekly-hybrid-planning
 - qmd
+- avalanche-metadata-update
 - entity-dbt-cloud
 - entity-data-factory
 - entity-extractor-spreadsheets
-- rohlik-grocery
 - snowflake-analysis-playbook
 - snowcli
 - write-commit

@@ -20,6 +20,9 @@ Use `rg` for exact string or path matching. Use `qmd` for semantic/hybrid retrie
 
 - Workspace root: `/Users/martin/Documents/adrez`
 - Never index `/Users/martin/Documents/adrez/old` unless explicitly asked.
+- Exclude legacy agent repos from default retrieval:
+  - `/Users/martin/Documents/adrez/adrez-data-assistant`
+  - `/Users/martin/Documents/adrez/adrez-metadata-sql-agent`
 - Prefer indexing:
   - `/Users/martin/Documents/adrez/docs`
   - repo-local `docs/`
@@ -51,7 +54,6 @@ qmd --index adrez collection add /Users/martin/Documents/adrez/data-factory/docs
 qmd --index adrez collection add /Users/martin/Documents/adrez/data-platform/docs --name dp_docs --mask "**/*.md"
 qmd --index adrez collection add /Users/martin/Documents/adrez/extractor-spreadsheets/docs --name es_docs --mask "**/*.md"
 qmd --index adrez collection add /Users/martin/Documents/adrez/metadata-builder/docs --name mb_docs --mask "**/*.md"
-qmd --index adrez collection add /Users/martin/Documents/adrez/adrez-data-assistant/docs --name ada_docs --mask "**/*.md"
 ```
 
 Optional context labels:
