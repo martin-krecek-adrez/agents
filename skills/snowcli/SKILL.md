@@ -1,6 +1,10 @@
 ---
 name: snowcli
 description: CLI for Snowflake. Query data, manage warehouses, databases, schemas, tables, and stages. Use when working with Snowflake data platform.
+scope: business
+status: active
+owner: martin
+last_reviewed: 2026-03-26
 compatibility: Requires snow CLI (docs.snowflake.com/en/developer-guide/snowflake-cli). Needs ~/.snowflake/config.toml with connection config.
 ---
 

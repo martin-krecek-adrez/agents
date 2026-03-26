@@ -1,6 +1,10 @@
 ---
 name: avalanche-metadata-update
 description: Rebuild, validate, export, and sync metadata-builder outputs for Avalanche MCP catalog and local metadata files.
+scope: business
+status: active
+owner: martin
+last_reviewed: 2026-03-26
 compatibility: Requires /Users/martin/Documents/adrez/metadata-builder and optionally /Users/martin/Documents/adrez/avalanche-mcp.
 ---
 

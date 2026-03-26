@@ -1,6 +1,6 @@
 # Agent Configuration
 
-Configuration for Codex CLI usage.
+Configuration for Codex/Codex CLI usage in the Adrez workspace.
 
 ## Setup
 
@@ -12,6 +12,18 @@ Sync the managed setup:
 bash /Users/martin/Documents/adrez/agents/scripts/sync_codex_setup.sh
 ```
 
+Refresh the managed QMD index:
+
+```bash
+bash /Users/martin/Documents/adrez/agents/scripts/qmd_refresh.sh
+```
+
+Run setup checks:
+
+```bash
+bash /Users/martin/Documents/adrez/agents/scripts/check_ai_setup.sh
+```
+
 See [Skills](https://developers.openai.com/codex/skills) and [AGENTS.md](https://developers.openai.com/codex/guides/agents-md) for details.
 
 ## Routing Summary
@@ -21,9 +33,9 @@ Main routing is defined in `AGENTS.md`.
 - Default workspace scope: `/Users/martin/Documents/adrez`
 - Default repo routing:
   - `dbt-cloud` for dbt models/finance/Snowflake analytics work
-  - `data-factory` for ingestion/orchestration pipelines
+  - `extractor-spreadsheets` first for new OneDrive/SharePoint spreadsheets and mapping sheets
+  - `data-factory` for already-landed ADLS sources and external-table exposure
   - `data-platform` for shared platform/data tooling
-  - `extractor-spreadsheets` for spreadsheet extractors/mappings
   - `avalanche-mcp` for current MCP analytics / agent work
   - `metadata-builder` for Avalanche metadata/catalog build
   - `powerbi` for Power BI / Fabric work
@@ -36,11 +48,12 @@ Main routing is defined in `AGENTS.md`.
   - Commit message drafting -> `write-commit`
   - Documentation requests -> `write-docs`
   - Tech comparisons -> `compare-tech`
+  - End-to-end spreadsheet onboarding -> `entity-spreadsheet-ingestion`
   - Add/update spreadsheet entity -> `entity-extractor-spreadsheets`
   - Add/update external-table entity -> `entity-data-factory`
   - Add/update dbt entity/model -> `entity-dbt-cloud`
+  - New Power BI report/model scaffold -> `powerbi-report-starter`
   - Rebuild/export Avalanche metadata -> `avalanche-metadata-update`
-  - Broad Snowflake investigations -> `snowflake-analysis-playbook` (in progress)
 
 ## Skills
 
@@ -60,7 +73,8 @@ Current business skills:
 - entity-dbt-cloud
 - entity-data-factory
 - entity-extractor-spreadsheets
-- snowflake-analysis-playbook
+- entity-spreadsheet-ingestion
+- powerbi-report-starter
 - snowcli
 - write-commit
 - write-docs

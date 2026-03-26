@@ -27,3 +27,4 @@ Keep this folder business-only.
 ## Promotion Rule
 - Keep repo-specific procedures in repo-local `AGENTS.md` until the workflow is stable and reused.
 - Promote to a shared skill only when the procedure is repeated across tasks and benefits from reuse.
+- For repeated multi-repo flows, prefer one orchestration skill plus smaller repo-specific skills for single-hop work.

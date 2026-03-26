@@ -1,0 +1,4 @@
+interface:
+  display_name: "QMD Retrieval"
+  short_description: "Search Adrez docs and notes semantically"
+  default_prompt: "Use $qmd to search Adrez docs and notes before answering."

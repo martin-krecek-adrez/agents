@@ -1,6 +1,10 @@
 ---
 name: entity-dbt-cloud
 description: Add a new dbt entity/model entry point in dbt-cloud (usually l1_raw first), docs/tests, and selector-based validation.
+scope: business
+status: active
+owner: martin
+last_reviewed: 2026-03-26
 compatibility: Requires /Users/martin/Documents/adrez/dbt-cloud and dbt environment access.
 ---
 
@@ -35,4 +39,3 @@ dbt build --select <model_name>
 - Model added in correct layer/path.
 - Schema docs/tests updated.
 - Selector validation run or documented blocker.
-

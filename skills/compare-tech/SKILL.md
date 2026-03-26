@@ -1,6 +1,10 @@
 ---
 name: compare-tech
 description: Compare technologies with weighted scoring matrix. Use when evaluating libraries, frameworks, SaaS products, or infrastructure options.
+scope: business
+status: active
+owner: martin
+last_reviewed: 2026-03-26
 ---
 
 # Compare Technologies

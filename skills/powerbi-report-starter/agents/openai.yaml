@@ -1,0 +1,4 @@
+interface:
+  display_name: "Power BI Report Starter"
+  short_description: "Scaffold a new Power BI report and model"
+  default_prompt: "Use $powerbi-report-starter to scaffold a new Power BI report and semantic model."

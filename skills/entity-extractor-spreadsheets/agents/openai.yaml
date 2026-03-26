@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spreadsheet Extractor"
+  short_description: "Land OneDrive spreadsheets into ADLS"
+  default_prompt: "Use $entity-extractor-spreadsheets to add a new OneDrive spreadsheet source to the extractor."

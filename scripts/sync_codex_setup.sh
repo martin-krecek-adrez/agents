@@ -36,7 +36,9 @@ copy_skill_dir "${PERSONAL_SKILLS_DIR}"
 
 declare -a previous_managed=()
 if [ -f "${MANIFEST_PATH}" ]; then
-  mapfile -t previous_managed < "${MANIFEST_PATH}"
+  while IFS= read -r skill_name; do
+    previous_managed+=("${skill_name}")
+  done < "${MANIFEST_PATH}"
 fi
 
 contains_skill() {

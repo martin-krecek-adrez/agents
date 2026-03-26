@@ -1,6 +1,10 @@
 ---
 name: qmd
 description: Local semantic and hybrid search over docs and notes using tobi/qmd. Use for cross-repo retrieval before analysis or answer generation.
+scope: business
+status: active
+owner: martin
+last_reviewed: 2026-03-26
 compatibility: Requires qmd CLI installed (bun install -g github:tobi/qmd) and sqlite available.
 ---
 
@@ -30,19 +34,25 @@ Use `rg` for exact string or path matching. Use `qmd` for semantic/hybrid retrie
 
 ## Standard Flow
 
-1. Query:
+1. Refresh the managed index when results may be stale or after meaningful docs changes:
+
+```bash
+bash /Users/martin/Documents/adrez/agents/scripts/qmd_refresh.sh
+```
+
+2. Query:
 
 ```bash
 qmd --index adrez query "what is revenue for finance team" --json -n 8
 ```
 
-2. Open top hits:
+3. Open top hits:
 
 ```bash
 qmd --index adrez get "<docid>" --full
 ```
 
-3. Build answer from the retrieved documents and cite source paths.
+4. Build answer from the retrieved documents and cite source paths.
 
 ## Collection Setup
 
@@ -67,12 +77,10 @@ qmd --index adrez context add qmd://df_docs "Ingestion and orchestration documen
 ## Maintenance
 
 ```bash
-qmd --index adrez update
-qmd --index adrez embed
+bash /Users/martin/Documents/adrez/agents/scripts/qmd_refresh.sh
 ```
 
-- Run `update` after content changes.
-- Run `embed` after major changes to improve semantic retrieval quality.
+- The refresh script keeps managed collections aligned with the workspace, removes legacy collection drift, runs `qmd update`, and refreshes embeddings.
 
 ## Notes
 

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Data Factory Entity"
+  short_description: "Expose landed ADLS files in Snowflake"
+  default_prompt: "Use $entity-data-factory to add a landed ADLS source to data-factory."

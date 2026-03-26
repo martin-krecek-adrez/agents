@@ -1,0 +1,4 @@
+interface:
+  display_name: "Avalanche Metadata"
+  short_description: "Refresh Avalanche catalog and metadata bundle"
+  default_prompt: "Use $avalanche-metadata-update to rebuild and sync Avalanche metadata artifacts."

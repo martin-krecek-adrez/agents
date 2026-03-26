@@ -1,6 +1,10 @@
 ---
 name: asana
 description: Manage Asana tasks from Codex (read hierarchy, create/update tasks and subtasks, and post concise status comments).
+scope: business
+status: active
+owner: martin
+last_reviewed: 2026-03-26
 ---
 
 # Asana Task Skill

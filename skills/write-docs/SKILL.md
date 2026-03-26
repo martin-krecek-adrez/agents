@@ -1,6 +1,10 @@
 ---
 name: write-docs
 description: Write AI-scannable technical documentation.
+scope: business
+status: active
+owner: martin
+last_reviewed: 2026-03-26
 ---
 
 # Write Documentation

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Spreadsheet Ingestion"
+  short_description: "Onboard spreadsheet sources end to end"
+  default_prompt: "Use $entity-spreadsheet-ingestion to add a new spreadsheet source from OneDrive into ADLS and Snowflake."

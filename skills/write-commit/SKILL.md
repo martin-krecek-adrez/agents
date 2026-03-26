@@ -1,6 +1,10 @@
 ---
 name: write-commit
 description: Write well-structured commit messages.
+scope: business
+status: active
+owner: martin
+last_reviewed: 2026-03-26
 ---
 
 # Write Commit
