@@ -52,8 +52,9 @@ Use these skills when intent clearly matches:
 - `asana`: update/comment in Asana tasks.
 - `write-commit`: prepare commit message from actual diff.
 - `write-docs`: write/update docs.
-- `qmd`: cross-repo retrieval over docs and notes before analysis or answer generation.
 - `compare-tech`: compare tool options.
+- `ai-context-maintenance`: audit AGENTS.md, shared skills, task notes, and durable docs routing.
+- `repo-pr-handoff`: prepare clean commits, PR summaries, validation handoffs, and Asana updates.
 - `entity-spreadsheet-ingestion`: end-to-end onboarding of a new OneDrive/SharePoint spreadsheet source across extractor-spreadsheets and data-factory.
 - `entity-extractor-spreadsheets`: add/update spreadsheet/mapping entities in extractor-spreadsheets.
 - `entity-data-factory`: add/update external-table entities/configs in data-factory for already-landed ADLS files or downstream spreadsheet exposure.
@@ -98,8 +99,17 @@ Use these skills when intent clearly matches:
 ## Git Defaults
 - Run `git status -sb` before edits.
 - Pull with `--ff-only` by default.
+- Use `repo-pr-handoff` for non-trivial branch/PR handoffs, especially model logic, ingestion, Terraform/platform, CI/deploy, or shared AI context changes.
+- Do not force branch/PR workflow for tiny typo/docs-only edits unless the user asks.
 - Do not push unless explicitly asked.
 - Do not amend commits unless explicitly asked.
+
+## GitHub Actions Defaults
+- `gh` is the default tool for GitHub Actions inspection across Adrez repos.
+- After any user-requested push to a branch with CI, check the latest run with `gh run list --branch <branch> --limit 5`.
+- Open the failing run with `gh run view <run-id> --json jobs` and `gh run view <run-id> --log` before guessing at root cause.
+- When the user expects CI confirmation, wait for completion with `gh run watch <run-id>` (or poll `gh run view <run-id>`) and report the final result.
+- Prefer repo-local workflow files under `.github/workflows/` only as supporting context; use run logs as the source of truth for the actual failure.
 
 ## Safety
 - Do not run destructive commands unless explicitly asked.

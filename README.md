@@ -12,12 +12,6 @@ Sync the managed setup:
 bash /Users/martin/Documents/adrez/agents/scripts/sync_codex_setup.sh
 ```
 
-Refresh the managed QMD index:
-
-```bash
-bash /Users/martin/Documents/adrez/agents/scripts/qmd_refresh.sh
-```
-
 Run setup checks:
 
 ```bash
@@ -67,14 +61,15 @@ Use `scripts/sync_codex_setup.sh` to sync both sets into `~/.codex/skills`.
 
 Current business skills:
 - asana
+- ai-context-maintenance
 - compare-tech
-- qmd
 - avalanche-metadata-update
 - entity-dbt-cloud
 - entity-data-factory
 - entity-extractor-spreadsheets
 - entity-spreadsheet-ingestion
 - powerbi-report-starter
+- repo-pr-handoff
 - snowcli
 - write-commit
 - write-docs

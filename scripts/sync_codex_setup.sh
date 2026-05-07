@@ -12,6 +12,9 @@ mkdir -p "${TARGET_SKILLS_DIR}"
 ln -sfn "${ADREZ_AGENTS_MD}" "${CODEX_HOME}/AGENTS.md"
 
 declare -a current_managed=()
+declare -a retired_skills=(
+  "qmd"
+)
 
 copy_skill_dir() {
   local source_root="$1"
@@ -60,6 +63,12 @@ if [ ${#previous_managed[@]} -gt 0 ]; then
     fi
   done
 fi
+
+for skill_name in "${retired_skills[@]}"; do
+  if ! contains_skill "${skill_name}" "${current_managed[@]}"; then
+    rm -rf "${TARGET_SKILLS_DIR}/${skill_name}"
+  fi
+done
 
 printf "%s\n" "${current_managed[@]}" | LC_ALL=C sort -u > "${MANIFEST_PATH}"
 

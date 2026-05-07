@@ -2,9 +2,15 @@
 set -euo pipefail
 
 failures=0
+warnings=0
 
 ok() {
   echo "[OK] $1"
+}
+
+warn() {
+  echo "[WARN] $1" >&2
+  warnings=$((warnings + 1))
 }
 
 fail() {
@@ -17,6 +23,9 @@ AGENTS_REPO="/Users/martin/Documents/adrez/agents"
 SKILLS_DIR="${AGENTS_REPO}/skills"
 README_PATH="${AGENTS_REPO}/README.md"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+MAX_AGENTS_WARN_BYTES=8000
+MAX_AGENTS_FAIL_BYTES=12000
+MAX_SKILL_REVIEW_AGE_DAYS=90
 
 if [ -L "${CODEX_HOME}/AGENTS.md" ] && [ "$(readlink "${CODEX_HOME}/AGENTS.md")" = "${ROOT_AGENTS}" ]; then
   ok "~/.codex/AGENTS.md points to the Adrez workspace bootstrap"
@@ -35,6 +44,59 @@ if [ -z "${style_hits}" ]; then
 else
   fail "Banned hockey-style phrasing still exists:\n${style_hits}"
 fi
+
+required_agents=(
+  "/Users/martin/Documents/adrez/AGENTS.md"
+  "/Users/martin/Documents/adrez/agents/AGENTS.md"
+  "/Users/martin/Documents/adrez/dbt-cloud/AGENTS.md"
+  "/Users/martin/Documents/adrez/data-factory/AGENTS.md"
+  "/Users/martin/Documents/adrez/extractor-spreadsheets/AGENTS.md"
+)
+
+for agents_file in "${required_agents[@]}"; do
+  if [ -f "${agents_file}" ]; then
+    ok "Required AGENTS.md exists: ${agents_file}"
+  else
+    fail "Missing required AGENTS.md: ${agents_file}"
+  fi
+done
+
+while IFS= read -r agents_file; do
+  [ -n "${agents_file}" ] || continue
+  size_bytes="$(wc -c < "${agents_file}" | tr -d ' ')"
+  if [ "${size_bytes}" -gt "${MAX_AGENTS_FAIL_BYTES}" ]; then
+    fail "AGENTS.md exceeds ${MAX_AGENTS_FAIL_BYTES} bytes (${size_bytes}): ${agents_file}"
+  elif [ "${size_bytes}" -gt "${MAX_AGENTS_WARN_BYTES}" ]; then
+    warn "AGENTS.md exceeds ${MAX_AGENTS_WARN_BYTES} bytes (${size_bytes}): ${agents_file}"
+  fi
+done < <(find /Users/martin/Documents/adrez -name AGENTS.md \
+  -not -path '*/old/*' \
+  -not -path '*/node_modules/*' \
+  -not -path '*/.git/*' \
+  | LC_ALL=C sort)
+
+if grep -q "/Users/martin/Documents/adrez/docs/data-platform" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
+  ok "dbt-cloud AGENTS.md routes durable data-platform docs"
+else
+  fail "dbt-cloud AGENTS.md does not route agents to /Users/martin/Documents/adrez/docs/data-platform"
+fi
+
+dbt_nested_agents=(
+  "/Users/martin/Documents/adrez/dbt-cloud/models/l1_raw/AGENTS.md"
+  "/Users/martin/Documents/adrez/dbt-cloud/models/l2_base/AGENTS.md"
+  "/Users/martin/Documents/adrez/dbt-cloud/models/l2_base/base_input/AGENTS.md"
+  "/Users/martin/Documents/adrez/dbt-cloud/models/l2_base/base/AGENTS.md"
+  "/Users/martin/Documents/adrez/dbt-cloud/models/l2_base/base_output/AGENTS.md"
+  "/Users/martin/Documents/adrez/dbt-cloud/models/l3_product/finance/AGENTS.md"
+)
+
+for agents_file in "${dbt_nested_agents[@]}"; do
+  if [ -f "${agents_file}" ]; then
+    ok "dbt-cloud nested AGENTS.md exists: ${agents_file}"
+  else
+    fail "Missing dbt-cloud nested AGENTS.md: ${agents_file}"
+  fi
+done
 
 actual_skills="$(find "${SKILLS_DIR}" -mindepth 1 -maxdepth 1 -type d | while IFS= read -r dir; do
   if [ -f "${dir}/SKILL.md" ]; then
@@ -61,6 +123,19 @@ while IFS= read -r skill_file; do
       fail "Missing '${field}' in ${skill_file}"
     fi
   done
+
+  last_reviewed="$(awk -F': *' '/^last_reviewed:/ { print $2; exit }' "${skill_file}")"
+  if [ -n "${last_reviewed}" ]; then
+    if reviewed_epoch="$(date -j -f "%Y-%m-%d" "${last_reviewed}" "+%s" 2>/dev/null)"; then
+      now_epoch="$(date "+%s")"
+      age_days="$(( (now_epoch - reviewed_epoch) / 86400 ))"
+      if [ "${age_days}" -gt "${MAX_SKILL_REVIEW_AGE_DAYS}" ]; then
+        warn "Skill last_reviewed is older than ${MAX_SKILL_REVIEW_AGE_DAYS} days (${age_days}): ${skill_file}"
+      fi
+    else
+      fail "Invalid last_reviewed date in ${skill_file}: ${last_reviewed}"
+    fi
+  fi
 done < <(find "${SKILLS_DIR}" -mindepth 2 -maxdepth 2 -name SKILL.md | LC_ALL=C sort)
 
 if [ "${failures}" -eq 0 ]; then
@@ -76,29 +151,28 @@ while IFS= read -r skill_name; do
   fi
 done <<< "${actual_skills}"
 
-if command -v qmd >/dev/null 2>&1; then
-  collection_list="$(qmd --index adrez collection list 2>/dev/null || true)"
-  if echo "${collection_list}" | grep -q '^ada_docs '; then
-    fail "Legacy qmd collection ada_docs is still present"
-  else
-    ok "Legacy qmd collection drift check passed"
-  fi
-
-  for name in docs dbt_docs dbt_tasks df_docs dp_docs es_docs mb_docs; do
-    if echo "${collection_list}" | grep -q "^${name} "; then
-      :
-    else
-      fail "Missing qmd collection: ${name}"
-    fi
-  done
+if [ -e "${CODEX_HOME}/skills/qmd" ]; then
+  fail "Retired managed skill still present in ~/.codex/skills: qmd"
 else
-  fail "qmd is not installed or not on PATH"
+  ok "Retired managed skill qmd is absent from ~/.codex/skills"
+fi
+
+if command -v qmd >/dev/null 2>&1; then
+  fail "Retired qmd CLI is still installed or on PATH"
+else
+  ok "Retired qmd CLI is absent from PATH"
 fi
 
 if [ "${failures}" -gt 0 ]; then
   echo
   echo "AI setup check failed with ${failures} issue(s)." >&2
   exit 1
+fi
+
+if [ "${warnings}" -gt 0 ]; then
+  echo
+  echo "AI setup check passed with ${warnings} warning(s)."
+  exit 0
 fi
 
 echo
