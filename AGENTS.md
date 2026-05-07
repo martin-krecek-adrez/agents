@@ -8,11 +8,8 @@ Default control hub for Codex in Adrez. Keep this file routing-focused; repo-spe
 - Prefer direct, neutral responses with minimal fluff.
 
 ## Execution Order
-Apply instructions in this order:
-1. `/Users/martin/AGENTS.md`
-2. `/Users/martin/Documents/adrez/agents/AGENTS.md`
-3. Closest repo/subfolder `AGENTS.md`
-If rules conflict, nearest repo `AGENTS.md` wins for repo-specific behavior.
+Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
+`AGENTS.md`. Nearest repo rules win for repo-specific behavior.
 
 ## Workspace Scope
 - Root: `/Users/martin/Documents/adrez`
@@ -28,30 +25,26 @@ If rules conflict, nearest repo `AGENTS.md` wins for repo-specific behavior.
 - `/Users/martin/Documents/adrez/powerbi`
 - `/Users/martin/Documents/adrez/docs`
 
-## Legacy Repos
-- `/Users/martin/Documents/adrez/adrez-data-assistant`
-- `/Users/martin/Documents/adrez/adrez-metadata-sql-agent`
-
 ## Repo Intent Map
 - `dbt-cloud`: dbt models, tests, docs, Snowflake analytics debugging.
 - `data-factory`: external-table/load config over already-landed ADLS paths; also the downstream Snowflake half of spreadsheet onboarding.
 - `data-platform`: shared Snowflake/Terraform/platform tooling.
 - `extractor-spreadsheets`: OneDrive/SharePoint spreadsheet extraction and mapping landing into ADLS; first half of spreadsheet onboarding.
 - `metadata-builder`: metadata contract build/export for Avalanche catalog and related eval assets.
-- `avalanche-mcp`: active MCP analytics platform and current agent-facing orchestration surface.
+- `avalanche-mcp`: active MCP analytics platform; do not touch unless explicitly requested.
 - `powerbi`: Power BI / Fabric semantic models, reports, and deployment validation.
 - `docs`: VitePress documentation.
 
 ## Skill Intent Map
 Use these skills when intent clearly matches:
-- `snowcli`: connect/query/check Snowflake, run SQL.
+- `snowcli`: query/check Snowflake.
 - `asana`: update/comment in Asana tasks.
 - `write-commit`: prepare commit message from actual diff.
 - `write-docs`: write/update docs.
 - `compare-tech`: compare tool options.
 - `ai-context-maintenance`: audit AGENTS.md, shared skills, task notes, and durable docs routing.
 - `repo-pr-handoff`: prepare clean commits, PR summaries, validation handoffs, and Asana updates.
-- `entity-spreadsheet-ingestion`: end-to-end onboarding of a new OneDrive/SharePoint spreadsheet source across extractor-spreadsheets and data-factory.
+- `entity-spreadsheet-ingestion`: end-to-end spreadsheet onboarding across extractor-spreadsheets and data-factory.
 - `entity-extractor-spreadsheets`: add/update spreadsheet/mapping entities in extractor-spreadsheets.
 - `entity-data-factory`: add/update external-table entities/configs in data-factory for already-landed ADLS files or downstream spreadsheet exposure.
 - `entity-dbt-cloud`: add/update dbt entities/models (default `l1_raw` first).
@@ -95,10 +88,12 @@ Use these skills when intent clearly matches:
 ## Git Defaults
 - Run `git status -sb` before edits.
 - Pull with `--ff-only` by default.
+- For implementation tasks, create or switch to a dedicated task branch before editing unless the user explicitly asks to use the current branch.
 - Use `repo-pr-handoff` for non-trivial handoffs: model logic, ingestion, Terraform/platform, CI/deploy, or shared AI context.
 - Do not force branch/PR workflow for tiny typo/docs-only edits unless the user asks.
 - For non-trivial work, unspecified requests like "push", "pushed", "commit and push", or "clean and pushed" mean push a feature branch and open a draft PR.
 - Never push directly to `main` for non-trivial work unless the user explicitly says `main`, `directly to main`, or `no PR`.
+- A request like "make changes in <repo> and push it" is not permission to work on or push `main`; use a dedicated task branch and draft PR.
 - Treat shared AI operating-system changes (`AGENTS.md`, skills, routing, task memory, automation prompts) as non-trivial.
 - If non-trivial changes already exist on `main`, create a feature branch before committing; do not direct-push `main` just to clean the worktree.
 - Do not push unless explicitly asked.

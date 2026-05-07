@@ -81,6 +81,14 @@ else
   fail "dbt-cloud AGENTS.md does not route agents to /Users/martin/Documents/adrez/docs/data-platform"
 fi
 
+if grep -q "dedicated task branch" /Users/martin/Documents/adrez/agents/AGENTS.md \
+  && grep -q "make changes in <repo> and push it" /Users/martin/Documents/adrez/agents/skills/repo-pr-handoff/SKILL.md \
+  && grep -q "dedicated task branch" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
+  ok "Dedicated branch defaults are explicit in shared and dbt-cloud guidance"
+else
+  fail "Dedicated branch defaults are missing from shared, repo-pr-handoff, or dbt-cloud guidance"
+fi
+
 dbt_nested_agents=(
   "/Users/martin/Documents/adrez/dbt-cloud/models/l1_raw/AGENTS.md"
   "/Users/martin/Documents/adrez/dbt-cloud/models/l2_base/AGENTS.md"
