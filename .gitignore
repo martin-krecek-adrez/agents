@@ -1,5 +1,7 @@
 # Dependencies
 node_modules/
+venv/
+.venv/
 
 # Lockfiles (regenerated on install)
 package-lock.json
