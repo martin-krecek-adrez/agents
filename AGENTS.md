@@ -42,10 +42,6 @@ If rules conflict, nearest repo `AGENTS.md` wins for repo-specific behavior.
 - `powerbi`: Power BI / Fabric semantic models, reports, and deployment validation.
 - `docs`: VitePress documentation.
 
-## Legacy Repo Intent Map
-- `adrez-data-assistant`: legacy prototype repo; no new feature work unless explicitly requested.
-- `adrez-metadata-sql-agent`: legacy SQL-agent repo; no new feature work unless explicitly requested.
-
 ## Skill Intent Map
 Use these skills when intent clearly matches:
 - `snowcli`: connect/query/check Snowflake, run SQL.
@@ -99,8 +95,12 @@ Use these skills when intent clearly matches:
 ## Git Defaults
 - Run `git status -sb` before edits.
 - Pull with `--ff-only` by default.
-- Use `repo-pr-handoff` for non-trivial branch/PR handoffs, especially model logic, ingestion, Terraform/platform, CI/deploy, or shared AI context changes.
+- Use `repo-pr-handoff` for non-trivial handoffs: model logic, ingestion, Terraform/platform, CI/deploy, or shared AI context.
 - Do not force branch/PR workflow for tiny typo/docs-only edits unless the user asks.
+- For non-trivial work, unspecified requests like "push", "pushed", "commit and push", or "clean and pushed" mean push a feature branch and open a draft PR.
+- Never push directly to `main` for non-trivial work unless the user explicitly says `main`, `directly to main`, or `no PR`.
+- Treat shared AI operating-system changes (`AGENTS.md`, skills, routing, task memory, automation prompts) as non-trivial.
+- If non-trivial changes already exist on `main`, create a feature branch before committing; do not direct-push `main` just to clean the worktree.
 - Do not push unless explicitly asked.
 - Do not amend commits unless explicitly asked.
 

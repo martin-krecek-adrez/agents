@@ -17,8 +17,14 @@ context changes.
 ## Trigger Guidance
 - Use for non-trivial changes before commit/push/PR.
 - Do not force PR ceremony for tiny typo/docs-only edits unless the user asks.
-- If the user explicitly says to commit directly, keep the same hygiene but skip
-  PR creation.
+- If the user asks for non-trivial work to be "pushed", "clean and pushed", or
+  "commit and push" without naming `main`, interpret that as feature branch plus
+  draft PR handoff.
+- Direct commits or pushes to `main` require explicit wording such as "push
+  directly to main", "commit directly to main", or "no PR".
+- Treat shared AI operating-system changes as non-trivial by default, including
+  `AGENTS.md`, skills, routing, task-memory rules, agent docs, and automation
+  prompts.
 
 ## Workflow
 1. Inspect worktree:
@@ -38,7 +44,7 @@ git diff --stat
    - stage only the approved file list,
    - use a concise imperative message,
    - include task note/docs updates when they are part of the change.
-5. PR handoff when requested:
+5. PR handoff for non-trivial work, or when requested:
    - push branch,
    - open draft PR unless the user requests ready-for-review,
    - include summary, validation, risks, rollback notes, Asana/task-note links.
