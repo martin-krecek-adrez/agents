@@ -25,7 +25,9 @@ context changes.
   "commit and push" without naming `main`, interpret that as feature branch plus
   draft PR handoff.
 - Direct commits or pushes to `main` require explicit wording such as "push
-  directly to main", "commit directly to main", or "no PR".
+  directly to main" or "commit directly to main".
+- Pushing a branch without opening a PR requires explicit wording such as
+  "no PR" or "jen pushni branch".
 - Treat shared AI operating-system changes as non-trivial by default, including
   `AGENTS.md`, skills, routing, task-memory rules, agent docs, and automation
   prompts.

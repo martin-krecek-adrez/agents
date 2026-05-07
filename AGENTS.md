@@ -92,8 +92,9 @@ Use these skills when intent clearly matches:
 - Use `repo-pr-handoff` for non-trivial handoffs: model logic, ingestion, Terraform/platform, CI/deploy, or shared AI context.
 - Do not force branch/PR workflow for tiny typo/docs-only edits unless the user asks.
 - For non-trivial work, unspecified requests like "push", "pushed", "commit and push", or "clean and pushed" mean push a feature branch and open a draft PR.
-- Never push directly to `main` for non-trivial work unless the user explicitly says `main`, `directly to main`, or `no PR`.
+- Never push directly to `main` for non-trivial work unless the user explicitly says `main` or `directly to main`.
 - A request like "make changes in <repo> and push it" is not permission to work on or push `main`; use a dedicated task branch and draft PR.
+- For non-trivial work, pushing a branch without opening a PR requires explicit wording like `no PR` or `jen pushni branch`.
 - Treat shared AI operating-system changes (`AGENTS.md`, skills, routing, task memory, automation prompts) as non-trivial.
 - If non-trivial changes already exist on `main`, create a feature branch before committing; do not direct-push `main` just to clean the worktree.
 - Do not push unless explicitly asked.
