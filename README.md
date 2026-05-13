@@ -42,6 +42,7 @@ Main routing is defined in `AGENTS.md`.
   - Commit message drafting -> `write-commit`
   - Documentation requests -> `write-docs`
   - Tech comparisons -> `compare-tech`
+  - Parallel repo branches / dirty worktree safety -> `repo-worktree-safety`
   - End-to-end spreadsheet onboarding -> `entity-spreadsheet-ingestion`
   - Add/update spreadsheet entity -> `entity-extractor-spreadsheets`
   - Add/update external-table entity -> `entity-data-factory`
@@ -70,6 +71,7 @@ Current business skills:
 - entity-spreadsheet-ingestion
 - powerbi-report-starter
 - repo-pr-handoff
+- repo-worktree-safety
 - snowcli
 - write-commit
 - write-docs

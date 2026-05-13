@@ -15,16 +15,6 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 - Root: `/Users/martin/Documents/adrez`
 - Do not inspect `/Users/martin/Documents/adrez/old` unless explicitly asked.
 
-## Primary Repos
-- `/Users/martin/Documents/adrez/dbt-cloud`
-- `/Users/martin/Documents/adrez/data-factory`
-- `/Users/martin/Documents/adrez/data-platform`
-- `/Users/martin/Documents/adrez/extractor-spreadsheets`
-- `/Users/martin/Documents/adrez/metadata-builder`
-- `/Users/martin/Documents/adrez/avalanche-mcp`
-- `/Users/martin/Documents/adrez/powerbi`
-- `/Users/martin/Documents/adrez/docs`
-
 ## Repo Intent Map
 - `dbt-cloud`: dbt models, tests, docs, Snowflake analytics debugging.
 - `data-factory`: external-table/load config over already-landed ADLS paths; also the downstream Snowflake half of spreadsheet onboarding.
@@ -37,19 +27,14 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 
 ## Skill Intent Map
 Use these skills when intent clearly matches:
-- `snowcli`: query/check Snowflake.
-- `asana`: update/comment in Asana tasks.
-- `write-commit`: prepare commit message from actual diff.
-- `write-docs`: write/update docs.
-- `compare-tech`: compare tool options.
-- `ai-context-maintenance`: audit AGENTS.md, shared skills, task notes, and durable docs routing.
-- `repo-pr-handoff`: prepare clean commits, PR summaries, validation handoffs, and Asana updates.
-- `entity-spreadsheet-ingestion`: end-to-end spreadsheet onboarding across extractor-spreadsheets and data-factory.
-- `entity-extractor-spreadsheets`: add/update spreadsheet/mapping entities in extractor-spreadsheets.
-- `entity-data-factory`: add/update external-table entities/configs in data-factory for already-landed ADLS files or downstream spreadsheet exposure.
-- `entity-dbt-cloud`: add/update dbt entities/models (default `l1_raw` first).
-- `powerbi-report-starter`: scaffold a new Power BI semantic model + report from scratch with canonical date dimensions.
-- `avalanche-metadata-update`: rebuild/export Avalanche metadata bundle and sync catalog artifacts.
+- Snowflake: `snowcli`.
+- Asana: `asana`.
+- Git delivery: `write-commit`, `repo-pr-handoff`, `repo-worktree-safety`.
+- Docs/context: `write-docs`, `ai-context-maintenance`, `compare-tech`.
+- Spreadsheet/data onboarding: `entity-spreadsheet-ingestion`, `entity-extractor-spreadsheets`, `entity-data-factory`.
+- dbt: `entity-dbt-cloud`.
+- Power BI: `powerbi-report-starter`.
+- Avalanche metadata: `avalanche-metadata-update`.
 
 ## Snowflake Defaults
 - For `snowcli` tasks, use locally configured Snow CLI/dbt context by default.
@@ -58,17 +43,14 @@ Use these skills when intent clearly matches:
 
 ## Routing Rules
 - Decide target repo + skill before editing.
-- If the user asks to add a new OneDrive/SharePoint spreadsheet, mapping sheet, or manual statement and does not limit scope, default to end-to-end flow:
-  - use `entity-spreadsheet-ingestion`
-  - start in `/Users/martin/Documents/adrez/extractor-spreadsheets`
-  - continue to `/Users/martin/Documents/adrez/data-factory` unless the user explicitly wants landing only
-- If the user asks only for spreadsheet landing, file pickup, or `ingest_config.yml` changes, use `entity-extractor-spreadsheets`.
-- If the user says files already exist in ADLS/lake/raw storage, or the source is Mews/Mara/other lake-native ingestion, skip extractor and use `entity-data-factory` in `/Users/martin/Documents/adrez/data-factory`.
-- If the user asks to create a new Power BI report or semantic model from scratch, default to `powerbi-report-starter` in `/Users/martin/Documents/adrez/powerbi`.
-- If user says "check dbt", default to `/Users/martin/Documents/adrez/dbt-cloud`.
-- If user asks about Avalanche MCP, MCP analytics flow, or current agent behavior, default to `/Users/martin/Documents/adrez/avalanche-mcp`.
-- If user asks to rebuild metadata/catalog for Avalanche, default to `/Users/martin/Documents/adrez/metadata-builder`.
-- If ambiguous whether the file already lands in ADLS, ask one short clarifying question.
+- New OneDrive/SharePoint spreadsheet, mapping sheet, or manual statement defaults to `entity-spreadsheet-ingestion`: `extractor-spreadsheets` first, then `data-factory` unless landing-only is requested.
+- Spreadsheet landing/file pickup/`ingest_config.yml` only: `entity-extractor-spreadsheets`.
+- Already-landed ADLS/lake/raw or lake-native source: `entity-data-factory`.
+- New Power BI report/model: `powerbi-report-starter`.
+- "check dbt": `dbt-cloud`.
+- Avalanche MCP/current agent behavior: `avalanche-mcp`.
+- Avalanche metadata/catalog rebuild: `metadata-builder`.
+- If ADLS landing status is ambiguous, ask one short clarifying question.
 
 ## Common Workflow Defaults
 - Prefer repo-local `docs/tasks/` only for multi-step, risky, or multi-session work when that repo uses task notes.
@@ -90,22 +72,41 @@ Use these skills when intent clearly matches:
 - Pull with `--ff-only` by default.
 - For implementation tasks, create or switch to a dedicated task branch before editing unless the user explicitly asks to use the current branch.
 - Use `repo-pr-handoff` for non-trivial handoffs: model logic, ingestion, Terraform/platform, CI/deploy, or shared AI context.
-- Do not force branch/PR workflow for tiny typo/docs-only edits unless the user asks.
-- For non-trivial work, unspecified requests like "push", "pushed", "commit and push", or "clean and pushed" mean push a feature branch and open a draft PR.
+- Use `repo-worktree-safety` when multiple independent tasks are active in the same repository, when branch/worktree state is ambiguous, or when dirty files may belong to another task.
+- Do not force branch/PR workflow for tiny typo/docs-only edits unless asked.
+- For non-trivial work, "push", "pushed", "commit and push", or "clean and pushed" means push a feature branch and open a draft PR.
 - Never push directly to `main` for non-trivial work unless the user explicitly says `main` or `directly to main`.
-- A request like "make changes in <repo> and push it" is not permission to work on or push `main`; use a dedicated task branch and draft PR.
-- For non-trivial work, pushing a branch without opening a PR requires explicit wording like `no PR` or `jen pushni branch`.
+- "make changes in <repo> and push it" is not permission to push `main`; use a task branch and draft PR.
+- Pushing a branch without PR requires explicit `no PR` or `jen pushni branch`.
 - Treat shared AI operating-system changes (`AGENTS.md`, skills, routing, task memory, automation prompts) as non-trivial.
-- If non-trivial changes already exist on `main`, create a feature branch before committing; do not direct-push `main` just to clean the worktree.
+- If non-trivial changes already exist on `main`, create a feature branch before committing.
 - Do not push unless explicitly asked.
 - Do not amend commits unless explicitly asked.
 
+## Concurrent Git Work
+- Branches are delivery units; worktrees are concurrency units.
+- For parallel same-repo tasks, use one `git worktree` per task branch. Do not switch one shared checkout between unrelated task branches.
+- Default task worktree location: `/Users/martin/Documents/adrez/_worktrees/<repo-name>/<task-slug>`.
+- Before editing, committing, pushing, PR, or merge, verify `pwd`, repo root, current branch, `git status -sb`, and intended task.
+- If branch does not match the task, stop and switch to the correct worktree or ask.
+- If dirty file ownership is unclear, stop and ask. Never use `git stash`, `git reset`, `git checkout --`, `git clean`, or file-moving cleanup to juggle unrelated work unless explicitly approved.
+- Multi-repo work uses one branch and PR per repo. Multi-task same-repo work uses one worktree, branch, and PR per task.
+
+## PR And Merge Defaults
+- Non-trivial work default: dedicated branch -> focused commit(s) -> push branch -> draft PR -> CI check -> Asana handoff.
+- After a user-requested push, open a draft PR unless the user explicitly says `no PR`, `jen pushni branch`, or asks for ready-for-review.
+- Use GitHub connector for PR creation/metadata when cleanly resolvable; use `gh` for CI/logs/checks/review threads/merge.
+- After pushing, resolve PR and head SHA, then check PR status for that exact head SHA.
+- Never merge unless the user explicitly says `merge`, `sluč`, or `dej to do main`.
+- Before merge, verify checks, review threads, mergeability, scope, base freshness, and current PR head SHA.
+- Default merge method is squash merge unless repo-local policy says otherwise.
+- After merge, delete safe short-lived remote branch, prune task worktree, sync `main`, and update Asana.
+
 ## GitHub Actions Defaults
 - `gh` is the default tool for GitHub Actions inspection across Adrez repos.
-- After any user-requested push to a branch with CI, check the latest run with `gh run list --branch <branch> --limit 5`.
-- Open the failing run with `gh run view <run-id> --json jobs` and `gh run view <run-id> --log` before guessing at root cause.
+- After user-requested push to a branch with CI, check current PR/head-SHA status and inspect failures with `gh`.
 - When the user expects CI confirmation, wait for completion with `gh run watch <run-id>` (or poll `gh run view <run-id>`) and report the final result.
-- Prefer repo-local workflow files under `.github/workflows/` only as supporting context; use run logs as the source of truth for the actual failure.
+- Use run logs as source of truth for CI failures.
 
 ## Safety
 - Do not run destructive commands unless explicitly asked.
