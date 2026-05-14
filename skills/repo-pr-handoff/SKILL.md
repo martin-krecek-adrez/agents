@@ -4,7 +4,7 @@ description: Prepare a clean branch, commit, validation summary, pull request bo
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-05-07
+last_reviewed: 2026-05-14
 compatibility: Requires a git repository in /Users/martin/Documents/adrez and GitHub access when opening PRs.
 ---
 
@@ -19,6 +19,8 @@ context changes.
 - Do not force PR ceremony for tiny typo/docs-only edits unless the user asks.
 - For implementation tasks, create or switch to a dedicated task branch before
   editing unless the user explicitly asks to use the current branch.
+- If multiple independent tasks are active in the same repo, use a dedicated
+  git worktree per task branch instead of switching branches in one checkout.
 - A request like "make changes in <repo> and push it" is not permission to work
   on or push `main`; use a dedicated task branch and draft PR.
 - If the user asks for non-trivial work to be "pushed", "clean and pushed", or
@@ -35,14 +37,22 @@ context changes.
 ## Workflow
 1. Inspect worktree:
 ```bash
+pwd
+git rev-parse --show-toplevel
+git branch --show-current
 git status -sb
 git diff --stat
 ```
-2. Choose branch:
+2. Choose branch and worktree:
    - if current branch is `main`, create a short dedicated task branch before
      editing,
    - if already on a task branch that matches the work, continue there,
    - if current branch is unrelated or ambiguous, ask before reusing it.
+   - if another independent task is active in the same repo, create or use a
+     task-specific worktree under
+     `/Users/martin/Documents/adrez/_worktrees/<repo>/<task-slug>`,
+   - if the worktree has dirty files whose owner is unclear, stop before branch
+     switching, staging, committing, pulling, or pushing.
 3. Split scope:
    - identify files that belong to the current task,
    - identify unrelated dirty files,
@@ -59,11 +69,63 @@ git diff --stat
    - push branch,
    - open draft PR unless the user requests ready-for-review,
    - include summary, validation, risks, rollback notes, Asana/task-note links.
-7. Update Asana when a task is known:
+7. Check PR and CI:
+   - resolve the PR and current head SHA,
+   - inspect checks/status for that exact head SHA,
+   - use CI logs as source of truth for failures,
+   - keep PR as draft unless the user asks for ready-for-review.
+8. Merge only when explicitly requested:
+   - verify required checks, unresolved review threads, mergeability, branch
+     scope, base freshness, and current PR head SHA,
+   - default to squash merge unless repo-local policy says otherwise,
+   - delete short-lived remote branch and prune task worktree when safe.
+9. Update Asana when a task is known:
    - changed paths,
    - validation result,
-   - PR link or commit hash,
+   - PR link, commit hash, merge result when applicable,
    - open follow-ups.
+
+## Branch / Worktree Safety
+- Branches are delivery units; worktrees are concurrency units.
+- Single task in a clean repo checkout can use a dedicated branch in the normal
+  repo path.
+- Parallel same-repo work must use one git worktree per task branch.
+- Before editing, committing, pushing, opening a PR, or merging, confirm:
+  - expected repo equals actual repo,
+  - expected branch equals actual branch,
+  - dirty files are either absent or belong to the current task.
+- Unknown dirty files block branch switching, staging, committing, pulling, and
+  pushing until ownership is clarified.
+- Do not use `git stash`, `git reset`, `git checkout --`, `git clean`, or file
+  moving to juggle unrelated work unless the user explicitly approves the exact
+  action.
+
+## User Intent Parsing
+- "push", "push it", "commit and push", "clean and pushed", or "ship this":
+  commit current-task changes, push the feature branch, and open a draft PR.
+- "no PR" or "jen pushni branch": push branch only and do not open a PR.
+- "ready for review": mark the draft PR ready only after validation and PR body
+  checks are current.
+- "merge", "sluč", or "dej to do main": merge only after PR/CI/review gates
+  pass.
+- "directly to main" or "push to main": allowed only when explicitly stated;
+  still inspect status and confirm scope first.
+
+## GitHub Tool Fallback
+- Prefer the GitHub connector for PR creation and metadata when it can access
+  the repo.
+- For private Adrez repos, a connector `404` does not prove the repo is missing.
+  Treat it as possible connector installation or scope limitation first.
+- If the connector returns `404` for an expected private Adrez repo:
+  - verify the local git remote URL,
+  - verify repo identity from the local checkout,
+  - try `gh repo view <owner>/<repo>`.
+- If sandboxed `gh` reports auth, keyring, DNS, or network-looking errors,
+  retry the same narrow `gh` command with `require_escalated` before concluding
+  auth is broken.
+- If escalated `gh auth status` is valid, continue PR creation or CI inspection
+  with escalated `gh`.
+- Record in the handoff when connector fallback was used.
 
 ## PR Body Template
 ```md
@@ -84,5 +146,7 @@ git diff --stat
 ## Done Checklist
 - Current-task files only were staged.
 - Validation ran or the reason it did not run is explicit.
+- Branch/worktree identity was verified before edits, commit, push, PR, and merge.
 - Commit/PR summary matches the actual diff.
+- PR CI/check state was reviewed for the current head SHA after push.
 - Asana or task note is updated when relevant.

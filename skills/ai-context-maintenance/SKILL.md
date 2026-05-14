@@ -4,7 +4,7 @@ description: Audit and maintain Adrez AI context surfaces, including AGENTS.md h
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-05-07
+last_reviewed: 2026-05-14
 compatibility: Requires /Users/martin/Documents/adrez/agents and the Adrez workspace repositories.
 ---
 
@@ -21,6 +21,7 @@ Codex setup.
 - Promote reusable workflows to skills only after repetition.
 - Promote durable business or operating-state knowledge to
   `/Users/martin/Documents/adrez/docs`, not repo-local task notes.
+- Treat `agents/feedback/inbox/` as raw evidence, not durable instructions.
 
 ## Workflow
 1. Run the setup check:
@@ -36,6 +37,7 @@ Codex setup.
    - `/Users/martin/Documents/adrez/agents/AGENTS.md`
    - repo-local `AGENTS.md` files in active repos
    - `/Users/martin/Documents/adrez/agents/skills/*/SKILL.md`
+   - `/Users/martin/Documents/adrez/agents/feedback/inbox/*.md`
    - repo-local `docs/tasks/`
    - `/Users/martin/Documents/adrez/docs/data-platform`
 4. Classify findings:
@@ -49,7 +51,14 @@ Codex setup.
    - or one repo `AGENTS.md` hierarchy,
    - or one docs routing improvement,
    - or one automation/check improvement.
-6. Summarize exact paths changed and whether `check_ai_setup.sh` passes.
+6. Process feedback inbox when requested:
+   - group items by area and repeated failure mode,
+   - decide disposition: promote, create Asana backlog, keep for more evidence,
+     reject as one-off,
+   - move processed items to `feedback/promoted/` or `feedback/rejected/` only
+     after the decision is reflected in the summary,
+   - add `check_ai_setup.sh` guards for promoted critical rules when practical.
+7. Summarize exact paths changed and whether `check_ai_setup.sh` passes.
 
 ## AGENTS.md Heuristics
 - Root workspace `AGENTS.md`: routing only.
@@ -68,8 +77,18 @@ Codex setup.
 - Treat the promotion report as a candidate list, not proof that every match
   should become durable docs.
 
+## Feedback Inbox
+- Raw feedback belongs in `/Users/martin/Documents/adrez/agents/feedback/inbox/`.
+- Use `agent-feedback-capture` to create new items.
+- Promote only stable, repeated, high-impact, or explicitly requested lessons.
+- Prefer scripts/checks over prose when the lesson can be validated
+  deterministically.
+- Keep incident examples in feedback history; put only the durable rule in
+  `AGENTS.md` or skills.
+
 ## Done Checklist
 - Setup check passes or failures are explained.
 - Findings are grouped by severity.
 - Suggested edits are small enough for a single review.
+- Feedback inbox items were triaged when requested.
 - No unrelated worktree changes are reverted.

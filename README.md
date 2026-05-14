@@ -27,6 +27,7 @@ Main routing is defined in `AGENTS.md`.
 - Default workspace scope: `/Users/martin/Documents/adrez`
 - Default repo routing:
   - `dbt-cloud` for dbt models/finance/Snowflake analytics work
+  - `extractor-documents` for PDF/document parsing into ADLS CSV outputs
   - `extractor-spreadsheets` first for new OneDrive/SharePoint spreadsheets and mapping sheets
   - `data-factory` for already-landed ADLS sources and external-table exposure
   - `data-platform` for shared platform/data tooling
@@ -41,7 +42,9 @@ Main routing is defined in `AGENTS.md`.
   - Asana updates/comments -> `asana`
   - Commit message drafting -> `write-commit`
   - Documentation requests -> `write-docs`
+  - Reusable harness/process feedback -> `agent-feedback-capture`
   - Tech comparisons -> `compare-tech`
+  - Parallel repo branches / dirty worktree safety -> `repo-worktree-safety`
   - End-to-end spreadsheet onboarding -> `entity-spreadsheet-ingestion`
   - Add/update spreadsheet entity -> `entity-extractor-spreadsheets`
   - Add/update external-table entity -> `entity-data-factory`
@@ -61,6 +64,7 @@ Use `scripts/sync_codex_setup.sh` to sync both sets into `~/.codex/skills`.
 
 Current business skills:
 - asana
+- agent-feedback-capture
 - ai-context-maintenance
 - compare-tech
 - avalanche-metadata-update
@@ -70,6 +74,7 @@ Current business skills:
 - entity-spreadsheet-ingestion
 - powerbi-report-starter
 - repo-pr-handoff
+- repo-worktree-safety
 - snowcli
 - write-commit
 - write-docs
