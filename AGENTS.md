@@ -19,6 +19,7 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 - `dbt-cloud`: dbt models, tests, docs, Snowflake analytics debugging.
 - `data-factory`: external-table/load config over already-landed ADLS paths; also the downstream Snowflake half of spreadsheet onboarding.
 - `data-platform`: shared Snowflake/Terraform/platform tooling.
+- `extractor-documents`: PDF/document extraction into ADLS CSV; Snowflake exposure belongs in `data-factory`.
 - `extractor-spreadsheets`: OneDrive/SharePoint spreadsheet extraction and mapping landing into ADLS; first half of spreadsheet onboarding.
 - `metadata-builder`: metadata contract build/export for Avalanche catalog and related eval assets.
 - `avalanche-mcp`: active MCP analytics platform; do not touch unless explicitly requested.
@@ -30,7 +31,7 @@ Use these skills when intent clearly matches:
 - Snowflake: `snowcli`.
 - Asana: `asana`.
 - Git delivery: `write-commit`, `repo-pr-handoff`, `repo-worktree-safety`.
-- Docs/context: `write-docs`, `ai-context-maintenance`, `compare-tech`.
+- Docs/context: `write-docs`, `ai-context-maintenance`, `agent-feedback-capture`, `compare-tech`.
 - Spreadsheet/data onboarding: `entity-spreadsheet-ingestion`, `entity-extractor-spreadsheets`, `entity-data-factory`.
 - dbt: `entity-dbt-cloud`.
 - Power BI: `powerbi-report-starter`.
@@ -45,6 +46,7 @@ Use these skills when intent clearly matches:
 - Decide target repo + skill before editing.
 - New OneDrive/SharePoint spreadsheet, mapping sheet, or manual statement defaults to `entity-spreadsheet-ingestion`: `extractor-spreadsheets` first, then `data-factory` unless landing-only is requested.
 - Spreadsheet landing/file pickup/`ingest_config.yml` only: `entity-extractor-spreadsheets`.
+- PDF/document parsing to ADLS CSV: `extractor-documents` first, then `data-factory` only if Snowflake exposure is needed.
 - Already-landed ADLS/lake/raw or lake-native source: `entity-data-factory`.
 - New Power BI report/model: `powerbi-report-starter`.
 - "check dbt": `dbt-cloud`.
@@ -53,18 +55,13 @@ Use these skills when intent clearly matches:
 - If ADLS landing status is ambiguous, ask one short clarifying question.
 
 ## Common Workflow Defaults
-- Prefer repo-local `docs/tasks/` only for multi-step, risky, or multi-session work when that repo uses task notes.
-- Skip task notes for trivial template-based edits.
-- Any temporary filter, scoped workaround, or performance guardrail added to code/config must include a nearby `TODO` with removal condition and, when relevant, a task-note link.
+- Use repo-local `docs/tasks/` for multi-step, risky, or multi-session work when the repo uses task notes; skip for trivial edits.
+- Temporary filters/workarounds/guardrails need a nearby `TODO` with removal condition and task-note link when relevant.
 
 ## Task Memory
 - Track execution status in Asana.
-- Default note split:
-  - Repo-local `docs/tasks/`: task execution notes, WIP analysis, temporary investigation context.
-  - `/Users/martin/Documents/adrez/docs/`: durable cross-repo documentation.
-- Promote notes to `/Users/martin/Documents/adrez/docs/` only when they describe current operational/business state that should be reused across tasks (for example "how we currently operate parking reservations/revenue", city tax policy, reconciliation operating rules).
-- Keep modeling-only implementation notes (SQL-level mechanics tied to one repo) in that repo unless they are broadly reusable.
-- Suggested task note naming: `YYYY-MM-DD-short-task-name.md`.
+- Repo `docs/tasks/`: execution notes and WIP analysis. `/Users/martin/Documents/adrez/docs/`: durable cross-repo/business state.
+- Keep modeling-only implementation notes in the repo unless broadly reusable. Suggested task note name: `YYYY-MM-DD-short-task-name.md`.
 - Cross-link Asana <-> task note <-> changed model/code paths.
 
 ## Git Defaults
@@ -96,6 +93,7 @@ Use these skills when intent clearly matches:
 - Non-trivial work default: dedicated branch -> focused commit(s) -> push branch -> draft PR -> CI check -> Asana handoff.
 - After a user-requested push, open a draft PR unless the user explicitly says `no PR`, `jen pushni branch`, or asks for ready-for-review.
 - Use GitHub connector for PR creation/metadata when cleanly resolvable; use `gh` for CI/logs/checks/review threads/merge.
+- For private Adrez repos, a GitHub connector `404` can mean connector scope; verify local remote and retry narrow sandbox-failed `gh` commands with `require_escalated` before concluding auth/repo is broken.
 - After pushing, resolve PR and head SHA, then check PR status for that exact head SHA.
 - Never merge unless the user explicitly says `merge`, `sluč`, or `dej to do main`.
 - Before merge, verify checks, review threads, mergeability, scope, base freshness, and current PR head SHA.

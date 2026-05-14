@@ -50,6 +50,7 @@ required_agents=(
   "/Users/martin/Documents/adrez/agents/AGENTS.md"
   "/Users/martin/Documents/adrez/dbt-cloud/AGENTS.md"
   "/Users/martin/Documents/adrez/data-factory/AGENTS.md"
+  "/Users/martin/Documents/adrez/extractor-documents/AGENTS.md"
   "/Users/martin/Documents/adrez/extractor-spreadsheets/AGENTS.md"
   "/Users/martin/Documents/adrez/metadata-builder/AGENTS.md"
   "/Users/martin/Documents/adrez/docs/AGENTS.md"
@@ -116,6 +117,26 @@ if grep -q "Never use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git c
   ok "No implicit stash/reset/checkout/clean rule is explicit"
 else
   fail "No implicit stash/reset/checkout/clean rule is missing from git guidance"
+fi
+
+if grep -q "GitHub connector \`404\` can mean connector scope" /Users/martin/Documents/adrez/agents/AGENTS.md \
+  && grep -q "try \`gh repo view <owner>/<repo>\`" /Users/martin/Documents/adrez/agents/skills/repo-pr-handoff/SKILL.md \
+  && grep -q "retry the same narrow \`gh\` command with \`require_escalated\`" /Users/martin/Documents/adrez/agents/skills/repo-pr-handoff/SKILL.md; then
+  ok "GitHub connector 404 and sandbox gh fallback guidance is explicit"
+else
+  fail "GitHub connector 404 and sandbox gh fallback guidance is missing"
+fi
+
+if [ -d /Users/martin/Documents/adrez/agents/feedback/inbox ] \
+  && [ -d /Users/martin/Documents/adrez/agents/feedback/promoted ] \
+  && [ -d /Users/martin/Documents/adrez/agents/feedback/rejected ] \
+  && [ -f /Users/martin/Documents/adrez/agents/feedback/TEMPLATE.md ] \
+  && grep -q "sensitive_data_checked" /Users/martin/Documents/adrez/agents/feedback/TEMPLATE.md \
+  && grep -q "agent-feedback-capture" /Users/martin/Documents/adrez/agents/skills/ai-context-maintenance/SKILL.md \
+  && grep -q "feedback/inbox" /Users/martin/Documents/adrez/agents/skills/agent-feedback-capture/SKILL.md; then
+  ok "Agent feedback inbox and capture workflow are configured"
+else
+  fail "Agent feedback inbox or capture workflow is missing"
 fi
 
 AVALANCHE_METADATA_SKILL="/Users/martin/Documents/adrez/agents/skills/avalanche-metadata-update/SKILL.md"

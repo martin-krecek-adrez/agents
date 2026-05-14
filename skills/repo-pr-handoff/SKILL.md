@@ -4,7 +4,7 @@ description: Prepare a clean branch, commit, validation summary, pull request bo
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-05-12
+last_reviewed: 2026-05-14
 compatibility: Requires a git repository in /Users/martin/Documents/adrez and GitHub access when opening PRs.
 ---
 
@@ -110,6 +110,22 @@ git diff --stat
   pass.
 - "directly to main" or "push to main": allowed only when explicitly stated;
   still inspect status and confirm scope first.
+
+## GitHub Tool Fallback
+- Prefer the GitHub connector for PR creation and metadata when it can access
+  the repo.
+- For private Adrez repos, a connector `404` does not prove the repo is missing.
+  Treat it as possible connector installation or scope limitation first.
+- If the connector returns `404` for an expected private Adrez repo:
+  - verify the local git remote URL,
+  - verify repo identity from the local checkout,
+  - try `gh repo view <owner>/<repo>`.
+- If sandboxed `gh` reports auth, keyring, DNS, or network-looking errors,
+  retry the same narrow `gh` command with `require_escalated` before concluding
+  auth is broken.
+- If escalated `gh auth status` is valid, continue PR creation or CI inspection
+  with escalated `gh`.
+- Record in the handoff when connector fallback was used.
 
 ## PR Body Template
 ```md
