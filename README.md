@@ -52,6 +52,15 @@ Main routing is defined in `AGENTS.md`.
   - New Power BI report/model scaffold -> `powerbi-report-starter`
   - Rebuild/export Avalanche metadata -> `avalanche-metadata-update`
 
+## Ops Memory
+
+Cross-repo operating state for Codex coordination lives in:
+- `/Users/martin/Documents/adrez/agents/ops`
+
+Use it for Chief of Staff briefs, open loops, people follow-ups, pipeline watch
+items, and thread handoff prompts. Keep repo implementation notes in repo-local
+`docs/tasks/`.
+
 ## Skills
 
 Business skills live in:

@@ -61,6 +61,7 @@ Use these skills when intent clearly matches:
 ## Task Memory
 - Track execution status in Asana.
 - Repo `docs/tasks/`: execution notes and WIP analysis. `/Users/martin/Documents/adrez/docs/`: durable cross-repo/business state.
+- `agents/ops/`: personal operating state for Codex coordination, including Chief of Staff briefs, open loops, people follow-ups, pipeline watch items, and thread handoff prompts.
 - Keep modeling-only implementation notes in the repo unless broadly reusable. Suggested task note name: `YYYY-MM-DD-short-task-name.md`.
 - Cross-link Asana <-> task note <-> changed model/code paths.
 
