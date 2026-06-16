@@ -32,6 +32,7 @@ Use these skills when intent clearly matches:
 - Asana legacy archive/context only: `asana`.
 - Linear task/project tracking: `adrez-linear-workflow`.
 - Decision support: `grill-me`, `compare-tech`.
+- Implementation review: `implementation-review`.
 - Git delivery: `write-commit`, `repo-pr-handoff`, `repo-worktree-safety`.
 - Docs/context: `write-docs`, `ai-context-maintenance`, `agent-feedback-capture`.
 - Spreadsheet/data onboarding: `entity-spreadsheet-ingestion`, `entity-extractor-spreadsheets`, `entity-data-factory`.
@@ -47,6 +48,7 @@ Use natural intent; exact skill names are optional.
 - Already-landed ADLS: "uz to lezi v ADLS", "udelej Snowflake exposure".
 - dbt: "pridej dbt model", "udelej l1_raw", "schema tests pro novy model".
 - Delivery: "otestuj to", "commitni", "pushni", "udelat PR", "otestuj PR", "mergni".
+- Review: "udelej review", "zkontroluj implementaci", "spawni subagenty na review", "bud dukladny".
 - Safety: "zkontroluj scope", "spatna branch", "dirty worktree".
 - Docs: "napis dokumentaci", "uprav docs", "sepis troubleshooting".
 - Feedback: "zapis feedback", "at se to priste nestane", "dej to do harnessu".

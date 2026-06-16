@@ -44,6 +44,7 @@ Main routing is defined in `AGENTS.md`.
   - Documentation requests -> `write-docs`
   - Reusable harness/process feedback -> `agent-feedback-capture`
   - Tech comparisons -> `compare-tech`
+  - Implementation diff/milestone review -> `implementation-review`
   - Parallel repo branches / dirty worktree safety -> `repo-worktree-safety`
   - End-to-end spreadsheet onboarding -> `entity-spreadsheet-ingestion`
   - Add/update spreadsheet entity -> `entity-extractor-spreadsheets`
@@ -83,6 +84,7 @@ Current business skills:
 - entity-extractor-spreadsheets
 - entity-spreadsheet-ingestion
 - grill-me
+- implementation-review
 - powerbi-report-starter
 - repo-pr-handoff
 - repo-worktree-safety

@@ -1,0 +1,7 @@
+interface:
+  display_name: "Implementation Review"
+  short_description: "Review implementation diffs before shipping"
+  default_prompt: "Use $implementation-review to review this implementation diff for bugs, regressions, missing validation, and scope leaks."
+
+policy:
+  allow_implicit_invocation: true

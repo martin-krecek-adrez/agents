@@ -31,8 +31,9 @@ Last reviewed: 2026-06-16
 | `entity-extractor-spreadsheets` | keep | Execution skill for SharePoint/OneDrive Excel/input sheet/mapping landing only: `ingest_config.yml` and ADLS validation. | No immediate change. |
 | `entity-spreadsheet-ingestion` | keep | Orchestrator across extractor + data-factory for unscoped or end-to-end requests such as "pridej input sheet", "napoj tenhle Excel", or "dostan tenhle SharePoint/OneDrive soubor do Snowflake". | No merge. Keep as orchestrator; keep subskills for limited-scope requests. |
 | `grill-me` | keep | Business decision-quality skill. Correct source is Adrez and it is wired in `agents/AGENTS.md`. | Keep minimal. Do not expand unless repeated usage shows missing behavior. |
+| `implementation-review` | keep | Standalone review gate for implementation diffs, milestones, branches, and PR-ready work. Report-first, no-edit default; can use focused subagents for non-trivial work. | No immediate change. |
 | `powerbi-report-starter` | keep | Focused scaffold workflow. | No immediate change. |
-| `repo-pr-handoff` | keep | Delivery orchestration skill for milestone validation, reviewer subagents, commit, push, PR, PR/CI check, merge, and task handoff. Detailed GitHub fallback and PR template live in `references/delivery-details.md`. | Watch usage; split out a dedicated pre-PR reviewer skill only if that workflow becomes frequent on its own. |
+| `repo-pr-handoff` | keep | Delivery orchestration skill for commit, push, PR, PR/CI check, merge, and task handoff. Detailed GitHub fallback and PR template live in `references/delivery-details.md`; standalone review belongs to `implementation-review`. | No immediate change. |
 | `repo-worktree-safety` | keep | Safety preflight for branch/worktree/scope/dirty-file confusion. Distinct from PR handoff delivery workflow. | No immediate change. |
 | `snowcli` | keep | Tool-specific skill. | No immediate change. |
 | `write-commit` | keep | Narrow and useful. | No immediate change. |
@@ -44,7 +45,8 @@ Last reviewed: 2026-06-16
   - `entity-spreadsheet-ingestion` orchestrates end-to-end work.
   - `entity-extractor-spreadsheets` handles OneDrive/SharePoint landing only.
   - `entity-data-factory` handles already-landed ADLS/Snowflake exposure.
-- Do not merge `repo-pr-handoff`, `repo-worktree-safety`, and `write-commit`.
+- Do not merge `implementation-review`, `repo-pr-handoff`, `repo-worktree-safety`, and `write-commit`.
+  - `implementation-review` is a report-first review gate.
   - `repo-worktree-safety` is a safety preflight.
   - `write-commit` is message construction.
   - `repo-pr-handoff` is delivery orchestration.
@@ -57,7 +59,7 @@ Last reviewed: 2026-06-16
 
 ## Priority Edits
 
-1. Consider trimming `repo-pr-handoff` after current dirty `agents/AGENTS.md` work is settled, because shared git policy already carries much of the same detail.
+1. Consider trimming `repo-pr-handoff` after current dirty `agents/AGENTS.md` work is settled, because shared git policy and `implementation-review` now carry some adjacent detail.
 2. Decide later whether `playwright` should remain a personal utility skill. Do not remove it from runtime until there is evidence that Browser Use fully covers the terminal automation use cases.
 3. Review new skill ideas separately and add them only when they represent repeated workflows rather than one-off prompts.
 

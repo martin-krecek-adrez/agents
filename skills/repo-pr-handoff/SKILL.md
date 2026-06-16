@@ -1,6 +1,6 @@
 ---
 name: repo-pr-handoff
-description: Prepare non-trivial Adrez repo work for delivery: milestone validation, reviewer subagents when useful, clean branch scope, commit, push, draft PR, PR/CI check, merge when explicitly requested, and Linear/Asana/task-note handoff. Use when the user says to test it, validate the milestone, spawn subagents for review, commit, push, ship it, make/open a PR, test/check the PR, mark ready for review, merge, or send it to main.
+description: Prepare non-trivial Adrez repo work for delivery: clean branch scope, final validation, commit, push, draft PR, PR/CI check, merge when explicitly requested, and Linear/Asana/task-note handoff. Use when the user says to commit, push, ship it, make/open a PR, test/check the PR, mark ready for review, merge, or send it to main. Use implementation-review for standalone implementation review before delivery.
 scope: business
 status: active
 owner: martin
@@ -13,13 +13,15 @@ compatibility: Requires a git repository in /Users/martin/Documents/adrez and Gi
 Use this skill when preparing non-trivial Adrez work for delivery: validation,
 branch scope, commit, push, PR, CI/review follow-up, merge, and task handoff.
 This is the delivery workflow. Use `repo-worktree-safety` for standalone
-worktree/branch safety questions and `write-commit` for commit-message wording.
+worktree/branch safety questions, `implementation-review` for standalone
+review gates, and `write-commit` for commit-message wording.
 
 ## Trigger Guidance
 - Use for non-trivial changes before validation, commit, push, PR, PR check, or merge.
-- Common user phrasing includes "otestuj to", "otestuj milestone", "spawni
-  subagenty na review", "commitni", "pushni", "ship it", "udelat PR",
+- Common user phrasing includes "commitni", "pushni", "ship it", "udelat PR",
   "otestuj PR", "ready for review", "mergni", and "posli to do mainu".
+- For standalone "udelej review", "zkontroluj implementaci", "spawni subagenty
+  na review", or "bud dukladny" requests, use `implementation-review` first.
 - Do not force PR ceremony for tiny typo/docs-only edits unless the user asks.
 - For implementation tasks, create or switch to a dedicated task branch before
   editing unless the user explicitly asks to use the current branch.
@@ -67,9 +69,9 @@ git diff --stat
    - for multi-step work, test each meaningful milestone before moving on,
    - document any blocker or skipped validation.
 5. Review before PR when useful:
-   - for non-trivial shared logic, data correctness, infra, security, or AI
-     operating-system changes, spawn focused reviewer subagents when available,
-   - ask reviewers for bugs, regressions, missing validation, and scope leaks,
+   - for standalone review, use `implementation-review`,
+   - for delivery-only handoff, ensure review findings are resolved or explicitly
+     carried as caveats before pushing,
    - fix material findings before pushing or explain why they are not handled.
 6. Commit:
    - stage only the approved file list,
@@ -117,10 +119,9 @@ git diff --stat
 ## User Intent Parsing
 - "push", "push it", "commit and push", "clean and pushed", or "ship this":
   commit current-task changes, push the feature branch, and open a draft PR.
-- "test it", "otestuj to", or "otestuj milestone": run the narrowest meaningful
-  validation for the current state and report blockers before continuing.
-- "spawn subagents for review" or "spawni subagenty na review": run focused
-  reviewer subagents when available before PR handoff.
+- "test it", "otestuj to", or "otestuj milestone" in a delivery context: run
+  the narrowest meaningful validation for the current state and report blockers
+  before continuing. For standalone review, use `implementation-review`.
 - "no PR" or "jen pushni branch": push branch only and do not open a PR.
 - "ready for review": mark the draft PR ready only after validation and PR body
   checks are current.
