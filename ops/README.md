@@ -15,7 +15,7 @@ Do not use this folder for implementation details that belong in repo
 
 | File | Purpose |
 | --- | --- |
-| `daily-brief.md` | Latest Chief of Staff brief and short history. |
+| `daily-brief.md` | Durable morning-brief policy and latest durable corrections; not a daily brief archive. |
 | `open-loops.md` | Cross-repo blockers, waiting items, PRs, Asana follow-ups. |
 | `pipeline-watch.md` | Pipeline/status email patterns and watch items. |
 | `people-followups.md` | People and threads that likely need a reply. |
@@ -25,6 +25,20 @@ Do not use this folder for implementation details that belong in repo
 ## Chief Of Staff Brief Contract
 
 The daily brief should be short enough to fit on one screen.
+
+Daily morning-brief output and raw run notes belong in automation memory, not in
+this repository:
+
+- `$CODEX_HOME/automations/adrez-chief-of-staff-morning-brief/memory.md`
+
+`agents/ops` is for durable operating state only. A morning run may update these
+files only when the change should affect future ranking, suppression, open-loop
+tracking, or people follow-up behavior.
+
+The brief must distinguish:
+- confirmed facts from inferred priorities
+- actionable items from parked or waiting context
+- connector gaps from true absence of signals
 
 Default sections:
 - `Today`
@@ -38,7 +52,19 @@ Rules:
 - Draft replies only when useful; never send them without confirmation.
 - Do not delete, archive, send, schedule, or mutate external systems without
   explicit user approval.
-- Write back only concise state that will matter tomorrow.
+- Write back only concise durable state that will matter tomorrow; do not
+  persist the full daily brief here.
+- If a morning run changes tracked files under `agents/ops`, make a focused git
+  commit or explicitly say the repo was left dirty because Martin asked.
+- Before ranking priorities, apply the latest Martin corrections in
+  `daily-brief.md`, `open-loops.md`, `pipeline-watch.md`, and
+  `people-followups.md`; never resurface a corrected item unless a newer source
+  reopens it.
+- Do not turn a `Done`, `Resolved`, `Waiting`, `Parked`, or
+  "Martin handles separately" item into a top priority unless there is a fresh
+  same-day trigger.
+- If a recommendation is inferred from data rather than explicitly requested by
+  Martin or another person, label it as an inference.
 
 ## Morning Source Order
 
@@ -61,6 +87,25 @@ default.
    - only when directly referenced by ops memory, Outlook, Teams, Asana, or a
      recent task note
 
+## Ranking Rules
+
+Rank an item high only when at least one is true:
+- it blocks today's scheduled work
+- it requires Martin's reply or decision
+- it is a fresh production, billing, pipeline, or reporting risk
+- Martin corrected it into today's focus
+- it has an explicit due date today or tomorrow
+
+Down-rank or omit an item when:
+- ops memory marks it `Done`, `Resolved`, `Waiting`, `Parked`, or handled by
+  Martin
+- the only source is stale Asana or task-note state contradicted by newer ops
+  memory
+- it is a recovered pipeline with no new failure
+- it is useful background but has no next action today
+- it is technically true, but ownership is external or Martin already said he
+  will handle it separately
+
 ## Connector Handling
 
 - Teams broad chat listing can timeout. Start with small pages (`top=1`) and
@@ -71,7 +116,11 @@ default.
 - If a Teams channel or chat fetch returns an empty body, use the thread preview
   and link/title as partial signal; do not reduce the item to "check manually"
   until a narrow retry has been attempted.
+- Treat empty Teams notification bodies as unknown status, not success and not
+  failure. Escalate only if another source suggests an incident.
 - Asana can be incomplete or stale. Cross-check Asana against Outlook Asana
   notifications and local repo task notes before ranking priorities.
 - "Manually check X" is a last-resort output. Prefer either doing the check via
   a narrower connector call or naming the exact unavailable source/tool.
+- When a connector is unavailable, output the exact unavailable source/tool and
+  what could not be verified; do not infer "no signal" from connector failure.
