@@ -1,10 +1,10 @@
 ---
 name: entity-dbt-cloud
-description: Add a new dbt entity/model entry point in dbt-cloud (usually l1_raw first), docs/tests, and selector-based validation.
+description: Add a new dbt entity/model entry point in dbt-cloud, usually l1_raw first, plus docs/tests and selector-based validation. Use when the user says "pridej dbt model", "pridej raw model", "dostan to do dbt", "udelej l1_raw", "pridej entity do dbt", or "pridej schema tests pro novy model".
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-03-26
+last_reviewed: 2026-06-16
 compatibility: Requires /Users/martin/Documents/adrez/dbt-cloud and dbt environment access.
 ---
 
@@ -23,14 +23,14 @@ Use this skill when adding a new entity/table model in `dbt-cloud`.
 - Whether downstream (`l2/l3`) is in scope.
 
 ## Workflow
-1. Open `/Users/martin/Documents/adrez/dbt-cloud/AGENTS.md` and relevant nearby schema/model files.
+1. Open `/Users/martin/Documents/adrez/dbt-cloud/AGENTS.md`, the closest layer-specific `AGENTS.md`, and relevant nearby schema/model files.
 2. Create model SQL (typically `models/l1_raw/.../raw_<entity>.sql`).
 3. Update corresponding `schema.yml`/`schema.yaml` with descriptions/tests.
 4. If requested, wire to downstream layers (`l2/l3`) explicitly.
 5. Validate with selector-based run:
 ```bash
 cd /Users/martin/Documents/adrez/dbt-cloud
-dbt build --select <model_name>
+./scripts/dbt-local build --select <model_name>
 ```
 6. If environment blocks validation, document exact reason in task note/handoff.
 7. If non-trivial, create/update `docs/tasks/YYYY-MM-DD-<task>.md`.

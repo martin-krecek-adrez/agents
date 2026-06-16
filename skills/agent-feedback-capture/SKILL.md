@@ -1,10 +1,10 @@
 ---
 name: agent-feedback-capture
-description: Capture reusable Adrez harness feedback as structured inbox items for later triage and promotion.
+description: Capture reusable Adrez harness feedback as structured inbox items for later triage and promotion. Use when the user says "zapis feedback", "zachyt feedback", "at se to priste nestane", "priste to delej jinak", "dej to do harnessu", "tohle je reusable lesson", or when agent/tool/connector behavior reveals a reusable workflow lesson.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-05-14
+last_reviewed: 2026-06-15
 compatibility: Requires /Users/martin/Documents/adrez/agents/feedback.
 ---
 
@@ -22,8 +22,8 @@ Capture feedback when:
   intent,
 - a workflow needs a new fallback, guardrail, script, or setup check,
 - a skill, `AGENTS.md`, or durable context surface is stale,
-- the user says "zapiš feedback", "přidej to do harnessu", "ať se to příště
-  nestane", or equivalent.
+- the user says "zapis feedback", "zachyt feedback", "priste to delej jinak",
+  "pridej to do harnessu", "at se to priste nestane", or equivalent.
 
 Do not use this skill for normal product-code bugs unless the reusable lesson is
 about agent/harness behavior.
@@ -57,11 +57,11 @@ Use:
 - If sensitivity was not checked, set `sensitive_data_checked: no`; such items
   cannot be promoted until reviewed.
 
-## Local Note vs Asana
+## Local Note vs Linear
 Create a local feedback item for reusable lessons, unclear future triage, or
 small harness improvements.
 
-Create an Asana backlog task as well when:
+Create a Linear issue as well when:
 - the change needs design discussion,
 - it affects multiple repos or production workflows,
 - it requires ownership or prioritization,
@@ -71,16 +71,16 @@ Create an Asana backlog task as well when:
 ## Promotion Policy
 - First occurrence: capture feedback.
 - Second similar occurrence: propose durable rule or skill/script/check change.
-- Clear P0/P1 safety issue: propose immediate harness update or Asana task.
+- Clear P0/P1 safety issue: propose immediate harness update or Linear issue.
 - Prefer promotion targets in this order:
   1. helper script or deterministic check,
   2. narrow skill update,
   3. repo-local `AGENTS.md`,
   4. shared `agents/AGENTS.md`,
-  5. durable docs or Asana backlog.
+  5. durable docs or Linear issue.
 
 ## Done Checklist
 - Feedback item exists in `feedback/inbox/`.
 - The item is sanitized or marks `sensitive_data_checked: no`.
 - Suggested promotion target is explicit.
-- Larger design work has an Asana backlog task when needed.
+- Larger design work has a Linear issue when needed.

@@ -37,7 +37,8 @@ style_hits="$(rg -n "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Ca
   /Users/martin/AGENTS.md \
   /Users/martin/Documents/adrez \
   /Users/martin/Documents/live/agent \
-  -g 'AGENTS.md' 2>/dev/null || true)"
+  -g 'AGENTS.md' \
+  -g '!adrez-tools/**' 2>/dev/null || true)"
 
 if [ -z "${style_hits}" ]; then
   ok "No banned hockey-style phrasing remains in AGENTS.md files"
@@ -52,8 +53,12 @@ required_agents=(
   "/Users/martin/Documents/adrez/data-factory/AGENTS.md"
   "/Users/martin/Documents/adrez/extractor-documents/AGENTS.md"
   "/Users/martin/Documents/adrez/extractor-spreadsheets/AGENTS.md"
+  "/Users/martin/Documents/adrez/data-platform/AGENTS.md"
   "/Users/martin/Documents/adrez/metadata-builder/AGENTS.md"
+  "/Users/martin/Documents/adrez/avalanche-mcp/AGENTS.md"
   "/Users/martin/Documents/adrez/docs/AGENTS.md"
+  "/Users/martin/Documents/adrez/powerbi/AGENTS.md"
+  "/Users/martin/Documents/adrez/reporting/AGENTS.md"
 )
 
 for agents_file in "${required_agents[@]}"; do
@@ -74,6 +79,7 @@ while IFS= read -r agents_file; do
   fi
 done < <(find /Users/martin/Documents/adrez -name AGENTS.md \
   -not -path '*/old/*' \
+  -not -path '*/adrez-tools/*' \
   -not -path '*/node_modules/*' \
   -not -path '*/.git/*' \
   | LC_ALL=C sort)
@@ -142,10 +148,14 @@ fi
 AVALANCHE_METADATA_SKILL="/Users/martin/Documents/adrez/agents/skills/avalanche-metadata-update/SKILL.md"
 if grep -q -- "--product-key l2_base_output" "${AVALANCHE_METADATA_SKILL}" \
   && grep -q "profiles_output_ai/l2_base_output" "${AVALANCHE_METADATA_SKILL}" \
+  && grep -q "mcp_metadata_bundle/catalog.json" "${AVALANCHE_METADATA_SKILL}" \
+  && grep -q "mcp_metadata_bundle_ai/catalog_ai.json" "${AVALANCHE_METADATA_SKILL}" \
+  && grep -q "scripts/run_ai_metadata_refresh.sh" "${AVALANCHE_METADATA_SKILL}" \
+  && grep -q "npm run validate-catalog -- --file" "${AVALANCHE_METADATA_SKILL}" \
   && grep -q "rsync -ani --delete" "${AVALANCHE_METADATA_SKILL}"; then
-  ok "Avalanche metadata skill uses product-scoped build, validation, and sync dry-run guidance"
+  ok "Avalanche metadata skill uses product-scoped build, both catalogs, validation, and sync dry-run guidance"
 else
-  fail "Avalanche metadata skill is missing product-scoped build, validation, or sync dry-run guidance"
+  fail "Avalanche metadata skill is missing product-scoped build, both-catalog validation, or sync dry-run guidance"
 fi
 
 dbt_nested_agents=(
@@ -183,6 +193,14 @@ else
   fail "agents/README.md skill list is out of sync with skills/ directory"
 fi
 
+inventory_skills="$(awk -F'\`' '/^\| `[^`]+` / { print $2 }' /Users/martin/Documents/adrez/agents/ops/skills-inventory.md | LC_ALL=C sort)"
+
+if [ "${actual_skills}" = "${inventory_skills}" ]; then
+  ok "skills inventory matches actual business skills"
+else
+  fail "skills inventory is out of sync with skills/ directory"
+fi
+
 while IFS= read -r skill_file; do
   [ -n "${skill_file}" ] || continue
   for field in name description status owner last_reviewed; do
@@ -215,6 +233,19 @@ while IFS= read -r skill_name; do
     :
   else
     fail "Managed skill missing from ~/.codex/skills: ${skill_name}"
+  fi
+
+  if [ -f "${CODEX_HOME}/.managed-skills-manifest" ] && grep -Fxq "${skill_name}" "${CODEX_HOME}/.managed-skills-manifest"; then
+    :
+  else
+    fail "Business skill missing from managed skills manifest: ${skill_name}"
+  fi
+
+  drift="$(rsync -ani --delete "${SKILLS_DIR}/${skill_name}/" "${CODEX_HOME}/skills/${skill_name}/" 2>/dev/null || true)"
+  if [ -z "${drift}" ]; then
+    :
+  else
+    fail "Runtime skill drift detected for ${skill_name}:\n${drift}"
   fi
 done <<< "${actual_skills}"
 

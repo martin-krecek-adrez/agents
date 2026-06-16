@@ -1,10 +1,10 @@
 ---
 name: powerbi-report-starter
-description: Create a new Power BI semantic model and report scaffold from scratch using the repo script, with canonical DIM_DATE and optional role-playing date tables.
+description: Create a new Power BI semantic model and report scaffold from scratch using the repo script, with canonical DIM_DATE and optional role-playing date tables. Use when the user says "novy Power BI report", "zaloz semantic model", "report scaffold", "novy dataset/report", or asks to create a new Power BI report/model from scratch.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-03-26
+last_reviewed: 2026-06-16
 compatibility: Requires /Users/martin/Documents/adrez/powerbi and local Python environment per repo README.
 ---
 
@@ -33,13 +33,14 @@ python3 scripts/create_blank_report.py --name "<name>" --roles <role1> <role2> -
 3. Review the dry-run output before writing files.
 4. Write the scaffold only after the target names and roles are confirmed:
 ```bash
-python3 scripts/create_blank_report.py --name "<name>" --roles <role1> <role2> --force --pretty
+python3 scripts/create_blank_report.py --name "<name>" --roles <role1> <role2> --pretty
 ```
-5. Validate locally with the umbrella validator when in scope:
+5. If the target already exists, stop and ask before using `--force`; it deletes existing target report/model folders before recreating them.
+6. Validate locally with the umbrella validator when in scope:
 ```bash
 python3 scripts/validate.py --mode static
 ```
-6. Runtime validation, DEV sync, or PROD sync are separate follow-up steps. Do not push or trigger release-style sync unless the user explicitly asks.
+7. Runtime validation, DEV sync, or PROD sync are separate follow-up steps. Do not push or trigger release-style sync unless the user explicitly asks.
 
 ## Done checklist
 - Report and semantic model scaffold created in `workspace/`.

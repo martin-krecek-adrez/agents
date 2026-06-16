@@ -7,7 +7,7 @@ Raw feedback is evidence. Promoted feedback becomes harness behavior.
 
 ## Folders
 - `inbox/`: raw feedback items waiting for triage.
-- `promoted/`: items converted into AGENTS.md, skills, scripts, checks, docs, or Asana backlog.
+- `promoted/`: items converted into AGENTS.md, skills, scripts, checks, docs, or Linear follow-up.
 - `rejected/`: one-off or obsolete items kept for traceability.
 
 ## Capture Rule
@@ -29,4 +29,4 @@ Prefer promotion targets in this order:
 2. narrow skill update,
 3. repo-local `AGENTS.md`,
 4. shared `agents/AGENTS.md`,
-5. durable docs or Asana backlog for larger design work.
+5. durable docs or Linear issue for larger design work.
