@@ -1,10 +1,10 @@
 ---
 name: snowcli
-description: CLI for Snowflake. Query data, manage warehouses, databases, schemas, tables, and stages. Use when working with Snowflake data platform.
+description: CLI for Snowflake. Query data, inspect warehouses/databases/schemas/tables/stages, describe objects, and validate Snowflake state. Use when the user says "koukni do Snowflake", "podivej se do Snowflake", "pust SQL", "over tabulku ve Snowflake", "ukaz schema", "najdi columns", "zkontroluj data ve Snowflake", or "over external table".
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-03-26
+last_reviewed: 2026-06-16
 compatibility: Requires snow CLI (docs.snowflake.com/en/developer-guide/snowflake-cli). Needs ~/.snowflake/config.toml with connection config.
 ---
 
@@ -48,6 +48,11 @@ snow sql -q "SELECT * FROM t" --format json | jq 'length'
 ```
 
 Available formats: `json`, `csv`, `tsv`, `plain`, `table` (default).
+
+## Safety
+
+- Default to read-only SQL and metadata inspection.
+- Do not run DDL, DML, `TRUNCATE`, warehouse changes, stage uploads/removals, or other mutating Snowflake commands unless the user explicitly asks for that action.
 
 ## Specifying Connection
 

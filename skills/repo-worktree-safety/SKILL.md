@@ -1,10 +1,10 @@
 ---
 name: repo-worktree-safety
-description: Isolate parallel same-repo work with git worktrees and recover safely from branch or dirty-worktree confusion.
+description: Isolate parallel same-repo work with git worktrees and recover safely from branch, scope, or dirty-worktree confusion. Use when the user says "mam bordel v branchich", "zkontroluj worktree", "jsem ve spatne branchi", "zkontroluj scope", "nez commitnes zkontroluj scope", "dirty worktree", or asks to create/use a task worktree.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-05-12
+last_reviewed: 2026-06-16
 compatibility: Requires a git repository in /Users/martin/Documents/adrez.
 ---
 

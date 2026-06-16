@@ -1,0 +1,7 @@
+interface:
+  display_name: "Adrez Linear Workflow"
+  short_description: "Manage Adrez Linear projects, issues, and updates"
+  default_prompt: "Use $adrez-linear-workflow to turn this Adrez work into the right Linear project, issue, child issue, or update."
+
+policy:
+  allow_implicit_invocation: true

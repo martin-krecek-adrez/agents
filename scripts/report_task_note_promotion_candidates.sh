@@ -41,6 +41,7 @@ done < <(find "${ROOT}" \
   -mtime +"${MIN_AGE_DAYS}" \
   -not -name 'TEMPLATE_TASK.md' \
   -not -path '*/old/*' \
+  -not -path '*/_worktrees/*' \
   -not -path '*/node_modules/*' \
   -not -path '*/adrez-data-assistant/*' \
   -not -path '*/adrez-metadata-sql-agent/*' \

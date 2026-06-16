@@ -72,6 +72,7 @@ Personal skills live in:
 Use `scripts/sync_codex_setup.sh` to sync both sets into `~/.codex/skills`.
 
 Current business skills:
+- adrez-linear-workflow
 - asana
 - agent-feedback-capture
 - ai-context-maintenance
@@ -81,6 +82,7 @@ Current business skills:
 - entity-data-factory
 - entity-extractor-spreadsheets
 - entity-spreadsheet-ingestion
+- grill-me
 - powerbi-report-starter
 - repo-pr-handoff
 - repo-worktree-safety

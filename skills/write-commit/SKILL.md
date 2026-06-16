@@ -1,10 +1,10 @@
 ---
 name: write-commit
-description: Write well-structured commit messages.
+description: Write well-structured commit messages. Use when the user asks for a commit message, git commit wording, how to name a commit, "napiš commit", "pojmenuj commit", or when another delivery workflow needs a concise commit subject/body.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-03-26
+last_reviewed: 2026-06-15
 ---
 
 # Write Commit

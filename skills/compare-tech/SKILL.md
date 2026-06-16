@@ -1,10 +1,10 @@
 ---
 name: compare-tech
-description: Compare technologies with weighted scoring matrix. Use when evaluating libraries, frameworks, SaaS products, or infrastructure options.
+description: Compare technologies with weighted scoring matrix. Use when evaluating libraries, frameworks, SaaS products, or infrastructure options, or when the user says "porovnej", "co je lepsi", "vyber mezi", "srovnej", "A vs B", or asks which technical tool/vendor/platform to use.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-03-26
+last_reviewed: 2026-06-16
 ---
 
 # Compare Technologies

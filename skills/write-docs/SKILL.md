@@ -1,10 +1,10 @@
 ---
 name: write-docs
-description: Write AI-scannable technical documentation.
+description: Write AI-scannable technical documentation for Adrez repos and durable docs. Use when the user says "napis dokumentaci", "uprav docs", "zdokumentuj workflow", "vytvor README", "pridej how-to", or "sepis troubleshooting". Use ai-context-maintenance instead for AGENTS.md, shared skill governance, task-memory routing, and Codex setup audits.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-03-26
+last_reviewed: 2026-06-16
 ---
 
 # Write Documentation
@@ -15,6 +15,7 @@ Documentation that is scannable, consistent, and actionable for AI agents.
 
 - If the current repo or subfolder has a local `AGENTS.md` for documentation, follow that file first.
 - Use this skill as the generic fallback only when no repo-local docs rules are more specific.
+- Use `ai-context-maintenance` instead when the work is about AGENTS.md hierarchy, skills, task-memory routing, feedback promotion, or local Codex setup.
 
 ## Structure
 
