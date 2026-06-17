@@ -1,8 +1,10 @@
 #!/usr/bin/env bash
 set -euo pipefail
 
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+AGENTS_REPO="$(cd "${SCRIPT_DIR}/.." && pwd -P)"
 ADREZ_AGENTS_MD="/Users/martin/Documents/adrez/AGENTS.md"
-BUSINESS_SKILLS_DIR="/Users/martin/Documents/adrez/agents/skills"
+BUSINESS_SKILLS_DIR="${AGENTS_REPO}/skills"
 PERSONAL_SKILLS_DIR="/Users/martin/Documents/live/agent/skills"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 TARGET_SKILLS_DIR="${CODEX_HOME}/skills"

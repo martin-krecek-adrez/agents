@@ -18,6 +18,10 @@ Run setup checks:
 bash /Users/martin/Documents/adrez/agents/scripts/check_ai_setup.sh
 ```
 
+`check_ai_setup.sh` also runs:
+- `scripts/validate_business_skills.py` for Adrez skill metadata and UI prompts.
+- `scripts/check_repo_hygiene.sh` for tracked junk files such as `.DS_Store`.
+
 See [Skills](https://developers.openai.com/codex/skills) and [AGENTS.md](https://developers.openai.com/codex/guides/agents-md) for details.
 
 ## Routing Summary

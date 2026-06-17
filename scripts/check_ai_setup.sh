@@ -19,7 +19,8 @@ fail() {
 }
 
 ROOT_AGENTS="/Users/martin/Documents/adrez/AGENTS.md"
-AGENTS_REPO="/Users/martin/Documents/adrez/agents"
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
+AGENTS_REPO="$(cd "${SCRIPT_DIR}/.." && pwd -P)"
 SKILLS_DIR="${AGENTS_REPO}/skills"
 README_PATH="${AGENTS_REPO}/README.md"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
@@ -38,7 +39,8 @@ style_hits="$(rg -n "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Ca
   /Users/martin/Documents/adrez \
   /Users/martin/Documents/live/agent \
   -g 'AGENTS.md' \
-  -g '!adrez-tools/**' 2>/dev/null || true)"
+  -g '!adrez-tools/**' \
+  -g '!_worktrees/**' 2>/dev/null || true)"
 
 if [ -z "${style_hits}" ]; then
   ok "No banned hockey-style phrasing remains in AGENTS.md files"
@@ -48,7 +50,7 @@ fi
 
 required_agents=(
   "/Users/martin/Documents/adrez/AGENTS.md"
-  "/Users/martin/Documents/adrez/agents/AGENTS.md"
+  "${AGENTS_REPO}/AGENTS.md"
   "/Users/martin/Documents/adrez/dbt-cloud/AGENTS.md"
   "/Users/martin/Documents/adrez/data-factory/AGENTS.md"
   "/Users/martin/Documents/adrez/extractor-documents/AGENTS.md"
@@ -79,6 +81,7 @@ while IFS= read -r agents_file; do
   fi
 done < <(find /Users/martin/Documents/adrez -name AGENTS.md \
   -not -path '*/old/*' \
+  -not -path '*/_worktrees/*' \
   -not -path '*/adrez-tools/*' \
   -not -path '*/node_modules/*' \
   -not -path '*/.git/*' \
@@ -90,62 +93,62 @@ else
   fail "dbt-cloud AGENTS.md does not route agents to /Users/martin/Documents/adrez/docs/data-platform"
 fi
 
-if grep -q "dedicated task branch" /Users/martin/Documents/adrez/agents/AGENTS.md \
-  && grep -q "make changes in <repo> and push it" /Users/martin/Documents/adrez/agents/skills/repo-pr-handoff/SKILL.md \
+if grep -q "dedicated task branch" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "make changes in <repo> and push it" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md" \
   && grep -q "dedicated task branch" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
   ok "Dedicated branch defaults are explicit in shared and dbt-cloud guidance"
 else
   fail "Dedicated branch defaults are missing from shared, repo-pr-handoff, or dbt-cloud guidance"
 fi
 
-if grep -q "Branches are delivery units; worktrees are concurrency units" /Users/martin/Documents/adrez/agents/AGENTS.md \
-  && grep -q "repo-worktree-safety" /Users/martin/Documents/adrez/agents/AGENTS.md \
-  && grep -q "git worktree per task branch" /Users/martin/Documents/adrez/agents/skills/repo-pr-handoff/SKILL.md \
-  && grep -q "One task = one branch = one git worktree = one agent" /Users/martin/Documents/adrez/agents/skills/repo-worktree-safety/SKILL.md; then
+if grep -q "Branches are delivery units; worktrees are concurrency units" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "repo-worktree-safety" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "git worktree per task branch" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md" \
+  && grep -q "One task = one branch = one git worktree = one agent" "${AGENTS_REPO}/skills/repo-worktree-safety/SKILL.md"; then
   ok "Concurrent same-repo worktree policy is explicit in shared git guidance"
 else
   fail "Concurrent same-repo worktree policy is missing from shared git guidance"
 fi
 
-if grep -q "git_task_preflight.sh" /Users/martin/Documents/adrez/agents/skills/repo-worktree-safety/SKILL.md \
-  && grep -q "create_task_worktree.sh" /Users/martin/Documents/adrez/agents/skills/repo-worktree-safety/SKILL.md \
-  && [ -x /Users/martin/Documents/adrez/agents/scripts/git_task_preflight.sh ] \
-  && [ -x /Users/martin/Documents/adrez/agents/scripts/create_task_worktree.sh ] \
-  && [ -x /Users/martin/Documents/adrez/agents/scripts/pr_handoff_check.sh ]; then
+if grep -q "git_task_preflight.sh" "${AGENTS_REPO}/skills/repo-worktree-safety/SKILL.md" \
+  && grep -q "create_task_worktree.sh" "${AGENTS_REPO}/skills/repo-worktree-safety/SKILL.md" \
+  && [ -x "${AGENTS_REPO}/scripts/git_task_preflight.sh" ] \
+  && [ -x "${AGENTS_REPO}/scripts/create_task_worktree.sh" ] \
+  && [ -x "${AGENTS_REPO}/scripts/pr_handoff_check.sh" ]; then
   ok "Git worktree safety helper scripts are documented and executable"
 else
   fail "Git worktree safety helper scripts are missing, undocumented, or not executable"
 fi
 
-if grep -q "Never use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" /Users/martin/Documents/adrez/agents/AGENTS.md \
-  && grep -q "Do not use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" /Users/martin/Documents/adrez/agents/skills/repo-pr-handoff/SKILL.md \
-  && grep -q "Do not use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" /Users/martin/Documents/adrez/agents/skills/repo-worktree-safety/SKILL.md; then
+if grep -q "Never use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "Do not use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md" \
+  && grep -q "Do not use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" "${AGENTS_REPO}/skills/repo-worktree-safety/SKILL.md"; then
   ok "No implicit stash/reset/checkout/clean rule is explicit"
 else
   fail "No implicit stash/reset/checkout/clean rule is missing from git guidance"
 fi
 
-if grep -q "GitHub connector \`404\` can mean connector scope" /Users/martin/Documents/adrez/agents/AGENTS.md \
-  && grep -q "try \`gh repo view <owner>/<repo>\`" /Users/martin/Documents/adrez/agents/skills/repo-pr-handoff/SKILL.md \
-  && grep -q "retry the same narrow \`gh\` command with \`require_escalated\`" /Users/martin/Documents/adrez/agents/skills/repo-pr-handoff/SKILL.md; then
+if grep -q "GitHub connector \`404\` can mean connector scope" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "try \`gh repo view <owner>/<repo>\`" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md" \
+  && grep -q "retry the same narrow \`gh\` command with \`require_escalated\`" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md"; then
   ok "GitHub connector 404 and sandbox gh fallback guidance is explicit"
 else
   fail "GitHub connector 404 and sandbox gh fallback guidance is missing"
 fi
 
-if [ -d /Users/martin/Documents/adrez/agents/feedback/inbox ] \
-  && [ -d /Users/martin/Documents/adrez/agents/feedback/promoted ] \
-  && [ -d /Users/martin/Documents/adrez/agents/feedback/rejected ] \
-  && [ -f /Users/martin/Documents/adrez/agents/feedback/TEMPLATE.md ] \
-  && grep -q "sensitive_data_checked" /Users/martin/Documents/adrez/agents/feedback/TEMPLATE.md \
-  && grep -q "agent-feedback-capture" /Users/martin/Documents/adrez/agents/skills/ai-context-maintenance/SKILL.md \
-  && grep -q "feedback/inbox" /Users/martin/Documents/adrez/agents/skills/agent-feedback-capture/SKILL.md; then
+if [ -d "${AGENTS_REPO}/feedback/inbox" ] \
+  && [ -d "${AGENTS_REPO}/feedback/promoted" ] \
+  && [ -d "${AGENTS_REPO}/feedback/rejected" ] \
+  && [ -f "${AGENTS_REPO}/feedback/TEMPLATE.md" ] \
+  && grep -q "sensitive_data_checked" "${AGENTS_REPO}/feedback/TEMPLATE.md" \
+  && grep -q "agent-feedback-capture" "${AGENTS_REPO}/skills/ai-context-maintenance/SKILL.md" \
+  && grep -q "feedback/inbox" "${AGENTS_REPO}/skills/agent-feedback-capture/SKILL.md"; then
   ok "Agent feedback inbox and capture workflow are configured"
 else
   fail "Agent feedback inbox or capture workflow is missing"
 fi
 
-AVALANCHE_METADATA_SKILL="/Users/martin/Documents/adrez/agents/skills/avalanche-metadata-update/SKILL.md"
+AVALANCHE_METADATA_SKILL="${AGENTS_REPO}/skills/avalanche-metadata-update/SKILL.md"
 if grep -q -- "--product-key l2_base_output" "${AVALANCHE_METADATA_SKILL}" \
   && grep -q "profiles_output_ai/l2_base_output" "${AVALANCHE_METADATA_SKILL}" \
   && grep -q "mcp_metadata_bundle/catalog.json" "${AVALANCHE_METADATA_SKILL}" \
@@ -193,7 +196,7 @@ else
   fail "agents/README.md skill list is out of sync with skills/ directory"
 fi
 
-inventory_skills="$(awk -F'\`' '/^\| `[^`]+` / { print $2 }' /Users/martin/Documents/adrez/agents/ops/skills-inventory.md | LC_ALL=C sort)"
+inventory_skills="$(awk -F'\`' '/^\| `[^`]+` / { print $2 }' "${AGENTS_REPO}/ops/skills-inventory.md" | LC_ALL=C sort)"
 
 if [ "${actual_skills}" = "${inventory_skills}" ]; then
   ok "skills inventory matches actual business skills"
@@ -227,6 +230,18 @@ if [ "${failures}" -eq 0 ]; then
   ok "All skill frontmatter includes required maintenance metadata"
 fi
 
+if python3 "${SCRIPT_DIR}/validate_business_skills.py" "${SKILLS_DIR}"; then
+  ok "Business skill validator passed"
+else
+  fail "Business skill validator failed"
+fi
+
+if bash "${SCRIPT_DIR}/check_repo_hygiene.sh"; then
+  ok "Repo hygiene validator passed"
+else
+  fail "Repo hygiene validator failed"
+fi
+
 while IFS= read -r skill_name; do
   [ -n "${skill_name}" ] || continue
   if [ -f "${CODEX_HOME}/skills/${skill_name}/SKILL.md" ]; then
@@ -241,7 +256,7 @@ while IFS= read -r skill_name; do
     fail "Business skill missing from managed skills manifest: ${skill_name}"
   fi
 
-  drift="$(rsync -ani --delete "${SKILLS_DIR}/${skill_name}/" "${CODEX_HOME}/skills/${skill_name}/" 2>/dev/null || true)"
+  drift="$(diff -qr "${SKILLS_DIR}/${skill_name}/" "${CODEX_HOME}/skills/${skill_name}/" 2>/dev/null || true)"
   if [ -z "${drift}" ]; then
     :
   else
