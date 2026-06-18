@@ -17,6 +17,8 @@ it.
 | Jiří Dufek / XML bank statements | Teams / Outlook / Martin correction | XML výpisy budou prospektivně, historicky prý banka neumí; ČSOB emailová distribuce výpisů je stále nejistá. | Martin to testuje sám bokem; nesurfacingovat jako follow-up pro Codex, pokud se znovu neotevře. | 2026-06-12 |
 | Martin Hapl / candidate email wording | Teams chat | Upozornil, že dovolenou raději nepsat kandidátům emailem; je to spíš procesní připomínka pro další intra. | U dnešních candidate follow-upů držet email stručný a citlivé HR detaily řešit ústně. | 2026-06-05 |
 | Mews / Adyen migration | Outlook / Martin correction | Hapl přidal Martina jako ownera změny; Martin poslal technické otázky k settlement identifierům, payout rekonstrukci a bank-statement identifikaci. | Martin hlídá Mews odpovědi; nesurfacingovat jako Codex reply-needed, jen jako watch. | 2026-06-16 |
+| Martin Hapl / SWE-252 benchmark answer packet | Linear / Outlook notification | Hapl čeká na Martinovy ingestion changes, než otestuje benchmark ask-packet answers. | Posunout ingestion změny nebo mu napsat krátký ETA/status. | 2026-06-18 |
+| Michal Bukáček / Snowflake URL | Teams chat | Michal po onsite žádá URL na Snowflake. | Poslat Snowflake URL nebo potvrdit, že přístup ještě není připravený. | 2026-06-18 |
 
 ## Resolved
 

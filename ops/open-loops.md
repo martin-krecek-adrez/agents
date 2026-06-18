@@ -37,6 +37,7 @@ threads.
 | Open | PPR occupancy/report repair | dbt task notes / Martin correction | Martin is handling this separately; report broke, so do not treat as a simple rollout recommendation. | 2026-06-12 |
 | Open | Mews Adyen migration / payout reconciliation | Outlook / Martin correction | Martin asked Mews whether Adyen payout amounts can be reconstructed from API settlement data; he is watching responses. 2026-06-20 account-verification deadline is Mews KYB/compliance from original migration email. | 2026-06-16 |
 | Open | Bank statements Snowflake automation | Teams / Jiří Dufek / Martin correction | Martin told Jiří he will automate bank statements into Snowflake/storage and analyze completeness/linkability; this is Martin's main work today. | 2026-06-16 |
+| Open | Benchmark answer packet ingestion changes | Linear SWE-252 / Hapl | Hapl will test after Martin implements the ingestion changes. | 2026-06-18 |
 
 ## Parking Lot
 
