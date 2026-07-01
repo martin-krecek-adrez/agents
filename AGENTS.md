@@ -31,6 +31,7 @@ Use these skills when intent clearly matches:
 - Snowflake: `snowcli`.
 - Asana legacy archive/context only: `asana`.
 - Linear task/project tracking: `adrez-linear-workflow`.
+- Thread intake / agent orchestration: `adrez-agent-orchestration`.
 - Decision support: `grill-me`, `compare-tech`.
 - Implementation review: `implementation-review`.
 - Git delivery: `write-commit`, `repo-pr-handoff`, `repo-worktree-safety`.
@@ -52,6 +53,7 @@ Use natural intent; exact skill names are optional.
 - Safety: "zkontroluj scope", "spatna branch", "dirty worktree".
 - Docs: "napis dokumentaci", "uprav docs", "sepis troubleshooting".
 - Feedback: "zapis feedback", "at se to priste nestane", "dej to do harnessu".
+- Orchestration: "je to male nebo velke", "rozpadni to na agenty", "kolik agentu pustit", "kdo dela co".
 
 ## Snowflake Defaults
 - For `snowcli` tasks, use locally configured Snow CLI/dbt context by default.

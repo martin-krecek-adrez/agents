@@ -42,6 +42,7 @@ Main routing is defined in `AGENTS.md`.
   - `adrez-data-assistant`
   - `adrez-metadata-sql-agent`
 - Skill routing highlights:
+  - Thread intake / agent orchestration -> `adrez-agent-orchestration`
   - Snowflake-related requests -> `snowcli`
   - Asana updates/comments -> `asana`
   - Commit message drafting -> `write-commit`
@@ -77,6 +78,7 @@ Personal skills live in:
 Use `scripts/sync_codex_setup.sh` to sync both sets into `~/.codex/skills`.
 
 Current business skills:
+- adrez-agent-orchestration
 - adrez-linear-workflow
 - asana
 - agent-feedback-capture

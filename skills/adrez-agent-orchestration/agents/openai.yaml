@@ -1,0 +1,7 @@
+interface:
+  display_name: "Adrez Agent Orchestration"
+  short_description: "Route Adrez threads into local or agent work"
+  default_prompt: "Use $adrez-agent-orchestration to triage this Adrez thread, decide local vs tracked vs parallel work, and define agent roles if needed."
+
+policy:
+  allow_implicit_invocation: true

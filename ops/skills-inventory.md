@@ -1,6 +1,6 @@
 # Skills Inventory
 
-Last reviewed: 2026-06-16
+Last reviewed: 2026-07-01
 
 ## Model
 
@@ -20,6 +20,7 @@ Last reviewed: 2026-06-16
 
 | Skill | Verdict | Notes | Next Action |
 | --- | --- | --- | --- |
+| `adrez-agent-orchestration` | keep | New light intake/orchestration layer for deciding tiny/small/tracked/parallel/project thread shape, local vs tracked work, and explicitly authorized subagent roles. Distinct from Linear tracking, implementation review, and repo/domain execution skills. | Forward-test on the next real multi-agent/thread-intake request; tighten trigger if it fires too broadly. |
 | `adrez-linear-workflow` | keep | Correctly promoted to business source. Linear is the only default tool for new Adrez task planning/tracking. Long body, but useful because Linear object decisions are fragile. | Consider moving templates to `references/` if it grows. |
 | `agent-feedback-capture` | keep | Clear raw-feedback capture skill. Distinct from `ai-context-maintenance`, which triages/promotes. | No immediate change. |
 | `ai-context-maintenance` | keep | Correct owner for AGENTS.md, skills, task memory, stale context, setup checks, and inventory-based skill audits. | No immediate change. |
@@ -50,6 +51,11 @@ Last reviewed: 2026-06-16
   - `repo-worktree-safety` is a safety preflight.
   - `write-commit` is message construction.
   - `repo-pr-handoff` is delivery orchestration.
+- Keep `adrez-agent-orchestration` as the thin intake layer above existing execution skills:
+  - It classifies thread shape and delegation mode.
+  - It hands tracking decisions to `adrez-linear-workflow`.
+  - It hands review gates to `implementation-review`.
+  - It hands implementation/delivery to repo/domain skills.
 - Do not merge `agent-feedback-capture` and `ai-context-maintenance`.
   - Capture stores raw evidence.
   - Maintenance triages/promotes stable lessons.
@@ -61,7 +67,7 @@ Last reviewed: 2026-06-16
 
 1. Consider trimming `repo-pr-handoff` after current dirty `agents/AGENTS.md` work is settled, because shared git policy and `implementation-review` now carry some adjacent detail.
 2. Decide later whether `playwright` should remain a personal utility skill. Do not remove it from runtime until there is evidence that Browser Use fully covers the terminal automation use cases.
-3. Review new skill ideas separately and add them only when they represent repeated workflows rather than one-off prompts.
+3. Forward-test `adrez-agent-orchestration` on the next real orchestration request and tighten its trigger if it fires on ordinary implementation work.
 
 ## Health Checks
 
