@@ -28,7 +28,7 @@ threads.
 | Done | Tools invoices for billing | Martin correction | Invoices are done; future improvement is an automation because the current manual process is repetitive. | 2026-06-12 |
 | Open | CFO dynamic report demo | Martin correction | Prepare/show CFO demo of the dynamic report. | 2026-06-01 |
 | Waiting | Avalanche rollout prep | Martin correction | Shown to everyone on 2026-06-03; wait for feedback, no active push unless someone responds. | 2026-06-04 |
-| Open | Finance Reconciliation Program 2026 | Outlook / Teams / Martin correction | This is Martin's main work today; Dan forwarded bank movements and data is now available. | 2026-06-09 |
+| Open | Finance Reconciliation Program 2026 | Outlook / Teams / Martin correction | This is Martin's main work today; Cash recon is his active focus on 2026-07-01. | 2026-07-01 |
 | Waiting | Rev Management booking-window heatmap prod deploy | Outlook GitHub notification / Martin correction | Code is in `main`; only a trivial prod deploy remains, so do not rank as development blocker. | 2026-06-12 |
 | Done | Booking room layout Avalanche metadata | Martin correction | Done as of 2026-06-03; do not keep surfacing as approval blocker. | 2026-06-03 |
 | Open | HR windows | Martin correction | One HR window already happened and another is still coming; keep candidate follow-up light but visible. | 2026-06-01 |
@@ -38,6 +38,8 @@ threads.
 | Open | Mews Adyen migration / payout reconciliation | Outlook / Martin correction | Martin asked Mews whether Adyen payout amounts can be reconstructed from API settlement data; he is watching responses. 2026-06-20 account-verification deadline is Mews KYB/compliance from original migration email. | 2026-06-16 |
 | Open | Bank statements Snowflake automation | Teams / Jiří Dufek / Martin correction | Martin told Jiří he will automate bank statements into Snowflake/storage and analyze completeness/linkability; this is Martin's main work today. | 2026-06-16 |
 | Open | Benchmark answer packet ingestion changes | Linear SWE-252 / Hapl | Hapl will test after Martin implements the ingestion changes. | 2026-06-18 |
+| Open | Expedia payout/remittance Snowflake exposure | Linear DTE-55 / Hapl | Three new `expedia_*` payout/remittance tables now land in ADLS; register entities in `data-factory`, add dbt views/tests, and preserve `payment_reference_number` as the cash-recon join key. | 2026-06-29 |
+| Open | Booking Search Results Score catalog coverage | Linear DTE-82 / Hapl / Martin correction | SRS cleanup task note is done; Martin will handle remaining extranet/catalog follow-up today. | 2026-07-01 |
 
 ## Parking Lot
 

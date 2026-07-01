@@ -31,6 +31,19 @@ follow.
 
 ## Latest Durable Corrections
 
+- 2026-07-01: dbt incident from the morning brief was resolved separately;
+  Power BI and reports were refreshed. Do not keep surfacing it as an open
+  incident unless a fresh failure appears. Martin is working on Cash recon
+  today and will handle extranet items today.
+- 2026-06-26: `Cash recon- Danovy kontroly + Martinuv update` was a meeting
+  invite/context for next Wednesday finance meet/sync, not a reply-needed email.
+  Martin will handle CSOB match-key work, and reporting/app focus remains a
+  today's focus.
+- 2026-06-26: Do not rank small Michal/reporting PRs as morning priorities only
+  because GitHub requested Martin's review. Martin and Michal agreed not to use
+  PR review friction for small non-production/non-important-pipeline changes.
+  Surface them only when they touch PROD, an important pipeline, or a real
+  release/risk decision.
 - 2026-06-16: Mews Adyen account verification deadline is a Mews KYB/compliance
   request from the original migration email, not a Codex-created technical
   deadline.
