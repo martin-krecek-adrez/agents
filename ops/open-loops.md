@@ -40,7 +40,7 @@ threads.
 | Open | Benchmark answer packet ingestion changes | Linear SWE-252 / Hapl | Hapl will test after Martin implements the ingestion changes. | 2026-06-18 |
 | Open | Expedia payout/remittance Snowflake exposure | Linear DTE-55 / Hapl | Three new `expedia_*` payout/remittance tables now land in ADLS; register entities in `data-factory`, add dbt views/tests, and preserve `payment_reference_number` as the cash-recon join key. | 2026-06-29 |
 | Open | Booking Search Results Score catalog coverage | Linear DTE-82 / Hapl / Martin correction | SRS cleanup task note is done; Martin will handle remaining extranet/catalog follow-up today. | 2026-07-01 |
-| Open | Booking SRS timeline migration blocker | Linear DTE-90 / Hapl | Decide whether PROD should expose `SRS_SOURCE_TYPE` or whether consumers should temporarily filter on `SOURCE_TYPE = 'booking_ranking_timeline'` with non-null score; deploy is held until Martin chooses. | 2026-07-02 |
+| Open | Booking SRS timeline consumer deploy | Linear DTE-90 / Hapl / dbt task notes | DTE-90 is now Agent Ready/Todo with two prepared app branches; review, smoke, and publish `commission-tier-monitoring` plus `market-overview-analysis`, then re-check Snowflake usage before any old-view drop. | 2026-07-03 |
 
 ## Parking Lot
 
