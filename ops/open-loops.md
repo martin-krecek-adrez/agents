@@ -42,6 +42,7 @@ threads.
 | Open | Booking Search Results Score catalog coverage | Linear DTE-82 / Hapl / Martin correction | SRS cleanup task note is done; Martin will handle remaining extranet/catalog follow-up today. | 2026-07-01 |
 | Open | Booking SRS timeline consumer deploy | Linear DTE-90 / Hapl / dbt task notes | DTE-90 is now Agent Ready/Todo with two prepared app branches; review, smoke, and publish `commission-tier-monitoring` plus `market-overview-analysis`, then re-check Snowflake usage before any old-view drop. | 2026-07-03 |
 | Open | Snowflake critical service key rotation | Outlook Asana digest | Due 2026-07-11; rotate/check critical service user keys and keep this visible until resolved or moved into Linear. | 2026-07-06 |
+| Open | Scrape module watermark Snowflake exposure | Linear DTE-92 / Hapl | Backlog/Medium task assigned 2026-07-06: expose `scrape_module_watermark` ADLS export as Snowflake external table/view so revenue.adrez.com can use real per-module freshness SLA data. | 2026-07-07 |
 
 ## Parking Lot
 
