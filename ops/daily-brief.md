@@ -31,6 +31,10 @@ follow.
 
 ## Latest Durable Corrections
 
+- 2026-07-15: Mandatory INSTRUCTOR training is completed; do not resurface it
+  from unread activation/reminder emails. Colin Stanley's Power BI access
+  request is being handled by Martin; do not rank it again unless Colin sends a
+  new follow-up.
 - 2026-07-01: dbt incident from the morning brief was resolved separately;
   Power BI and reports were refreshed. Do not keep surfacing it as an open
   incident unless a fresh failure appears. Martin is working on Cash recon
