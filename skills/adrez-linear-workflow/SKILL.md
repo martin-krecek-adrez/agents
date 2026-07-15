@@ -1,10 +1,10 @@
 ---
 name: adrez-linear-workflow
-description: Use when managing Adrez work in Linear, the only default tool for new Adrez task planning/tracking. Use for creating or updating Linear projects, issues, child issues, comments, or updates; converting legacy Asana/task context into Linear; drafting agent-ready task descriptions; or recording task updates for Adrez work.
+description: Use when managing Adrez work in Linear, the only active tool for task planning/tracking. Use for creating or updating Linear projects, issues, child issues, comments, or updates; converting legacy Asana/task context into Linear; drafting agent-ready task descriptions; or recording task updates for Adrez work.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-06-15
+last_reviewed: 2026-07-15
 ---
 
 # Adrez Linear Workflow
@@ -15,10 +15,14 @@ Use Linear as a lightweight task starter and task noter for Adrez work. Keep it 
 Default team is `Data Engineering` for almost all Adrez data, analytics, reporting, dbt, ingestion, platform-adjacent, and agent/data-product work. Use another team only when the user explicitly asks or the work is clearly outside this flow.
 
 ## Boundary
-- Linear is the only default tool for new Adrez task planning and tracking.
-- Asana is dead for new Adrez tasks. Do not create new Asana tasks or subtasks.
-- Use `asana` only for existing legacy Asana tasks that should not be migrated yet, unfinished old Asana tasks, or historical Asana context lookup.
-- If the user provides an Asana URL/GID, use `asana` to read/update/comment on that existing legacy item; create new tracking in Linear unless the user explicitly says not to.
+- Linear is the only active tool for Adrez task planning and tracking.
+- Asana is retired. Do not create tasks/subtasks, reopen work, or scan it as an
+  active queue.
+- Use `asana` only when Martin explicitly provides a legacy URL/GID or asks
+  for historical context.
+- If legacy Asana context reveals active work, first find any existing Linear
+  tracking. Propose migration when none exists; create or update Linear only
+  when Martin has authorized tracking, and keep the Asana item archival.
 
 ## When To Use
 - User asks to create, update, organize, or inspect Linear projects/issues.

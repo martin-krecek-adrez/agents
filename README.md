@@ -46,7 +46,7 @@ Main routing is defined in `AGENTS.md`.
 - Skill routing highlights:
   - Thread intake / agent orchestration -> `adrez-agent-orchestration`
   - Snowflake-related requests -> `snowcli`
-  - Asana updates/comments -> `asana`
+  - Explicit legacy Asana lookup -> `asana`
   - Commit message drafting -> `write-commit`
   - Documentation requests -> `write-docs`
   - Reusable harness/process feedback -> `agent-feedback-capture`

@@ -1,10 +1,10 @@
 ---
 name: repo-pr-handoff
-description: Prepare non-trivial Adrez repo work for delivery: clean branch scope, final validation, commit, push, draft PR, PR/CI check, merge when explicitly requested, and Linear/Asana/task-note handoff. Use when the user says to commit, push, ship it, make/open a PR, test/check the PR, mark ready for review, merge, or send it to main. Use implementation-review for standalone implementation review before delivery.
+description: Prepare non-trivial Adrez repo work for delivery: clean branch scope, final validation, commit, push, draft PR, PR/CI check, merge when explicitly requested, and Linear/task-note handoff. Use when the user says to commit, push, ship it, make/open a PR, test/check the PR, mark ready for review, merge, or send it to main. Use implementation-review for standalone implementation review before delivery.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-06-15
+last_reviewed: 2026-07-15
 compatibility: Requires a git repository in /Users/martin/Documents/adrez and GitHub access when opening PRs.
 ---
 
@@ -91,7 +91,8 @@ git diff --stat
      scope, base freshness, and current PR head SHA,
    - default to squash merge unless repo-local policy says otherwise,
    - delete short-lived remote branch and prune task worktree when safe.
-10. Update Linear/Asana/task notes when a task is known:
+10. Update Linear/task notes when a task is known. Update Asana only when the
+    user explicitly requested an archival update on the named legacy item:
    - changed paths,
    - validation result,
    - PR link, commit hash, merge result when applicable,
@@ -137,4 +138,5 @@ git diff --stat
 - Branch/worktree identity was verified before edits, commit, push, PR, and merge.
 - Commit/PR summary matches the actual diff.
 - PR CI/check state was reviewed for the current head SHA after push.
-- Linear, Asana, or task note is updated when relevant.
+- Linear or the task note is updated when relevant; legacy Asana is touched
+  only when explicitly requested.

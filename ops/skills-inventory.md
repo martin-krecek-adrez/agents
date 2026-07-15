@@ -1,6 +1,6 @@
 # Skills Inventory
 
-Last reviewed: 2026-07-01
+Last reviewed: 2026-07-15
 
 ## Model
 
@@ -24,7 +24,7 @@ Last reviewed: 2026-07-01
 | `adrez-linear-workflow` | keep | Correctly promoted to business source. Linear is the only default tool for new Adrez task planning/tracking. Long body, but useful because Linear object decisions are fragile. | Consider moving templates to `references/` if it grows. |
 | `agent-feedback-capture` | keep | Clear raw-feedback capture skill. Distinct from `ai-context-maintenance`, which triages/promotes. | No immediate change. |
 | `ai-context-maintenance` | keep | Correct owner for AGENTS.md, skills, task memory, stale context, setup checks, and inventory-based skill audits. | No immediate change. |
-| `asana` | keep | Legacy Asana archive/context workflow only: read historical context, finish/update existing old tasks, or comment on existing Asana URLs/GIDs. No new Asana tasks/subtasks. | No immediate change. |
+| `asana` | keep | Historical archive lookup only for explicit legacy URLs/GIDs. Never use it as an active queue or routine brief source. | Keep the trigger narrow and archive-only. |
 | `avalanche-metadata-update` | keep | Focused product-scoped metadata workflow for both Avalanche catalogs: `catalog.json` and `catalog_ai.json`. | No immediate change. |
 | `compare-tech` | keep | Generic but useful. Low overlap. | No immediate change. |
 | `entity-data-factory` | keep | Execution skill for already-landed ADLS/lake/raw sources and Snowflake exposure only. Uses data-factory local wrapper and treats `CONFIG_PATHS` as an override check, not a default edit. | No immediate change. |
@@ -60,8 +60,8 @@ Last reviewed: 2026-07-01
   - Capture stores raw evidence.
   - Maintenance triages/promotes stable lessons.
 - Keep `asana` and `adrez-linear-workflow` separate:
-  - Asana: dead for new tasks; use only for existing legacy Asana URLs/GIDs, historical context, and comments/updates on old tasks.
-  - Linear: all new Adrez planning/tracking, projects/issues/updates.
+  - Asana: retired; use only for explicit historical URLs/GIDs or archive context.
+  - Linear: all active Adrez planning/tracking, projects/issues/updates.
 
 ## Priority Edits
 

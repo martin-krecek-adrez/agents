@@ -16,7 +16,7 @@ Do not use this folder for implementation details that belong in repo
 | File | Purpose |
 | --- | --- |
 | `daily-brief.md` | Durable morning-brief policy and latest durable corrections; not a daily brief archive. |
-| `open-loops.md` | Cross-repo blockers, waiting items, PRs, Asana follow-ups. |
+| `open-loops.md` | Cross-repo blockers, waiting items, PRs, and Linear follow-ups. |
 | `pipeline-watch.md` | Pipeline/status email patterns and watch items. |
 | `people-followups.md` | People and threads that likely need a reply. |
 | `decisions.md` | Stable operating decisions that affect future brief behavior. |
@@ -81,10 +81,10 @@ default.
    - Outlook Calendar for today's schedule
    - Outlook Email for reply-needed and pipeline/status signals
    - Teams channels and chats for people, pipeline, incident, and status signals
-   - Asana for assigned tasks, due-soon work, recently completed work, and
-     project/task status
+   - Linear for assigned tasks, due-soon work, recently completed work, and
+     project/issue status
 4. GitHub / CI:
-   - only when directly referenced by ops memory, Outlook, Teams, Asana, or a
+   - only when directly referenced by ops memory, Outlook, Teams, Linear, or a
      recent task note
 
 ## Ranking Rules
@@ -99,7 +99,7 @@ Rank an item high only when at least one is true:
 Down-rank or omit an item when:
 - ops memory marks it `Done`, `Resolved`, `Waiting`, `Parked`, or handled by
   Martin
-- the only source is stale Asana or task-note state contradicted by newer ops
+- the only source is legacy Asana or task-note state contradicted by newer ops
   memory
 - it is a recovered pipeline with no new failure
 - it is useful background but has no next action today
@@ -118,8 +118,12 @@ Down-rank or omit an item when:
   until a narrow retry has been attempted.
 - Treat empty Teams notification bodies as unknown status, not success and not
   failure. Escalate only if another source suggests an incident.
-- Asana can be incomplete or stale. Cross-check Asana against Outlook Asana
-  notifications and local repo task notes before ranking priorities.
+- Do not query Asana in routine briefs. It is a historical archive only; use it
+  only when Martin explicitly asks for a legacy URL/GID or historical context.
+- If Outlook surfaces an old Asana notification with unresolved underlying
+  work, find the owning Linear issue before ranking it as active. If none
+  exists, surface the migration need and create one only with explicit Martin
+  approval.
 - "Manually check X" is a last-resort output. Prefer either doing the check via
   a narrower connector call or naming the exact unavailable source/tool.
 - When a connector is unavailable, output the exact unavailable source/tool and

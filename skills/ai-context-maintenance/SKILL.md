@@ -4,7 +4,7 @@ description: Audit and maintain the Adrez AI operating system. Use when the user
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-06-12
+last_reviewed: 2026-07-15
 compatibility: Requires /Users/martin/Documents/adrez/agents and the Adrez workspace repositories.
 ---
 
@@ -107,7 +107,8 @@ Rules:
   `docs/tasks/`.
 - Move current business rules, architecture, source-system behavior, and
   operating-state truth to `/Users/martin/Documents/adrez/docs`.
-- Cross-link Linear/Asana, task note, and durable docs when promotion happens.
+- Cross-link Linear, task note, and durable docs when promotion happens.
+  Preserve legacy Asana links only as historical provenance.
 - Treat the promotion report as a candidate list, not proof that every match
   should become durable docs.
 

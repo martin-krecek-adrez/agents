@@ -32,7 +32,7 @@ fallback, or writing the final task handoff.
 
 ## Links
 - Linear:
-- Asana:
+- Legacy Asana (historical only):
 - Task note:
 ```
 
@@ -43,7 +43,8 @@ fallback, or writing the final task handoff.
 - Keep PR as draft unless the user asks for ready-for-review.
 
 ## Task Handoff
-- Prefer Linear for new Adrez work.
-- Use Asana only for explicit legacy Asana tasks or historical context.
+- Use Linear for all active Adrez work.
+- Use Asana only for explicit legacy historical context or a requested archival
+  update; never treat it as an active handoff target.
 - Include changed paths, validation result, PR link, commit hash, merge result
   when applicable, and open follow-ups.
