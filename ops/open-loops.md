@@ -37,13 +37,14 @@ threads.
 | Open | PPR occupancy/report repair | dbt task notes / Martin correction | Martin is handling this separately; report broke, so do not treat as a simple rollout recommendation. | 2026-06-12 |
 | Open | Mews Adyen migration / payout reconciliation | Outlook / Martin correction | Martin asked Mews whether Adyen payout amounts can be reconstructed from API settlement data; he is watching responses. 2026-06-20 account-verification deadline is Mews KYB/compliance from original migration email. | 2026-06-16 |
 | Open | Bank statements Snowflake automation | Teams / Jiří Dufek / Martin correction | Martin told Jiří he will automate bank statements into Snowflake/storage and analyze completeness/linkability; this is Martin's main work today. | 2026-06-16 |
-| Open | Benchmark answer packet ingestion changes | Linear SWE-252 / Hapl | Hapl will test after Martin implements the ingestion changes. | 2026-06-18 |
-| Open | Expedia payout/remittance Snowflake exposure | Linear DTE-55 / Hapl | Three new `expedia_*` payout/remittance tables now land in ADLS; register entities in `data-factory`, add dbt views/tests, and preserve `payment_reference_number` as the cash-recon join key. | 2026-06-29 |
+| Waiting | Benchmark answer packet ingestion changes | Linear SWE-252 / live ownership check | Linear still shows Todo, but the issue is assigned to Martin Hapl; do not rank as Martin Křeček work unless Hapl reopens a concrete dependency. | 2026-07-15 |
+| Done | Expedia payout/remittance Snowflake exposure | Linear DTE-55 | Linear confirms Done on 2026-06-29 with data-factory/dbt PRs attached; do not resurface as open work. | 2026-07-15 |
 | Open | Booking Search Results Score catalog coverage | Linear DTE-82 / Hapl / Martin correction | SRS cleanup task note is done; Martin will handle remaining extranet/catalog follow-up today. | 2026-07-01 |
 | Open | Booking SRS timeline consumer deploy | Linear DTE-90 / Hapl / dbt task notes | DTE-90 is now Agent Ready/Todo with two prepared app branches; review, smoke, and publish `commission-tier-monitoring` plus `market-overview-analysis`, then re-check Snowflake usage before any old-view drop. | 2026-07-03 |
 | Open | Snowflake critical service key rotation | Outlook Asana digest | Due 2026-07-11; rotate/check critical service user keys and keep this visible until resolved or moved into Linear. | 2026-07-06 |
 | Open | Scrape module watermark Snowflake exposure | Linear DTE-92 / Hapl | Backlog/Medium task assigned 2026-07-06: expose `scrape_module_watermark` ADLS export as Snowflake external table/view so revenue.adrez.com can use real per-module freshness SLA data. | 2026-07-07 |
 | Done | Verify dbt-cloud GitHub deploy key | Outlook GitHub notification / GitHub API | `adrez-vps-dbt-cloud-readonly` exists on `adrez-com/dbt-cloud` and is scoped read-only; do not resurface unless access issues appear. | 2026-07-13 |
+| Open | Mews individual permissions migration | Linear DTE-56 | Due 2026-07-15 and still Backlog: assign roles to all affected Mews users before the Mews 2026-08-05 deprecation deadline. | 2026-07-15 |
 
 ## Parking Lot
 
