@@ -20,4 +20,4 @@ jobs:
       - name: Validate directly managed skills
         run: python3 scripts/validate_business_skills.py
       - name: Run plugin cutover tests
-        run: python3 scripts/tests/test_plugin_cutover.py
+        run: python3 -m unittest discover -s scripts/tests -p 'test_*.py'

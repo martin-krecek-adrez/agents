@@ -27,6 +27,14 @@ CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 MAX_AGENTS_WARN_BYTES=8000
 MAX_AGENTS_FAIL_BYTES=12000
 MAX_SKILL_REVIEW_AGE_DAYS=90
+AGENTS_SCOPE_LISTER="${SCRIPT_DIR}/list_managed_agents.py"
+
+if managed_agents="$(python3 "${AGENTS_SCOPE_LISTER}" /Users/martin/Documents/adrez)"; then
+  :
+else
+  fail "Could not resolve the managed AGENTS.md scope"
+  managed_agents=""
+fi
 
 if [ -L "${CODEX_HOME}/AGENTS.md" ] && [ "$(readlink "${CODEX_HOME}/AGENTS.md")" = "${ROOT_AGENTS}" ]; then
   ok "~/.codex/AGENTS.md points to the Adrez workspace bootstrap"
@@ -34,13 +42,17 @@ else
   fail "~/.codex/AGENTS.md does not point to ${ROOT_AGENTS}"
 fi
 
-style_hits="$(rg -n "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Canada\"" \
-  /Users/martin/AGENTS.md \
-  /Users/martin/Documents/adrez \
-  /Users/martin/Documents/live/agent \
-  -g 'AGENTS.md' \
-  -g '!adrez-tools/**' \
-  -g '!_worktrees/**' 2>/dev/null || true)"
+style_hits="$(
+  rg -Hn "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Canada\"" \
+    /Users/martin/AGENTS.md 2>/dev/null || true
+  rg -Hn "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Canada\"" \
+    /Users/martin/Documents/live/agent -g 'AGENTS.md' 2>/dev/null || true
+  while IFS= read -r agents_file; do
+    [ -n "${agents_file}" ] || continue
+    rg -Hn "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Canada\"" \
+      "${agents_file}" 2>/dev/null || true
+  done <<< "${managed_agents}"
+)"
 
 if [ -z "${style_hits}" ]; then
   ok "No banned hockey-style phrasing remains in AGENTS.md files"
@@ -78,14 +90,7 @@ while IFS= read -r agents_file; do
   elif [ "${size_bytes}" -gt "${MAX_AGENTS_WARN_BYTES}" ]; then
     warn "AGENTS.md exceeds ${MAX_AGENTS_WARN_BYTES} bytes (${size_bytes}): ${agents_file}"
   fi
-done < <(find /Users/martin/Documents/adrez -name AGENTS.md \
-  -not -path '*/old/*' \
-  -not -path '*/_worktrees/*' \
-  -not -path '*/adrez-tools/*' \
-  -not -path '*/tech-plugins/plugins/*/skills/*/templates/*' \
-  -not -path '*/node_modules/*' \
-  -not -path '*/.git/*' \
-  | LC_ALL=C sort)
+done <<< "${managed_agents}"
 
 if grep -q "/Users/martin/Documents/adrez/docs/data-platform" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
   ok "dbt-cloud AGENTS.md routes durable data-platform docs"
