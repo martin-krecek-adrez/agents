@@ -6,11 +6,26 @@ Configuration for Codex/Codex CLI usage in the Adrez workspace.
 
 ### [Codex](https://developers.openai.com/codex)
 
-Sync the managed setup:
+Install and verify the team plugin before the first managed sync:
 
 ```bash
+codex plugin marketplace add git@github.com:adrez-com/tech-plugins.git
+codex plugin add adrez-data-platform@adrez-tech
+codex plugin list --json
+```
+
+Then preflight and sync the directly managed setup:
+
+```bash
+bash /Users/martin/Documents/adrez/agents/scripts/sync_codex_setup.sh --preflight-only
 bash /Users/martin/Documents/adrez/agents/scripts/sync_codex_setup.sh
 ```
+
+This sync installs only directly managed operating, context, and out-of-plugin
+skills. Team data-platform skills are installed separately from the
+`Adrez Data Platform` plugin in `adrez-com/tech-plugins`; they must not be
+copied into `~/.codex/skills`. The sync intentionally fails without one
+complete, enabled plugin runtime so it cannot delete legacy copies prematurely.
 
 Run setup checks:
 
@@ -71,15 +86,74 @@ items, and thread handoff prompts. Keep repo implementation notes in repo-local
 
 ## Skills
 
-Business skills live in:
+Directly managed Adrez operating, context, and out-of-plugin skills live in:
 - `/Users/martin/Documents/adrez/agents/skills`
 
 Personal skills live in:
 - `/Users/martin/Documents/live/agent/skills`
 
-Use `scripts/sync_codex_setup.sh` to sync both sets into `~/.codex/skills`.
+Use `scripts/sync_codex_setup.sh` to sync those two source roots into
+`~/.codex/skills`.
 
-Current business skills:
+Team data-platform and repository-delivery skills live only in:
+- `adrez-com/tech-plugins/plugins/adrez-data-platform/skills`
+
+Install them through the `Adrez Tech` plugin marketplace. Ownership is enforced
+by the plugin's bundled `skill-inventory.txt`; the sync fails if an inventory
+name appears in either directly managed source root or direct runtime.
+
+### Data Platform plugin cutover
+
+Apply ownership changes in this order:
+
+1. Merge, tag, and publish `adrez-data-platform` in `adrez-com/tech-plugins`.
+2. Add the marketplace and install the plugin:
+
+   ```bash
+   codex plugin marketplace add git@github.com:adrez-com/tech-plugins.git
+   codex plugin add adrez-data-platform@adrez-tech
+   ```
+
+3. Merge the `agents` ownership cutover.
+4. Run a no-write preflight, the transactional sync, and the health check:
+
+   ```bash
+   export ADREZ_TECH_PLUGINS_ROOT=<resolved-tech-plugins-checkout>
+   bash scripts/sync_codex_setup.sh --preflight-only
+   bash scripts/sync_codex_setup.sh
+   bash scripts/check_ai_setup.sh
+   ```
+
+   Resolve the placeholder to the main checkout or task worktree being released;
+   do not paste it literally.
+
+5. Start a new Codex task so the installed plugin skills are loaded.
+
+The sync verifies `installed` and `enabled` state, exact version, bundled
+inventory, every cached `SKILL.md`, and source/cache payload equality when a
+source checkout is available. It stages all direct skills before replacing any
+runtime path and refuses symlink targets.
+
+### Upgrade and rollback
+
+For an upgrade, publish a release with matching Codex and Claude manifest
+versions, refresh the marketplace, reinstall, run the preflight and health
+check, and start a new task:
+
+```bash
+codex plugin marketplace upgrade adrez-tech
+codex plugin add adrez-data-platform@adrez-tech
+bash scripts/sync_codex_setup.sh --preflight-only
+bash scripts/check_ai_setup.sh
+```
+
+Prefer a forward revert with a new patch release. Do not uninstall or disable a
+working plugin before its replacement passes the runtime check. If the agents
+cutover itself must be rolled back, first revert the agents commit so the direct
+skill sources and previous sync implementation are restored, run that sync,
+verify a new task loads the direct skills, and only then disable the plugin.
+
+Current directly managed Adrez skills:
 - adrez-agent-orchestration
 - adrez-linear-workflow
 - asana
@@ -87,18 +161,9 @@ Current business skills:
 - ai-context-maintenance
 - compare-tech
 - avalanche-metadata-update
-- entity-dbt-cloud
-- entity-data-factory
-- entity-extractor-spreadsheets
-- entity-spreadsheet-ingestion
 - grill-me
-- implementation-review
 - powerbi-report-starter
-- repo-pr-handoff
-- repo-worktree-safety
-- snowcli
 - write-commit
-- write-docs
 
 ## Credits
 
