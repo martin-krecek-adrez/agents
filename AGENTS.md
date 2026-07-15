@@ -19,12 +19,17 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 - `dbt-cloud`: dbt models, tests, docs, Snowflake analytics debugging.
 - `data-factory`: external-table/load config over already-landed ADLS paths; also the downstream Snowflake half of spreadsheet onboarding.
 - `data-platform`: shared Snowflake/Terraform/platform tooling.
-- `extractor-documents`: PDF/document extraction into ADLS CSV; Snowflake exposure belongs in `data-factory`.
 - `extractor-spreadsheets`: OneDrive/SharePoint spreadsheet extraction and mapping landing into ADLS; first half of spreadsheet onboarding.
 - `metadata-builder`: metadata contract build/export for Avalanche catalog and related eval assets.
 - `avalanche-mcp`: active MCP analytics platform; do not touch unless explicitly requested.
 - `powerbi`: Power BI / Fabric semantic models, reports, and deployment validation.
 - `docs`: VitePress documentation.
+
+## Archived Repo Boundary
+- `adrez-data-assistant`: replaced by `avalanche-mcp`.
+- `adrez-metadata-sql-agent`: metadata ownership moved to `metadata-builder`; active agent runtime work moved to `avalanche-mcp`.
+- `extractor-documents`: its Expedia payout/remittance PDF flow moved to `extranet-scraper`.
+- Do not route new work to archived repos. Use them only for an explicitly approved restore, migration, or historical investigation.
 
 ## Skill Intent Map
 Use these skills when intent clearly matches:
@@ -65,7 +70,8 @@ Use natural intent; exact skill names are optional.
 - New SharePoint/OneDrive Excel, input sheet, mapping sheet, or manual spreadsheet request defaults to `entity-spreadsheet-ingestion`; examples: "pridej input sheet", "napoj tenhle Excel", "dostan tenhle SharePoint/OneDrive soubor do Snowflake".
 - Landing/file pickup/`ingest_config.yml` only: `entity-extractor-spreadsheets`.
 - Already-landed ADLS/lake/raw source, external-table config, or Snowflake exposure only: `entity-data-factory`.
-- PDF/document parsing to ADLS CSV: `extractor-documents` first, then `data-factory` only if Snowflake exposure is needed.
+- Expedia payout/remittance PDF extraction: `extranet-scraper`.
+- New document extraction: route to the owning active source/ingestion repo; do not revive `extractor-documents` without an explicit migration decision.
 - New Power BI report/model: `powerbi-report-starter`.
 - "check dbt": `dbt-cloud`.
 - Avalanche MCP/current agent behavior: `avalanche-mcp`.
