@@ -53,7 +53,6 @@ required_agents=(
   "${AGENTS_REPO}/AGENTS.md"
   "/Users/martin/Documents/adrez/dbt-cloud/AGENTS.md"
   "/Users/martin/Documents/adrez/data-factory/AGENTS.md"
-  "/Users/martin/Documents/adrez/extractor-documents/AGENTS.md"
   "/Users/martin/Documents/adrez/extractor-spreadsheets/AGENTS.md"
   "/Users/martin/Documents/adrez/data-platform/AGENTS.md"
   "/Users/martin/Documents/adrez/metadata-builder/AGENTS.md"

@@ -7,7 +7,6 @@ repos=(
   "agents"
   "dbt-cloud"
   "data-factory"
-  "extractor-documents"
   "extractor-spreadsheets"
   "data-platform"
   "metadata-builder"

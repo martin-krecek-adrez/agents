@@ -31,16 +31,18 @@ Main routing is defined in `AGENTS.md`.
 - Default workspace scope: `/Users/martin/Documents/adrez`
 - Default repo routing:
   - `dbt-cloud` for dbt models/finance/Snowflake analytics work
-  - `extractor-documents` for PDF/document parsing into ADLS CSV outputs
   - `extractor-spreadsheets` first for new OneDrive/SharePoint spreadsheets and mapping sheets
   - `data-factory` for already-landed ADLS sources and external-table exposure
   - `data-platform` for shared platform/data tooling
   - `avalanche-mcp` for current MCP analytics / agent work
   - `metadata-builder` for Avalanche metadata/catalog build
   - `powerbi` for Power BI / Fabric work
-- Legacy repos:
+- Archived repos (historical reference only):
   - `adrez-data-assistant`
   - `adrez-metadata-sql-agent`
+  - `extractor-documents`
+- Expedia payout/remittance PDF extraction is owned by `extranet-scraper`.
+- New document extraction is routed to the owning active source/ingestion repo.
 - Skill routing highlights:
   - Thread intake / agent orchestration -> `adrez-agent-orchestration`
   - Snowflake-related requests -> `snowcli`

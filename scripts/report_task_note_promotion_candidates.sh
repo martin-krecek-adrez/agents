@@ -45,6 +45,7 @@ done < <(find "${ROOT}" \
   -not -path '*/node_modules/*' \
   -not -path '*/adrez-data-assistant/*' \
   -not -path '*/adrez-metadata-sql-agent/*' \
+  -not -path '*/extractor-documents/*' \
   | LC_ALL=C sort)
 
 if [ "${candidate_count}" -eq 0 ]; then
