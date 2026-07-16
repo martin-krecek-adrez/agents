@@ -24,6 +24,7 @@ AGENTS_REPO="$(cd "${SCRIPT_DIR}/.." && pwd -P)"
 SKILLS_DIR="${AGENTS_REPO}/skills"
 README_PATH="${AGENTS_REPO}/README.md"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
+PERSONAL_SKILLS_DIR="${PERSONAL_SKILLS_DIR:-/Users/martin/Documents/live/agent/skills}"
 MAX_AGENTS_WARN_BYTES=8000
 MAX_AGENTS_FAIL_BYTES=12000
 MAX_SKILL_REVIEW_AGE_DAYS=90
@@ -110,6 +111,21 @@ if grep -q "Branches are delivery units; worktrees are concurrency units" "${AGE
   ok "Concurrent same-repo worktree policy is explicit in shared git guidance"
 else
   fail "Concurrent same-repo worktree policy is missing from shared git guidance"
+fi
+
+if grep -q "This repository is Martin's local control hub" "${README_PATH}" \
+  && grep -q "Team members must not run this" "${README_PATH}" \
+  && grep -q "repository's sync" "${README_PATH}" \
+  && grep -q "adrez-com/tech-plugins/README.md" "${README_PATH}"; then
+  ok "agents README marks the sync as Martin-only and routes team onboarding"
+else
+  fail "agents README is missing the Martin-only or team-plugin onboarding boundary"
+fi
+
+if rg -n "commission-tier-monitoring" "${AGENTS_REPO}/ops" >/dev/null 2>&1; then
+  fail "Active agents ops state must not route work to commission-tier-monitoring"
+else
+  ok "Active agents ops state excludes commission-tier-monitoring"
 fi
 
 ownership_args=(--check-runtime)
@@ -252,27 +268,12 @@ else
   fail "Repo hygiene validator failed"
 fi
 
-while IFS= read -r skill_name; do
-  [ -n "${skill_name}" ] || continue
-  if [ -f "${CODEX_HOME}/skills/${skill_name}/SKILL.md" ]; then
-    :
-  else
-    fail "Managed skill missing from ~/.codex/skills: ${skill_name}"
-  fi
-
-  if [ -f "${CODEX_HOME}/.managed-skills-manifest" ] && grep -Fxq "${skill_name}" "${CODEX_HOME}/.managed-skills-manifest"; then
-    :
-  else
-    fail "Business skill missing from managed skills manifest: ${skill_name}"
-  fi
-
-  drift="$(diff -qr "${SKILLS_DIR}/${skill_name}/" "${CODEX_HOME}/skills/${skill_name}/" 2>/dev/null || true)"
-  if [ -z "${drift}" ]; then
-    :
-  else
-    fail "Runtime skill drift detected for ${skill_name}:\n${drift}"
-  fi
-done <<< "${actual_skills}"
+if CODEX_HOME="${CODEX_HOME}" PERSONAL_SKILLS_DIR="${PERSONAL_SKILLS_DIR}" \
+  python3 "${SCRIPT_DIR}/check_managed_skill_runtime.py"; then
+  ok "All directly managed skills match source, manifest, and runtime"
+else
+  fail "Directly managed skill source/runtime check failed"
+fi
 
 if [ -e "${CODEX_HOME}/skills/qmd" ]; then
   fail "Retired managed skill still present in ~/.codex/skills: qmd"

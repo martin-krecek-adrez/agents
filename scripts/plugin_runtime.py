@@ -18,12 +18,29 @@ REQUIRED_PLUGIN_EXECUTABLES = ("scripts/check_local_skill_conflicts.py",)
 SKILL_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 VERSION_RE = re.compile(
     r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
-    r"(?:-[0-9A-Za-z.-]+)?(?:\+[0-9A-Za-z.-]+)?$"
+    r"(?:-((?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*)"
+    r"(?:\.(?:0|[1-9]\d*|[0-9A-Za-z-]*[A-Za-z-][0-9A-Za-z-]*))*))?"
+    r"(?:\+([0-9A-Za-z-]+(?:\.[0-9A-Za-z-]+)*))?$"
 )
 
 
 class PluginRuntimeError(RuntimeError):
     pass
+
+
+def semver_precedence(version: str) -> tuple:
+    match = VERSION_RE.fullmatch(version)
+    if not match:
+        raise PluginRuntimeError(f"Invalid plugin version: {version!r}")
+    major, minor, patch = (int(match.group(index)) for index in range(1, 4))
+    prerelease = match.group(4)
+    if prerelease is None:
+        return major, minor, patch, 1, ()
+    identifiers = tuple(
+        (0, int(item)) if item.isdigit() else (1, item)
+        for item in prerelease.split(".")
+    )
+    return major, minor, patch, 0, identifiers
 
 
 @dataclass(frozen=True)

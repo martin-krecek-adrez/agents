@@ -5,10 +5,7 @@ ROOT="${1:-/Users/martin/Documents/adrez}"
 MIN_AGE_DAYS="${MIN_AGE_DAYS:-30}"
 MAX_CANDIDATES="${MAX_CANDIDATES:-25}"
 
-if ! command -v rg >/dev/null 2>&1; then
-  echo "ripgrep is required for this report." >&2
-  exit 1
-fi
+MATCH_PATTERN="business rule|current state|operating rule|policy|canonical|source of truth|durable|decision|architecture|runbook|process|workflow|contract|semantic|definition"
 
 echo "Task note promotion candidates"
 echo "Root: ${ROOT}"
@@ -19,9 +16,11 @@ echo
 candidate_count=0
 
 while IFS= read -r note; do
-  matches="$(rg -n -i \
-    "business rule|current state|operating rule|policy|canonical|source of truth|durable|decision|architecture|runbook|process|workflow|contract|semantic|definition" \
-    "${note}" 2>/dev/null || true)"
+  if command -v rg >/dev/null 2>&1; then
+    matches="$(rg -n -i "${MATCH_PATTERN}" "${note}" 2>/dev/null || true)"
+  else
+    matches="$(grep -E -n -i "${MATCH_PATTERN}" "${note}" 2>/dev/null || true)"
+  fi
 
   if [ -n "${matches}" ]; then
     candidate_count=$((candidate_count + 1))
@@ -36,16 +35,20 @@ while IFS= read -r note; do
     fi
   fi
 done < <(find "${ROOT}" \
+  \( -type d \( \
+    -name 'commission-tier-monitoring' -o \
+    -name 'old' -o \
+    -name '_worktrees' -o \
+    -name 'node_modules' -o \
+    -name 'adrez-data-assistant' -o \
+    -name 'adrez-metadata-sql-agent' -o \
+    -name 'extractor-documents' \
+  \) \) -prune -o \
   -path '*/docs/tasks/*.md' \
   -type f \
   -mtime +"${MIN_AGE_DAYS}" \
   -not -name 'TEMPLATE_TASK.md' \
-  -not -path '*/old/*' \
-  -not -path '*/_worktrees/*' \
-  -not -path '*/node_modules/*' \
-  -not -path '*/adrez-data-assistant/*' \
-  -not -path '*/adrez-metadata-sql-agent/*' \
-  -not -path '*/extractor-documents/*' \
+  -print \
   | LC_ALL=C sort)
 
 if [ "${candidate_count}" -eq 0 ]; then
