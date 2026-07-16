@@ -67,6 +67,12 @@ class PluginUpdateCheckTests(unittest.TestCase):
         )
         self.assertTrue(result.startswith("[WARN]"))
 
+    def test_invalid_semver_is_rejected(self) -> None:
+        for version in ("0.1.1-01", "0.1.1-alpha..1", "0.1.1-alpha."):
+            with self.subTest(version=version):
+                with self.assertRaises(PluginRuntimeError):
+                    classify_payload("0.1.0", "old", version, "new", "abc123")
+
     @mock.patch("check_adrez_data_platform_update.subprocess.run")
     def test_run_is_noninteractive(self, run_mock: mock.Mock) -> None:
         run_mock.return_value = subprocess.CompletedProcess(["git"], 0, "", "")

@@ -122,6 +122,12 @@ else
   fail "agents README is missing the Martin-only or team-plugin onboarding boundary"
 fi
 
+if rg -n "commission-tier-monitoring" "${AGENTS_REPO}/ops" >/dev/null 2>&1; then
+  fail "Active agents ops state must not route work to commission-tier-monitoring"
+else
+  ok "Active agents ops state excludes commission-tier-monitoring"
+fi
+
 ownership_args=(--check-runtime)
 if [ -n "${ADREZ_TECH_PLUGINS_ROOT:-}" ]; then
   ownership_args+=(--require-plugin-source)

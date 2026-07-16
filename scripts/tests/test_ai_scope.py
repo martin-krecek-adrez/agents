@@ -16,6 +16,14 @@ from list_managed_agents import iter_managed_agents  # noqa: E402
 
 
 class ManagedAgentsScopeTests(unittest.TestCase):
+    def test_active_ops_do_not_route_external_repository(self) -> None:
+        for path in sorted((ROOT / "ops").glob("*.md")):
+            self.assertNotIn(
+                "commission-tier-monitoring",
+                path.read_text(encoding="utf-8"),
+                str(path),
+            )
+
     def test_external_and_generated_repositories_are_excluded(self) -> None:
         with tempfile.TemporaryDirectory(prefix="adrez-agents-scope-") as temp:
             workspace = Path(temp).resolve()

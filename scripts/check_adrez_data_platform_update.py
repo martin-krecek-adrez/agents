@@ -3,13 +3,17 @@ from __future__ import annotations
 
 import json
 import os
-import re
 import subprocess
 import tempfile
 from pathlib import Path
 from typing import Optional, Tuple
 
-from plugin_runtime import PluginRuntimeError, validate_plugin_root, validate_runtime
+from plugin_runtime import (
+    PluginRuntimeError,
+    semver_precedence,
+    validate_plugin_root,
+    validate_runtime,
+)
 
 
 MARKETPLACE = "adrez-tech"
@@ -17,10 +21,6 @@ PLUGIN = "adrez-data-platform"
 REMOTE = "git@github.com:adrez-com/tech-plugins.git"
 REF = "refs/heads/main"
 NETWORK_TIMEOUT_SECONDS = 30
-SEMVER_RE = re.compile(
-    r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
-    r"(?:-([0-9A-Za-z.-]+))?(?:\+[0-9A-Za-z.-]+)?$"
-)
 
 
 def _run(
@@ -67,21 +67,6 @@ def _run_remote(
     return result, None
 
 
-def _semver_precedence(version: str) -> tuple:
-    match = SEMVER_RE.fullmatch(version)
-    if not match:
-        raise PluginRuntimeError(f"invalid semantic version: {version!r}")
-    major, minor, patch = (int(match.group(index)) for index in range(1, 4))
-    prerelease = match.group(4)
-    if prerelease is None:
-        return major, minor, patch, 1, ()
-    identifiers = tuple(
-        (0, int(item)) if item.isdigit() else (1, item)
-        for item in prerelease.split(".")
-    )
-    return major, minor, patch, 0, identifiers
-
-
 def parse_marketplace(payload: object) -> Path:
     if not isinstance(payload, dict) or not isinstance(payload.get("marketplaces"), list):
         raise PluginRuntimeError("codex marketplace list returned an invalid payload")
@@ -114,8 +99,8 @@ def classify_payload(
     remote_sha: str,
 ) -> str:
     if remote_version != installed_version:
-        remote_precedence = _semver_precedence(remote_version)
-        installed_precedence = _semver_precedence(installed_version)
+        remote_precedence = semver_precedence(remote_version)
+        installed_precedence = semver_precedence(installed_version)
         if remote_precedence > installed_precedence:
             return (
                 f"[UPDATE] installed={installed_version} remote={remote_version} "
