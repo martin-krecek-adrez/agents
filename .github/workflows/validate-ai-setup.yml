@@ -1,0 +1,23 @@
+name: Validate AI setup
+
+on:
+  pull_request:
+  push:
+    branches: [main]
+
+jobs:
+  plugin-cutover:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      - name: Validate Python and shell syntax
+        run: |
+          python3 -m compileall -q scripts
+          bash -n scripts/*.sh
+      - name: Validate directly managed skills
+        run: python3 scripts/validate_business_skills.py
+      - name: Run plugin cutover tests
+        run: python3 -m unittest discover -s scripts/tests -p 'test_*.py'
