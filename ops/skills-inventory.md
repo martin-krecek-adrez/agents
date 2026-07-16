@@ -16,6 +16,19 @@ Last reviewed: 2026-07-15
 - The plugin's bundled `skill-inventory.txt` is the machine-readable ownership
   contract used from source and installed cache.
 
+## Change routing
+
+- Portable team data-platform or repository-delivery workflow: add or update
+  the owning plugin in `tech-plugins`.
+- Portable workflow for another team domain: use that domain's plugin rather
+  than expanding `adrez-data-platform` without a clear fit.
+- Martin-only Adrez operating, tracking, or context workflow: add or update
+  `agents/skills`.
+- Life-only workflow: add or update the personal agent repository.
+- Runtime paths (`~/.codex/skills` and plugin caches) are outputs only.
+- Promotion from a direct source to a plugin must use the source-aware cutover
+  in `README.md`; never leave the same skill name in both sources.
+
 ## Directly managed skills
 
 | Skill | Verdict | Notes | Next Action |

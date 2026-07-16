@@ -38,6 +38,7 @@ Team data-platform and repository-delivery skills are provided by the
 `adrez-data-platform` plugin from `adrez-com/tech-plugins`. Personal operating,
 tracking, and context-maintenance skills remain managed by this repository.
 Never copy plugin-owned skills into `agents/skills` or `~/.codex/skills`.
+Team members install the plugin and must not run Martin's local agents sync.
 
 Use these skills when intent clearly matches:
 - Snowflake: `snowcli`.

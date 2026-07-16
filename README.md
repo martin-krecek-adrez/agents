@@ -2,6 +2,17 @@
 
 Configuration for Codex/Codex CLI usage in the Adrez workspace.
 
+## Audience and ownership
+
+This repository is Martin's local control hub. Its sync manages Martin-only
+operating, tracking, context, and life skills. Team members must not run this
+repository's sync; their portable onboarding lives in
+`adrez-com/tech-plugins/README.md` and uses the `Adrez Tech` marketplace.
+
+The absolute `/Users/martin/...` paths below are intentional local defaults for
+this managed setup, not copyable instructions for another machine. Team plugin
+content must remain machine-portable and must not use these paths.
+
 ## Setup
 
 ### [Codex](https://developers.openai.com/codex)
@@ -40,6 +51,17 @@ Run setup checks:
 ```bash
 bash /Users/martin/Documents/adrez/agents/scripts/check_ai_setup.sh
 ```
+
+The weekly report-only audit also runs a network-dependent freshness check:
+
+```bash
+python3 /Users/martin/Documents/adrez/agents/scripts/check_adrez_data_platform_update.py
+```
+
+This check compares the installed cache and local marketplace snapshot with
+remote `main` without changing an existing checkout or plugin installation.
+Network unavailability is reported as a warning, never as proof that no update
+exists.
 
 `check_ai_setup.sh` also runs:
 - `scripts/validate_business_skills.py` for Adrez skill metadata and UI prompts.
@@ -109,6 +131,24 @@ Team data-platform and repository-delivery skills live only in:
 Install them through the `Adrez Tech` plugin marketplace. Ownership is enforced
 by the plugin's bundled `skill-inventory.txt`; the sync fails if an inventory
 name appears in either directly managed source root or direct runtime.
+
+### Adding or changing a skill
+
+- Reusable team data-platform or repository-delivery workflow: change the
+  `adrez-data-platform` plugin in `tech-plugins`.
+- Reusable workflow for another team domain: use the matching plugin in
+  `tech-plugins`; do not put every team workflow into `adrez-data-platform`.
+- Martin-only Adrez operating, tracking, or context workflow: change
+  `agents/skills` and update this README plus `ops/skills-inventory.md`.
+- Life-only workflow: change the personal agent repository.
+- Never edit `~/.codex/skills` or the plugin cache as a source.
+
+For a direct skill change, run `scripts/sync_codex_setup.sh --preflight-only`,
+the actual sync, and `scripts/check_ai_setup.sh`, then start a new Codex task so
+the refreshed skill registry is loaded. For a plugin change, follow the
+contribution and release checklist in `tech-plugins/README.md`. Promoting a
+direct skill into a plugin uses the source-aware cutover below so no name is
+owned by both sources.
 
 ### Data Platform plugin cutover
 

@@ -36,16 +36,20 @@ while IFS= read -r note; do
     fi
   fi
 done < <(find "${ROOT}" \
+  \( -type d \( \
+    -name 'commission-tier-monitoring' -o \
+    -name 'old' -o \
+    -name '_worktrees' -o \
+    -name 'node_modules' -o \
+    -name 'adrez-data-assistant' -o \
+    -name 'adrez-metadata-sql-agent' -o \
+    -name 'extractor-documents' \
+  \) \) -prune -o \
   -path '*/docs/tasks/*.md' \
   -type f \
   -mtime +"${MIN_AGE_DAYS}" \
   -not -name 'TEMPLATE_TASK.md' \
-  -not -path '*/old/*' \
-  -not -path '*/_worktrees/*' \
-  -not -path '*/node_modules/*' \
-  -not -path '*/adrez-data-assistant/*' \
-  -not -path '*/adrez-metadata-sql-agent/*' \
-  -not -path '*/extractor-documents/*' \
+  -print \
   | LC_ALL=C sort)
 
 if [ "${candidate_count}" -eq 0 ]; then
