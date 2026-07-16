@@ -44,8 +44,7 @@ threads.
 | Open | Snowflake critical service key rotation | Linear DTE-116 | Legacy reminder was overdue; Linear now tracks the work with due date 2026-07-22. Identify affected service users, rotate required keys, and validate dependent services. | 2026-07-15 |
 | Open | Scrape module watermark Snowflake exposure | Linear DTE-92 / Hapl | Backlog/Medium task assigned 2026-07-06: expose `scrape_module_watermark` ADLS export as Snowflake external table/view so revenue.adrez.com can use real per-module freshness SLA data. | 2026-07-07 |
 | Done | Verify dbt-cloud GitHub deploy key | Outlook GitHub notification / GitHub API | `adrez-vps-dbt-cloud-readonly` exists on `adrez-com/dbt-cloud` and is scoped read-only; do not resurface unless access issues appear. | 2026-07-13 |
-| Waiting | Mews individual permissions migration | Linear DTE-56 / Martin correction | Someone else is expected to finish the migration soon. Martin should verify completion by 2026-08-03, before the Mews cutoff on 2026-08-05. | 2026-07-15 |
-| Open | dbt Cloud 15k limit / dbt Core migration | Linear DTE-5 / Martin correction | Migration to dbt Core on Adrez VPS is in progress. Finish and validate by 2026-07-31; do not close as stale or already done. | 2026-07-15 |
+| Parked | Mews individual permissions migration | Linear DTE-56 / Martin correction | Due moved to 2026-08-15 because there is no capacity now. This is after the stated Mews deprecation deadline 2026-08-05; keep the access-risk note, but do not rank before mid-August unless Mews reports impact. | 2026-07-15 |
 
 ## Parking Lot
 

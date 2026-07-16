@@ -76,7 +76,7 @@ curl -sS -X PUT \
   "https://app.asana.com/api/1.0/tasks/${TASK_GID}"
 ```
 
-### Post concise progress comment
+### Post concise archival comment
 ```bash
 TASK_GID=1234567890
 curl -sS -X POST \
