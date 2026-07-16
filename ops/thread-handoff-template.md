@@ -7,7 +7,8 @@ Context:
 - Workspace: /Users/martin/Documents/adrez
 - Relevant repo/path:
 - Related ops memory:
-- Related task note / Asana / PR:
+- Related Linear issue / task note / PR:
+- Legacy Asana reference (historical only):
 
 Goal:
 -
@@ -36,4 +37,3 @@ Expected output:
 In the coordination thread, ask Codex to fill this template for one concrete
 task. Paste the filled prompt into a new thread, or save it next to the relevant
 repo task note if the work should be picked up later.
-

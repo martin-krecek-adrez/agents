@@ -24,7 +24,7 @@ Last reviewed: 2026-07-15
 | `adrez-linear-workflow` | keep | Default Adrez Linear planning and updates. | No change. |
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |
-| `asana` | keep | Legacy Asana context and existing-task updates only. | No change. |
+| `asana` | keep | Historical archive lookup only for explicit legacy URLs/GIDs. Never use it as an active queue or routine brief source. | Keep the trigger narrow and archive-only. |
 | `avalanche-metadata-update` | keep | Product-specific metadata refresh remains outside plugin V1. | Reassess for plugin V1.1. |
 | `compare-tech` | keep | Generic decision support. | No change. |
 | `grill-me` | keep | Personal plan/design interview workflow. | No change. |
@@ -48,6 +48,8 @@ released through the `Adrez Tech` marketplace.
   skills.
 - Keep `adrez-agent-orchestration` in `agents`; it may route to plugin-provided
   skills by name but does not own their implementations.
+- Keep `asana` and `adrez-linear-workflow` separate. Asana is an explicit
+  historical archive lookup only; Linear owns all active planning and tracking.
 - Keep Avalanche metadata and Power BI outside plugin V1 until explicitly
   promoted.
 

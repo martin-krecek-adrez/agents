@@ -134,6 +134,18 @@ else
   fail "GitHub connector 404 and sandbox gh fallback guidance is missing"
 fi
 
+if grep -q "Asana is retired" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "Do not query Asana in routine briefs" "${AGENTS_REPO}/ops/README.md" \
+  && grep -q "create one only with explicit Martin" "${AGENTS_REPO}/ops/README.md" \
+  && grep -q "Never change assignee, title, due/start dates, notes" "${AGENTS_REPO}/skills/asana/SKILL.md" \
+  && grep -q 'archival comment or `completed=true`' "${AGENTS_REPO}/skills/asana/SKILL.md" \
+  && grep -q "create or update Linear only" "${AGENTS_REPO}/skills/asana/SKILL.md" \
+  && grep -q "Linear is the only active Adrez task tracker" "${AGENTS_REPO}/ops/decisions.md"; then
+  ok "Asana retirement and Linear-only active tracking are explicit"
+else
+  fail "Asana retirement policy is missing from shared or morning-brief guidance"
+fi
+
 if [ -d "${AGENTS_REPO}/feedback/inbox" ] \
   && [ -d "${AGENTS_REPO}/feedback/promoted" ] \
   && [ -d "${AGENTS_REPO}/feedback/rejected" ] \

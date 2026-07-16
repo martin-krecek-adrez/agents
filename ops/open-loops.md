@@ -19,7 +19,7 @@ threads.
 | --- | --- | --- | --- | --- |
 | Open | Adrez Chief of Staff pilot | Codex thread | Harden source order and signal ranking. | 2026-05-19 |
 | Open | Teams connector chat pagination | Morning brief feedback | Use `top=1` chat listing and incremental retries; avoid broad chat list calls. | 2026-05-19 |
-| Open | Asana source quality | Morning brief feedback | Identify correct Adrez project/task surfaces; current search misses due-soon task from Outlook Asana email. | 2026-05-19 |
+| Done | Retire Asana as an active source | Martin correction | Linear is the only active task tracker. Do not query Asana in routine briefs; use it only for explicit historical lookup. | 2026-07-15 |
 | Open | Yesterday work synthesis | Morning brief feedback | Load recent `docs/tasks` notes before priorities. | 2026-05-19 |
 | Open | Mews weekly delete reconciliation guard | Local task brief / repo notes | Finish guard rollout; add `_inc` freshness monitoring and consider diagnostics audit after weekly pattern settles. | 2026-05-21 |
 | Open | Pipeline orchestrator GitHub deploy workflow | Outlook / gh / Martin correction | Latest Deploy Worker run on `main` also failed on 2026-05-21 for `0159de4`; production is still understood as covered by local deploy, so fix when capacity allows unless deploys start depending on GitHub. | 2026-05-22 |
@@ -41,7 +41,7 @@ threads.
 | Done | Expedia payout/remittance Snowflake exposure | Linear DTE-55 | Linear confirms Done on 2026-06-29 with data-factory/dbt PRs attached; do not resurface as open work. | 2026-07-15 |
 | Open | Booking Search Results Score catalog coverage | Linear DTE-82 / Hapl / Martin correction | SRS cleanup task note is done; Martin will handle remaining extranet/catalog follow-up today. | 2026-07-01 |
 | Open | Booking SRS timeline consumer deploy | Linear DTE-90 / Hapl / dbt task notes | DTE-90 is now Agent Ready/Todo with two prepared app branches; review, smoke, and publish `commission-tier-monitoring` plus `market-overview-analysis`, then re-check Snowflake usage before any old-view drop. | 2026-07-03 |
-| Open | Snowflake critical service key rotation | Outlook Asana digest | Due 2026-07-11; rotate/check critical service user keys and keep this visible until resolved or moved into Linear. | 2026-07-06 |
+| Open | Snowflake critical service key rotation | Linear DTE-116 | Legacy reminder was overdue; Linear now tracks the work with due date 2026-07-22. Identify affected service users, rotate required keys, and validate dependent services. | 2026-07-15 |
 | Open | Scrape module watermark Snowflake exposure | Linear DTE-92 / Hapl | Backlog/Medium task assigned 2026-07-06: expose `scrape_module_watermark` ADLS export as Snowflake external table/view so revenue.adrez.com can use real per-module freshness SLA data. | 2026-07-07 |
 | Done | Verify dbt-cloud GitHub deploy key | Outlook GitHub notification / GitHub API | `adrez-vps-dbt-cloud-readonly` exists on `adrez-com/dbt-cloud` and is scoped read-only; do not resurface unless access issues appear. | 2026-07-13 |
 | Parked | Mews individual permissions migration | Linear DTE-56 / Martin correction | Due moved to 2026-08-15 because there is no capacity now. This is after the stated Mews deprecation deadline 2026-08-05; keep the access-risk note, but do not rank before mid-August unless Mews reports impact. | 2026-07-15 |

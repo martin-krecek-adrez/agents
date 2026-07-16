@@ -19,17 +19,17 @@ Stable decisions for Adrez Chief of Staff and Codex coordination.
   Outlook Email, Teams, and triggered GitHub/CI; do not use Gmail or Google
   Calendar as default sources.
 - Every morning brief should load recent repo `docs/tasks` notes to reconstruct
-  what changed yesterday; Asana alone is not enough source of truth for agent
-  work.
-- Use Asana in every work brief, but treat missing/stale Asana results as a
-  source-quality finding, not as proof that no work exists.
+  what changed yesterday; task notes complement current Linear state.
+- Linear is the only active Adrez task tracker. Asana is retired and must not be
+  queried in routine work briefs; use it only for an explicit legacy URL/GID or
+  historical-context request.
 - For Teams, use narrow incremental listing/fetch retries before declaring a
   source gap. Broad chat listing may timeout.
 - Avoid parallel Microsoft 365 connector fan-out in morning briefs. Run Outlook
   and Teams checks sequentially with small result sets to reduce Microsoft Graph
   429 throttling; if Martin provides direct context in chat, use that as a
   higher-confidence correction.
-- Martin corrections are higher priority than older task notes, Asana state,
+- Martin corrections are higher priority than older task notes, legacy Asana state,
   pipeline memory, or previous brief text.
 - A brief should not recommend rollout, deploy, closure, or business
   communication from technical validation alone; label such items as inferred

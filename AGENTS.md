@@ -41,7 +41,7 @@ Never copy plugin-owned skills into `agents/skills` or `~/.codex/skills`.
 
 Use these skills when intent clearly matches:
 - Snowflake: `snowcli`.
-- Asana legacy archive/context only: `asana`.
+- Asana historical archive lookup only: `asana`.
 - Linear task/project tracking: `adrez-linear-workflow`.
 - Thread intake / agent orchestration: `adrez-agent-orchestration`.
 - Decision support: `grill-me`, `compare-tech`.
@@ -95,11 +95,15 @@ Use natural intent; exact skill names are optional.
 - Temporary filters/workarounds/guardrails need a nearby `TODO` with removal condition and task-note link when relevant.
 
 ## Task Memory
-- Track all new Adrez work in Linear by default. Asana is dead for new tasks; use it only for existing legacy Asana URLs/GIDs, unfinished old tasks that should not be migrated yet, or historical context.
+- Track all active Adrez work in Linear. Asana is retired and must not be
+  scanned routinely, reopened as a work queue, or used for new tracking. Use
+  it only when Martin explicitly provides a legacy URL/GID or asks for
+  historical context.
 - Repo `docs/tasks/`: execution notes and WIP analysis. `/Users/martin/Documents/adrez/docs/`: durable cross-repo/business state.
 - `agents/ops/`: personal operating state for Codex coordination.
 - Keep modeling-only implementation notes in the repo unless broadly reusable. Suggested task note name: `YYYY-MM-DD-short-task-name.md`.
-- Cross-link Linear/Asana <-> task note <-> changed model/code paths when a tracker is involved.
+- Cross-link Linear <-> task note <-> changed model/code paths when a tracker
+  is involved. Preserve legacy Asana links only as historical provenance.
 
 ## Git Defaults
 - Run `git status -sb` before edits.
