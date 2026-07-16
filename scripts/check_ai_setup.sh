@@ -27,6 +27,14 @@ CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 MAX_AGENTS_WARN_BYTES=8000
 MAX_AGENTS_FAIL_BYTES=12000
 MAX_SKILL_REVIEW_AGE_DAYS=90
+AGENTS_SCOPE_LISTER="${SCRIPT_DIR}/list_managed_agents.py"
+
+if managed_agents="$(python3 "${AGENTS_SCOPE_LISTER}" /Users/martin/Documents/adrez)"; then
+  :
+else
+  fail "Could not resolve the managed AGENTS.md scope"
+  managed_agents=""
+fi
 
 if [ -L "${CODEX_HOME}/AGENTS.md" ] && [ "$(readlink "${CODEX_HOME}/AGENTS.md")" = "${ROOT_AGENTS}" ]; then
   ok "~/.codex/AGENTS.md points to the Adrez workspace bootstrap"
@@ -34,13 +42,17 @@ else
   fail "~/.codex/AGENTS.md does not point to ${ROOT_AGENTS}"
 fi
 
-style_hits="$(rg -n "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Canada\"" \
-  /Users/martin/AGENTS.md \
-  /Users/martin/Documents/adrez \
-  /Users/martin/Documents/live/agent \
-  -g 'AGENTS.md' \
-  -g '!adrez-tools/**' \
-  -g '!_worktrees/**' 2>/dev/null || true)"
+style_hits="$(
+  rg -Hn "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Canada\"" \
+    /Users/martin/AGENTS.md 2>/dev/null || true
+  rg -Hn "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Canada\"" \
+    /Users/martin/Documents/live/agent -g 'AGENTS.md' 2>/dev/null || true
+  while IFS= read -r agents_file; do
+    [ -n "${agents_file}" ] || continue
+    rg -Hn "Zaruba|Voracek|NHL commentators|hockey game \"Czechia vs Canada\"" \
+      "${agents_file}" 2>/dev/null || true
+  done <<< "${managed_agents}"
+)"
 
 if [ -z "${style_hits}" ]; then
   ok "No banned hockey-style phrasing remains in AGENTS.md files"
@@ -78,13 +90,7 @@ while IFS= read -r agents_file; do
   elif [ "${size_bytes}" -gt "${MAX_AGENTS_WARN_BYTES}" ]; then
     warn "AGENTS.md exceeds ${MAX_AGENTS_WARN_BYTES} bytes (${size_bytes}): ${agents_file}"
   fi
-done < <(find /Users/martin/Documents/adrez -name AGENTS.md \
-  -not -path '*/old/*' \
-  -not -path '*/_worktrees/*' \
-  -not -path '*/adrez-tools/*' \
-  -not -path '*/node_modules/*' \
-  -not -path '*/.git/*' \
-  | LC_ALL=C sort)
+done <<< "${managed_agents}"
 
 if grep -q "/Users/martin/Documents/adrez/docs/data-platform" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
   ok "dbt-cloud AGENTS.md routes durable data-platform docs"
@@ -93,43 +99,36 @@ else
 fi
 
 if grep -q "dedicated task branch" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "make changes in <repo> and push it" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md" \
   && grep -q "dedicated task branch" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
   ok "Dedicated branch defaults are explicit in shared and dbt-cloud guidance"
 else
-  fail "Dedicated branch defaults are missing from shared, repo-pr-handoff, or dbt-cloud guidance"
+  fail "Dedicated branch defaults are missing from shared or dbt-cloud guidance"
 fi
 
 if grep -q "Branches are delivery units; worktrees are concurrency units" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "repo-worktree-safety" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "git worktree per task branch" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md" \
-  && grep -q "One task = one branch = one git worktree = one agent" "${AGENTS_REPO}/skills/repo-worktree-safety/SKILL.md"; then
+  && grep -q "repo-worktree-safety" "${AGENTS_REPO}/AGENTS.md"; then
   ok "Concurrent same-repo worktree policy is explicit in shared git guidance"
 else
   fail "Concurrent same-repo worktree policy is missing from shared git guidance"
 fi
 
-if grep -q "git_task_preflight.sh" "${AGENTS_REPO}/skills/repo-worktree-safety/SKILL.md" \
-  && grep -q "create_task_worktree.sh" "${AGENTS_REPO}/skills/repo-worktree-safety/SKILL.md" \
-  && [ -x "${AGENTS_REPO}/scripts/git_task_preflight.sh" ] \
-  && [ -x "${AGENTS_REPO}/scripts/create_task_worktree.sh" ] \
-  && [ -x "${AGENTS_REPO}/scripts/pr_handoff_check.sh" ]; then
-  ok "Git worktree safety helper scripts are documented and executable"
+ownership_args=(--check-runtime)
+if [ -n "${ADREZ_TECH_PLUGINS_ROOT:-}" ]; then
+  ownership_args+=(--require-plugin-source)
+fi
+if bash "${SCRIPT_DIR}/check_skill_ownership.sh" "${ownership_args[@]}"; then
+  ok "Plugin runtime is complete and skill ownership is disjoint"
 else
-  fail "Git worktree safety helper scripts are missing, undocumented, or not executable"
+  fail "Plugin runtime or skill ownership check failed"
 fi
 
-if grep -q "Never use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "Do not use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md" \
-  && grep -q "Do not use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" "${AGENTS_REPO}/skills/repo-worktree-safety/SKILL.md"; then
+if grep -q "Never use \`git stash\`, \`git reset\`, \`git checkout --\`, \`git clean\`" "${AGENTS_REPO}/AGENTS.md"; then
   ok "No implicit stash/reset/checkout/clean rule is explicit"
 else
   fail "No implicit stash/reset/checkout/clean rule is missing from git guidance"
 fi
 
-if grep -q "GitHub connector \`404\` can mean connector scope" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "try \`gh repo view <owner>/<repo>\`" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md" \
-  && grep -q "retry the same narrow \`gh\` command with \`require_escalated\`" "${AGENTS_REPO}/skills/repo-pr-handoff/SKILL.md"; then
+if grep -q "GitHub connector \`404\` can mean connector scope" "${AGENTS_REPO}/AGENTS.md"; then
   ok "GitHub connector 404 and sandbox gh fallback guidance is explicit"
 else
   fail "GitHub connector 404 and sandbox gh fallback guidance is missing"
@@ -196,7 +195,7 @@ actual_skills="$(find "${SKILLS_DIR}" -mindepth 1 -maxdepth 1 -type d | while IF
 done | LC_ALL=C sort)"
 
 readme_skills="$(awk '
-  /^Current business skills:/ { flag=1; next }
+  /^Current directly managed Adrez skills:/ { flag=1; next }
   flag && /^$/ { flag=0 }
   flag && /^- / { sub(/^- /, ""); print }
 ' "${README_PATH}" | LC_ALL=C sort)"

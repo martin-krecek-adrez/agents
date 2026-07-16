@@ -14,6 +14,8 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 ## Workspace Scope
 - Root: `/Users/martin/Documents/adrez`
 - Do not inspect `/Users/martin/Documents/adrez/old` unless explicitly asked.
+- `commission-tier-monitoring` is an external, unowned checkout. Do not inspect,
+  validate, route work to, or include its `AGENTS.md` in shared workspace audits.
 
 ## Repo Intent Map
 - `dbt-cloud`: dbt models, tests, docs, Snowflake analytics debugging.
@@ -32,6 +34,11 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 - Do not route new work to archived repos. Use them only for an explicitly approved restore, migration, or historical investigation.
 
 ## Skill Intent Map
+Team data-platform and repository-delivery skills are provided by the
+`adrez-data-platform` plugin from `adrez-com/tech-plugins`. Personal operating,
+tracking, and context-maintenance skills remain managed by this repository.
+Never copy plugin-owned skills into `agents/skills` or `~/.codex/skills`.
+
 Use these skills when intent clearly matches:
 - Snowflake: `snowcli`.
 - Asana historical archive lookup only: `asana`.
@@ -45,6 +52,10 @@ Use these skills when intent clearly matches:
 - dbt: `entity-dbt-cloud`.
 - Power BI: `powerbi-report-starter`.
 - Avalanche metadata: `avalanche-metadata-update`.
+
+The machine-readable ownership boundary is the installed plugin's
+`skill-inventory.txt`. The local sync must validate that inventory and reject
+every duplicate direct source or runtime path.
 
 ## How To Ask
 Use natural intent; exact skill names are optional.
