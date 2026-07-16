@@ -72,8 +72,9 @@ class ManagedAgentsScopeTests(unittest.TestCase):
                 text=True,
                 stdout=subprocess.PIPE,
                 stderr=subprocess.PIPE,
-                check=True,
+                check=False,
             )
+            self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn(str(included), result.stdout)
             self.assertNotIn("commission-tier-monitoring", result.stdout)
             self.assertNotIn(str(excluded), result.stdout)

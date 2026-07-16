@@ -71,7 +71,7 @@ class ManagedSkillRuntimeTests(unittest.TestCase):
     def test_stale_manifest_name_is_detected(self) -> None:
         self.add_skill(self.business, "business-skill")
         self.write_manifest("business-skill", "removed-skill")
-        with self.assertRaisesRegex(ManagedSkillError, "stale=\['removed-skill'\]"):
+        with self.assertRaisesRegex(ManagedSkillError, r"stale=\['removed-skill'\]"):
             validate_managed_runtime((self.business, self.personal), self.codex)
 
     def test_invalid_source_name_is_detected(self) -> None:
