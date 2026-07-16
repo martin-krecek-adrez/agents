@@ -14,6 +14,7 @@ PLUGIN_NAME = "adrez-data-platform"
 MARKETPLACE_NAME = "adrez-tech"
 PLUGIN_ID = f"{PLUGIN_NAME}@{MARKETPLACE_NAME}"
 INVENTORY_NAME = "skill-inventory.txt"
+REQUIRED_PLUGIN_EXECUTABLES = ("scripts/check_local_skill_conflicts.py",)
 SKILL_NAME_RE = re.compile(r"^[a-z0-9][a-z0-9._-]*$")
 VERSION_RE = re.compile(
     r"^(0|[1-9]\d*)\.(0|[1-9]\d*)\.(0|[1-9]\d*)"
@@ -68,6 +69,14 @@ def _payload_digest(plugin_root: Path, skills: tuple[str, ...]) -> str:
             for path in sorted((plugin_root / "skills" / skill).rglob("*"))
             if path.is_file() or path.is_symlink()
         )
+    scripts_root = plugin_root / "scripts"
+    if scripts_root.is_symlink() or not scripts_root.is_dir():
+        raise PluginRuntimeError(f"Plugin scripts root is missing or unsafe: {scripts_root}")
+    paths.extend(
+        path
+        for path in sorted(scripts_root.rglob("*"))
+        if path.is_file() or path.is_symlink()
+    )
     for path in paths:
         if path.is_symlink() or not path.is_file():
             raise PluginRuntimeError(f"Plugin payload contains a symlink or missing file: {path}")
@@ -119,6 +128,11 @@ def validate_plugin_root(plugin_root: Path, expected_version: str | None = None)
         )
     for name in skills:
         _regular_file(skills_root / name / "SKILL.md", f"Skill {name}")
+    for relative in REQUIRED_PLUGIN_EXECUTABLES:
+        executable = plugin_root / relative
+        _regular_file(executable, f"Required plugin helper {relative}")
+        if not os.access(executable, os.X_OK):
+            raise PluginRuntimeError(f"Required plugin helper is not executable: {executable}")
     return PluginState(
         root=plugin_root,
         version=version,

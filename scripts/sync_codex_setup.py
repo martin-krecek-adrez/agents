@@ -94,6 +94,24 @@ def preflight_targets(
     validate_regular_or_missing(manifest_path, "Managed skills manifest")
 
 
+def reject_unmanaged_plugin_conflicts(
+    skills_root: Path,
+    plugin_owned: set[str],
+    previous_manifest: set[str],
+) -> None:
+    unmanaged = sorted(
+        name
+        for name in plugin_owned
+        if lexists(skills_root / name) and name not in previous_manifest
+    )
+    if unmanaged:
+        raise SyncError(
+            "Refusing to remove plugin-owned direct skills not owned by the previous managed "
+            "manifest. Preserve them with the plugin conflict helper first: "
+            + ", ".join(unmanaged)
+        )
+
+
 def remove_path(path: Path) -> None:
     if not lexists(path):
         return
@@ -148,7 +166,7 @@ def transactional_apply(
             replace(skills_root / name, replacement, f"skills/{name}")
         replace(agents_target, staged_agents, "AGENTS.md")
         replace(manifest_path, staged_manifest, "managed-skills-manifest")
-    except Exception as original:
+    except BaseException as original:
         try:
             for index, (target, backup_path) in enumerate(reversed(processed)):
                 if lexists(target):
@@ -157,7 +175,7 @@ def transactional_apply(
                 if backup_path is not None and lexists(backup_path):
                     target.parent.mkdir(parents=True, exist_ok=True)
                     os.replace(backup_path, target)
-        except Exception as rollback_error:
+        except BaseException as rollback_error:
             keep_backup = True
             raise SyncError(
                 f"sync failed and rollback was incomplete; backup retained at {backup}: "
@@ -195,6 +213,7 @@ def main() -> None:
     plugin_owned = set(runtime.skills)
     managed = scan_sources([agents_repo / "skills", personal_root], plugin_owned)
     previous = read_previous_manifest(manifest_path)
+    reject_unmanaged_plugin_conflicts(skills_root, plugin_owned, previous)
     affected = set(managed) | previous | RETIRED_SKILLS | plugin_owned
     preflight_targets(codex_home, skills_root, affected, agents_target, manifest_path)
 

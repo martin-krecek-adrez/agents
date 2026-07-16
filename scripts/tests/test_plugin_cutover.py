@@ -71,6 +71,10 @@ class CutoverTests(unittest.TestCase):
         )
         skills = ("plugin-alpha", "plugin-beta")
         (root / "skill-inventory.txt").write_text("\n".join(skills) + "\n", encoding="utf-8")
+        helper = root / "scripts" / "check_local_skill_conflicts.py"
+        helper.parent.mkdir()
+        helper.write_text("#!/usr/bin/env python3\n", encoding="utf-8")
+        helper.chmod(0o755)
         for name in skills:
             skill = root / "skills" / name
             skill.mkdir(parents=True)
@@ -134,6 +138,10 @@ class CutoverTests(unittest.TestCase):
         legacy = self.home / "skills" / "plugin-alpha"
         legacy.mkdir(parents=True)
         (legacy / "SKILL.md").write_text("legacy\n")
+        (self.home / ".managed-skills-manifest").write_text(
+            "plugin-alpha\n",
+            encoding="utf-8",
+        )
         result = run(["bash", SYNC], self.env, check=True)
         self.assertEqual(result.returncode, 0)
         self.assertFalse(legacy.exists())
@@ -141,6 +149,16 @@ class CutoverTests(unittest.TestCase):
         manifest = (self.home / ".managed-skills-manifest").read_text().splitlines()
         self.assertIn("asana", manifest)
         self.assertNotIn("plugin-alpha", manifest)
+
+    def test_unmanaged_plugin_copy_is_never_removed_by_sync(self) -> None:
+        self._install_cache()
+        unmanaged = self.home / "skills" / "plugin-alpha"
+        unmanaged.mkdir(parents=True)
+        (unmanaged / "SKILL.md").write_text("custom unmanaged\n", encoding="utf-8")
+        result = run(["bash", SYNC], self.env)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("not owned by the previous managed manifest", result.stderr)
+        self.assertEqual((unmanaged / "SKILL.md").read_text(), "custom unmanaged\n")
 
     def test_incomplete_cache_preserves_legacy_copy(self) -> None:
         cache = self._install_cache()
@@ -154,6 +172,17 @@ class CutoverTests(unittest.TestCase):
         self.assertNotEqual(result.returncode, 0)
         self.assertTrue((legacy / "SKILL.md").is_file())
         self.assertEqual(target_agents.read_text(), "original\n")
+
+    def test_non_executable_helper_preserves_legacy_copy(self) -> None:
+        cache = self._install_cache()
+        (cache / "scripts" / "check_local_skill_conflicts.py").chmod(0o644)
+        legacy = self.home / "skills" / "plugin-alpha"
+        legacy.mkdir(parents=True)
+        (legacy / "SKILL.md").write_text("legacy\n", encoding="utf-8")
+        result = run(["bash", SYNC], self.env)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("not executable", result.stderr)
+        self.assertTrue((legacy / "SKILL.md").is_file())
 
     def test_symlink_target_is_rejected_without_external_delete(self) -> None:
         self._install_cache()
@@ -193,6 +222,14 @@ class CutoverTests(unittest.TestCase):
     def test_runtime_check_detects_source_cache_drift(self) -> None:
         self._install_cache()
         (self.source_plugin / "skills" / "plugin-alpha" / "SKILL.md").write_text("changed\n")
+        result = run(["bash", OWNERSHIP, "--check-runtime", "--require-plugin-source"], self.env)
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("differs from the checked-out source", result.stderr)
+
+    def test_runtime_check_detects_helper_drift(self) -> None:
+        self._install_cache()
+        helper = self.source_plugin / "scripts" / "check_local_skill_conflicts.py"
+        helper.write_text("#!/usr/bin/env python3\n# changed\n", encoding="utf-8")
         result = run(["bash", OWNERSHIP, "--check-runtime", "--require-plugin-source"], self.env)
         self.assertNotEqual(result.returncode, 0)
         self.assertIn("differs from the checked-out source", result.stderr)
@@ -238,6 +275,53 @@ class CutoverTests(unittest.TestCase):
         self.assertEqual((old_skill / "SKILL.md").read_text(), "old\n")
         self.assertEqual(agents_target.read_text(), "old agents\n")
         self.assertEqual(manifest.read_text(), "direct-skill\n")
+
+    def test_keyboard_interrupt_restores_all_previous_targets(self) -> None:
+        skills_root = self.home / "skills"
+        old_skill = skills_root / "direct-skill"
+        old_skill.mkdir(parents=True)
+        (old_skill / "SKILL.md").write_text("old\n", encoding="utf-8")
+        new_skill = self.base / "new-direct-skill"
+        new_skill.mkdir()
+        (new_skill / "SKILL.md").write_text("new\n", encoding="utf-8")
+        agents_target = self.home / "AGENTS.md"
+        agents_target.write_text("old agents\n", encoding="utf-8")
+        manifest = self.home / ".managed-skills-manifest"
+        manifest.write_text("direct-skill\n", encoding="utf-8")
+
+        real_replace = os.replace
+
+        def interrupt_new_manifest(source: str | Path, target: str | Path) -> None:
+            source_path = Path(source)
+            target_path = Path(target)
+            if (
+                target_path == manifest
+                and source_path.name == "managed-skills-manifest"
+                and source_path.parent.name.startswith(".managed-skills-stage-")
+            ):
+                raise KeyboardInterrupt()
+            real_replace(source, target)
+
+        with mock.patch.object(
+            sync_codex_setup.os,
+            "replace",
+            side_effect=interrupt_new_manifest,
+        ):
+            with self.assertRaises(KeyboardInterrupt):
+                sync_codex_setup.transactional_apply(
+                    codex_home=self.home,
+                    skills_root=skills_root,
+                    managed={"direct-skill": new_skill},
+                    affected_skills={"direct-skill"},
+                    agents_source=self.agents,
+                    agents_target=agents_target,
+                    manifest_path=manifest,
+                )
+
+        self.assertEqual((old_skill / "SKILL.md").read_text(), "old\n")
+        self.assertEqual(agents_target.read_text(), "old agents\n")
+        self.assertEqual(manifest.read_text(), "direct-skill\n")
+        self.assertEqual(list(self.home.glob(".managed-skills-backup-*")), [])
 
 
 if __name__ == "__main__":
