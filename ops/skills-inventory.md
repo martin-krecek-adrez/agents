@@ -16,6 +16,19 @@ Last reviewed: 2026-07-15
 - The plugin's bundled `skill-inventory.txt` is the machine-readable ownership
   contract used from source and installed cache.
 
+## Change routing
+
+- Portable team data-platform or repository-delivery workflow: add or update
+  the owning plugin in `tech-plugins`.
+- Portable workflow for another team domain: use that domain's plugin rather
+  than expanding `adrez-data-platform` without a clear fit.
+- Martin-only Adrez operating, tracking, or context workflow: add or update
+  `agents/skills`.
+- Life-only workflow: add or update the personal agent repository.
+- Runtime paths (`~/.codex/skills` and plugin caches) are outputs only.
+- Promotion from a direct source to a plugin must use the source-aware cutover
+  in `README.md`; never leave the same skill name in both sources.
+
 ## Directly managed skills
 
 | Skill | Verdict | Notes | Next Action |
@@ -24,7 +37,7 @@ Last reviewed: 2026-07-15
 | `adrez-linear-workflow` | keep | Default Adrez Linear planning and updates. | No change. |
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |
-| `asana` | keep | Legacy Asana context and existing-task updates only. | No change. |
+| `asana` | keep | Historical archive lookup only for explicit legacy URLs/GIDs. Never use it as an active queue or routine brief source. | Keep the trigger narrow and archive-only. |
 | `avalanche-metadata-update` | keep | Product-specific metadata refresh remains outside plugin V1. | Reassess for plugin V1.1. |
 | `compare-tech` | keep | Generic decision support. | No change. |
 | `grill-me` | keep | Personal plan/design interview workflow. | No change. |
@@ -48,6 +61,8 @@ released through the `Adrez Tech` marketplace.
   skills.
 - Keep `adrez-agent-orchestration` in `agents`; it may route to plugin-provided
   skills by name but does not own their implementations.
+- Keep `asana` and `adrez-linear-workflow` separate. Asana is an explicit
+  historical archive lookup only; Linear owns all active planning and tracking.
 - Keep Avalanche metadata and Power BI outside plugin V1 until explicitly
   promoted.
 
