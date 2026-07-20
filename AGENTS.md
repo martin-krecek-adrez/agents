@@ -14,8 +14,9 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 ## Workspace Scope
 - Root: `/Users/martin/Documents/adrez`
 - Do not inspect `/Users/martin/Documents/adrez/old` unless explicitly asked.
-- `commission-tier-monitoring` is an external, unowned checkout. Do not inspect,
-  validate, route work to, or include its `AGENTS.md` in shared workspace audits.
+- `commission-tier-monitoring` and `market-overview-analysis` are external,
+  unowned checkouts. Do not inspect, validate, route work to, or include their
+  files in shared workspace audits.
 
 ## Repo Intent Map
 - `dbt-cloud`: dbt models, tests, docs, Snowflake analytics debugging.

@@ -122,11 +122,13 @@ else
   fail "agents README is missing the Martin-only or team-plugin onboarding boundary"
 fi
 
-if rg -n "commission-tier-monitoring" "${AGENTS_REPO}/ops" >/dev/null 2>&1; then
-  fail "Active agents ops state must not route work to commission-tier-monitoring"
-else
-  ok "Active agents ops state excludes commission-tier-monitoring"
-fi
+for external_repo in commission-tier-monitoring market-overview-analysis; do
+  if rg -n "${external_repo}" "${AGENTS_REPO}/ops" >/dev/null 2>&1; then
+    fail "Active agents ops state must not route work to ${external_repo}"
+  else
+    ok "Active agents ops state excludes ${external_repo}"
+  fi
+done
 
 ownership_args=(--check-runtime)
 if [ -n "${ADREZ_TECH_PLUGINS_ROOT:-}" ]; then

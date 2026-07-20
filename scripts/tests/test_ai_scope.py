@@ -18,11 +18,12 @@ from list_managed_agents import iter_managed_agents  # noqa: E402
 class ManagedAgentsScopeTests(unittest.TestCase):
     def test_active_ops_do_not_route_external_repository(self) -> None:
         for path in sorted((ROOT / "ops").glob("*.md")):
-            self.assertNotIn(
+            text = path.read_text(encoding="utf-8")
+            for repository in (
                 "commission-tier-monitoring",
-                path.read_text(encoding="utf-8"),
-                str(path),
-            )
+                "market-overview-analysis",
+            ):
+                self.assertNotIn(repository, text, str(path))
 
     def test_external_and_generated_repositories_are_excluded(self) -> None:
         with tempfile.TemporaryDirectory(prefix="adrez-agents-scope-") as temp:
@@ -30,6 +31,7 @@ class ManagedAgentsScopeTests(unittest.TestCase):
             included = [workspace / "AGENTS.md", workspace / "owned-repo" / "AGENTS.md"]
             excluded = [
                 workspace / "commission-tier-monitoring" / "AGENTS.md",
+                workspace / "market-overview-analysis" / "AGENTS.md",
                 workspace / "old" / "AGENTS.md",
                 workspace / "_worktrees" / "repo" / "task" / "AGENTS.md",
                 workspace
@@ -58,6 +60,13 @@ class ManagedAgentsScopeTests(unittest.TestCase):
                 / "tasks"
                 / "excluded.md"
             )
+            market_overview = (
+                workspace
+                / "market-overview-analysis"
+                / "docs"
+                / "tasks"
+                / "excluded.md"
+            )
             sibling_checkout = (
                 workspace
                 / "dbt-cloud-mews-l1-append"
@@ -65,7 +74,7 @@ class ManagedAgentsScopeTests(unittest.TestCase):
                 / "tasks"
                 / "duplicate.md"
             )
-            for path in (included, excluded, sibling_checkout):
+            for path in (included, excluded, market_overview, sibling_checkout):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text("canonical workflow\n", encoding="utf-8")
                 old = time.time() - 40 * 24 * 60 * 60
@@ -84,7 +93,9 @@ class ManagedAgentsScopeTests(unittest.TestCase):
             self.assertEqual(result.returncode, 0, result.stderr)
             self.assertIn(str(included), result.stdout)
             self.assertNotIn("commission-tier-monitoring", result.stdout)
+            self.assertNotIn("market-overview-analysis", result.stdout)
             self.assertNotIn(str(excluded), result.stdout)
+            self.assertNotIn(str(market_overview), result.stdout)
             self.assertNotIn(str(sibling_checkout), result.stdout)
 
 
