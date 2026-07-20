@@ -3,12 +3,10 @@ date: 2026-07-01
 area: metadata
 severity: P2
 source: user
-status: inbox
+status: rejected
 related_task:
 sensitive_data_checked: yes
-promote_to:
-  - deterministic-check
-  - linear
+promote_to: []
 ---
 
 # Avalanche Prague Booking Partnership All Null
@@ -57,6 +55,12 @@ matters analytically.
 Promote to Linear if verification confirms that `BOOKING_PARTNERSHIP` is expected
 to be meaningful for Prague, or if another market/field shows the same
 all-null-by-segment pattern.
+
+## Resolution
+The issue was fixed upstream in dbt by preserving the Booking partnership tier
+enum and deriving the boolean partnership field from it. It has not repeated,
+so a generic segment-level all-null check would add more maintenance than signal.
+Reconsider only if the same failure shape appears for another important field.
 
 ## Notes
 No raw row samples or customer data included. Reported aggregate: Prague has

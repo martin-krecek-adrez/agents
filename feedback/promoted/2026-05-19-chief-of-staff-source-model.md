@@ -3,12 +3,12 @@ date: 2026-05-19
 area: prompts
 severity: P1
 source: user
-status: inbox
+status: promoted
 related_task:
 sensitive_data_checked: yes
 promote_to:
-  - skill
-  - shared AGENTS.md
+  - automation
+  - ops-policy
 ---
 
 # Chief Of Staff Source Model Failed
@@ -30,7 +30,7 @@ chat listing and direct fetch worked. Outlook Email plugin needed to be
 installed. Asana connector worked, but current search did not find the due-soon
 task referenced by the Outlook Asana notification.
 
-## Suggested Harness Change
+## Historical Suggested Harness Change
 Create a dedicated Chief of Staff runbook/skill that always:
 - Loads local ops memory and automation memory first.
 - Loads yesterday/recent `*/docs/tasks/YYYY-MM-DD-*.md` notes.
@@ -45,5 +45,13 @@ Create a dedicated Chief of Staff runbook/skill that always:
 Promote immediately if the automation runs again, because this is the core
 workflow contract for the brief.
 
+## Resolution
+The stable lesson is promoted into the active morning-brief automation and
+operating policy: load local operating state first, use the current work-source
+graph, retry slow connectors through narrow bounded queries, name exact source
+gaps, and return a short actionable brief. The source list below is retained as
+incident history; active source ownership now belongs to the automation prompt.
+
 ## Notes
-Do not include Gmail or Google Calendar in the default work brief.
+The original Gmail, Google Calendar, Outlook, Teams, and Asana choices describe
+the incident context, not current routing. Asana is retired for active tracking.

@@ -58,7 +58,14 @@ class ManagedAgentsScopeTests(unittest.TestCase):
                 / "tasks"
                 / "excluded.md"
             )
-            for path in (included, excluded):
+            sibling_checkout = (
+                workspace
+                / "dbt-cloud-mews-l1-append"
+                / "docs"
+                / "tasks"
+                / "duplicate.md"
+            )
+            for path in (included, excluded, sibling_checkout):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text("canonical workflow\n", encoding="utf-8")
                 old = time.time() - 40 * 24 * 60 * 60
@@ -78,6 +85,7 @@ class ManagedAgentsScopeTests(unittest.TestCase):
             self.assertIn(str(included), result.stdout)
             self.assertNotIn("commission-tier-monitoring", result.stdout)
             self.assertNotIn(str(excluded), result.stdout)
+            self.assertNotIn(str(sibling_checkout), result.stdout)
 
 
 if __name__ == "__main__":
