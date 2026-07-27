@@ -25,6 +25,7 @@ SKILLS_DIR="${AGENTS_REPO}/skills"
 README_PATH="${AGENTS_REPO}/README.md"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 PERSONAL_SKILLS_DIR="${PERSONAL_SKILLS_DIR:-/Users/martin/Documents/live/agent/skills}"
+DATA_FACTORY_ROOT="${ADREZ_DATA_FACTORY_ROOT:-/Users/martin/Documents/adrez/data-factory}"
 MAX_AGENTS_WARN_BYTES=8000
 MAX_AGENTS_FAIL_BYTES=12000
 MAX_SKILL_REVIEW_AGE_DAYS=90
@@ -65,7 +66,7 @@ required_agents=(
   "/Users/martin/Documents/adrez/AGENTS.md"
   "${AGENTS_REPO}/AGENTS.md"
   "/Users/martin/Documents/adrez/dbt-cloud/AGENTS.md"
-  "/Users/martin/Documents/adrez/data-factory/AGENTS.md"
+  "${DATA_FACTORY_ROOT}/AGENTS.md"
   "/Users/martin/Documents/adrez/extractor-spreadsheets/AGENTS.md"
   "/Users/martin/Documents/adrez/data-platform/AGENTS.md"
   "/Users/martin/Documents/adrez/metadata-builder/AGENTS.md"
@@ -82,6 +83,16 @@ for agents_file in "${required_agents[@]}"; do
     fail "Missing required AGENTS.md: ${agents_file}"
   fi
 done
+
+DATA_FACTORY_AGENTS="${DATA_FACTORY_ROOT}/AGENTS.md"
+if grep -q 'production-activation.json' "${DATA_FACTORY_AGENTS}" \
+  && grep -q 'must match the manifest' "${DATA_FACTORY_AGENTS}" \
+  && grep -q 'payload.configPath' "${DATA_FACTORY_AGENTS}" \
+  && ! grep -q 'default config autodiscovery' "${DATA_FACTORY_AGENTS}"; then
+  ok "data-factory AGENTS.md matches the production activation manifest contract"
+else
+  fail "data-factory AGENTS.md has stale or incomplete production activation guidance"
+fi
 
 while IFS= read -r agents_file; do
   [ -n "${agents_file}" ] || continue
