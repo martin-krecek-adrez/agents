@@ -89,7 +89,8 @@ Use natural intent; exact skill names are optional.
 - Airflow status, DAG runs, task instances, and logs: route to
   `airflow-orchestrator` and use its production read-only REST API before any
   browser automation. Follow the repo-local
-  `.codex/rules/airflow-readonly-api.md` rule.
+  `.codex/rules/airflow-readonly-api.md` rule. Never treat `GET /version` as
+  proof of Airflow user authentication.
 - Avalanche MCP/current agent behavior: `avalanche-mcp`.
 - Avalanche metadata/catalog rebuild: `metadata-builder`.
 - If ADLS landing status is ambiguous, ask one short clarifying question.
