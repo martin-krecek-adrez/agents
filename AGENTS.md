@@ -86,6 +86,10 @@ Use natural intent; exact skill names are optional.
 - New document extraction: route to the owning active source/ingestion repo; do not revive `extractor-documents` without an explicit migration decision.
 - New Power BI report/model: `powerbi-report-starter`.
 - "check dbt": `dbt-cloud`.
+- Airflow status, DAG runs, task instances, and logs: route to
+  `airflow-orchestrator` and use its production read-only REST API before any
+  browser automation. Follow the repo-local
+  `.codex/rules/airflow-readonly-api.md` rule.
 - Avalanche MCP/current agent behavior: `avalanche-mcp`.
 - Avalanche metadata/catalog rebuild: `metadata-builder`.
 - If ADLS landing status is ambiguous, ask one short clarifying question.
