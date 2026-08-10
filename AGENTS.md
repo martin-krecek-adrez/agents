@@ -68,11 +68,11 @@ every duplicate direct source or runtime path.
 - New document extraction: route to the owning active source/ingestion repo; do not revive `extractor-documents` without an explicit migration decision.
 - New Power BI report/model: `powerbi-report-starter`.
 - "check dbt": `dbt-cloud`.
-- Airflow status, DAG runs, task instances, and logs: route to
-  `airflow-orchestrator` and use its production read-only REST API before any
-  browser automation. Follow the repo-local
-  `.codex/rules/airflow-readonly-api.md` rule. Never treat `GET /version` as
-  proof of Airflow user authentication.
+- Airflow status, DAG runs, task instances, logs, and approved control actions:
+  route to `airflow-orchestrator` and use SSH to the VPS with the local key
+  `~/.ssh/adrez_vps_hostinger`. Follow the repo-local
+  `.codex/rules/airflow-readonly-api.md` rule. Do not use the 1Password-backed
+  Airflow REST API unless the user explicitly requests that access path.
 - Avalanche MCP/current agent behavior: `avalanche-mcp`.
 - Avalanche metadata/catalog rebuild: `metadata-builder`.
 - If ADLS landing status is ambiguous, ask one short clarifying question.
