@@ -4,7 +4,7 @@ description: Triage and orchestrate non-trivial Adrez Codex threads into local w
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-07-01
+last_reviewed: 2026-08-10
 ---
 
 # Adrez Agent Orchestration
@@ -55,6 +55,12 @@ skills. It decides the shape of the work before implementation starts.
 ## Delegation Rules
 - Spawn subagents only when the user explicitly authorizes subagents,
   delegation, or parallel agent work in this thread.
+- Start with at most two subagents in the first wave. Keep one concurrency slot
+  free for follow-up work and coordination.
+- Review the first wave before spawning another wave. Spawn more agents only
+  when unresolved work is still independent and the expected value is clear.
+- Stop or interrupt redundant, stalled, or looping agents. Do not use more
+  agents to repeat evidence that is already sufficient for a decision.
 - Delegate sidecar work that can run independently while the main agent handles
   the critical path.
 - Do not delegate the next blocking step if the main agent needs its result
