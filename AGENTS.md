@@ -14,8 +14,9 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 ## Workspace Scope
 - Root: `/Users/martin/Documents/adrez`
 - Do not inspect `/Users/martin/Documents/adrez/old` unless explicitly asked.
-- `commission-tier-monitoring` is an external, unowned checkout. Do not inspect,
-  validate, route work to, or include its `AGENTS.md` in shared workspace audits.
+- `commission-tier-monitoring` and `market-overview-analysis` are external,
+  unowned checkouts. Do not inspect, validate, route work to, or include their
+  files in shared workspace audits.
 
 ## Repo Intent Map
 - `dbt-cloud`: dbt models, tests, docs, Snowflake analytics debugging.
@@ -57,25 +58,6 @@ Use these skills when intent clearly matches:
 The machine-readable ownership boundary is the installed plugin's
 `skill-inventory.txt`. The local sync must validate that inventory and reject
 every duplicate direct source or runtime path.
-
-## How To Ask
-Use natural intent; exact skill names are optional.
-- Snowflake: "koukni do Snowflake", "pust SQL", "over tabulku ve Snowflake".
-- Spreadsheet to Snowflake: "pridej input sheet", "napoj tenhle Excel", "dostan SharePoint soubor do Snowflake".
-- Landing only: "jen landing", "jen extractor", "`ingest_config.yml`".
-- Already-landed ADLS: "uz to lezi v ADLS", "udelej Snowflake exposure".
-- dbt: "pridej dbt model", "udelej l1_raw", "schema tests pro novy model".
-- Delivery: "otestuj to", "commitni", "pushni", "udelat PR", "otestuj PR", "mergni".
-- Review: "udelej review", "zkontroluj implementaci", "spawni subagenty na review", "bud dukladny".
-- Safety: "zkontroluj scope", "spatna branch", "dirty worktree".
-- Docs: "napis dokumentaci", "uprav docs", "sepis troubleshooting".
-- Feedback: "zapis feedback", "at se to priste nestane", "dej to do harnessu".
-- Orchestration: "je to male nebo velke", "rozpadni to na agenty", "kolik agentu pustit", "kdo dela co".
-
-## Snowflake Defaults
-- For `snowcli` tasks, use locally configured Snow CLI/dbt context by default.
-- If required context is missing or ambiguous, ask one short clarifying question.
-- Always return executable SQL and prefer fully qualified names (`database.schema.table`).
 
 ## Routing Rules
 - Decide target repo + skill before editing.

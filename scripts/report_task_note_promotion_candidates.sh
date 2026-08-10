@@ -37,6 +37,8 @@ while IFS= read -r note; do
 done < <(find "${ROOT}" \
   \( -type d \( \
     -name 'commission-tier-monitoring' -o \
+    -name 'market-overview-analysis' -o \
+    -name 'dbt-cloud-*' -o \
     -name 'old' -o \
     -name '_worktrees' -o \
     -name 'node_modules' -o \

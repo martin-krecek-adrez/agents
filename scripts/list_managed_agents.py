@@ -6,7 +6,9 @@ import os
 from pathlib import Path
 
 
-EXCLUDED_ROOT_REPOSITORIES = frozenset({"commission-tier-monitoring"})
+EXCLUDED_ROOT_REPOSITORIES = frozenset(
+    {"commission-tier-monitoring", "market-overview-analysis"}
+)
 PRUNED_DIRECTORY_NAMES = frozenset({".git", "_worktrees", "adrez-tools", "node_modules", "old"})
 
 

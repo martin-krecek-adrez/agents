@@ -18,6 +18,7 @@ it.
 | Martin Hapl / candidate email wording | Teams chat | Upozornil, že dovolenou raději nepsat kandidátům emailem; je to spíš procesní připomínka pro další intra. | U dnešních candidate follow-upů držet email stručný a citlivé HR detaily řešit ústně. | 2026-06-05 |
 | Mews / Adyen migration | Outlook / Martin correction | Hapl přidal Martina jako ownera změny; Martin poslal technické otázky k settlement identifierům, payout rekonstrukci a bank-statement identifikaci. | Martin hlídá Mews odpovědi; nesurfacingovat jako Codex reply-needed, jen jako watch. | 2026-06-16 |
 | Martin Hapl / SWE-252 benchmark answer packet | Linear / Outlook notification | Hapl čeká na Martinovy ingestion changes, než otestuje benchmark ask-packet answers. | Posunout ingestion změny nebo mu napsat krátký ETA/status. | 2026-06-18 |
+| Martin Hapl / revenue metric contract | Linear DTE-35 / DTE-163 | Revenue Analytics používá gross, zatímco RM report má směřovat na revenue bez VAT; bez jednoho rozhodnutí budou spojené aplikace ukazovat různé ADR/revenue. | Rozhodnout `net` vs `net ex city tax`, zahrnutí provizí a `ORIGINAL_AMOUNT_*` vs `AMOUNT_*`; potvrdit v DTE-35. | 2026-07-27 |
 
 ## Resolved
 
