@@ -33,9 +33,11 @@ skills. It decides the shape of the work before implementation starts.
    - task branch/worktree,
    - planned subagent delegation,
    - or follow-up project/issue planning.
-4. Name the owner of each slice: main agent, human, Linear issue, or subagent
+4. Declare the delivery target: local implementation, pushed branch and PR,
+   merged `main`, or deployment. Do not infer a later stage from `udělej`.
+5. Name the owner of each slice: main agent, human, Linear issue, or subagent
    role.
-5. Define the immediate next local action. Keep blocking work local instead of
+6. Define the immediate next local action. Keep blocking work local instead of
    delegating it away.
 
 ## Triage Levels
@@ -84,17 +86,28 @@ skills. It decides the shape of the work before implementation starts.
 - **reviewer**: checks correctness, regressions, validation, and scope leaks.
 - **verifier**: runs or inspects validation that can happen in parallel.
 
+## Delivery checkpoint
+
+- Before implementation, name the target remote/base and required final state.
+- For same-repo concurrency, route execution through `repo-worktree-safety`.
+- Before delivery, route through `repo-pr-handoff` and require exact SHA proof
+  for every requested stage.
+- At final handoff, state local, remote branch, PR, `main`, deployment, and
+  cleanup separately. If a stage was not requested or reached, say so.
+
 ## Output Shape
 For a normal orchestration response, keep it short:
 
 ```md
 Triage: level N - reason.
 Mode: local / tracked / branch / parallel / project.
+Delivery target: local / PR / main / deployment.
 Slices:
 - Main agent: ...
 - Optional subagent role: ...
 Immediate next action: ...
 Tracking: none / Linear issue / existing issue.
+Required proof: base SHA / remote SHA / PR head / main SHA / deployment ID.
 ```
 
 For large ambiguous work, ask at most one clarification question. If a safe

@@ -95,7 +95,10 @@ every duplicate direct source or runtime path.
 
 ## Git Defaults
 - Run `git status -sb` before edits.
-- Pull with `--ff-only` by default.
+- Before creating a task branch or worktree, fetch through
+  `repo-worktree-safety` and base it on the fetched remote target. Do not use an
+  unverified local `main` as the task base.
+- Pull with `--ff-only` only in a clean checkout when a pull is needed.
 - For implementation tasks, create or switch to a dedicated task branch before editing unless the user explicitly asks to use the current branch.
 - Use `repo-pr-handoff` for non-trivial handoffs: model logic, ingestion, Terraform/platform, CI/deploy, or shared AI context.
 - Use `repo-worktree-safety` when multiple independent tasks are active in the same repository, when branch/worktree state is ambiguous, or when dirty files may belong to another task.
@@ -105,11 +108,24 @@ every duplicate direct source or runtime path.
 
 ## Delivery Defaults
 - Branches are delivery units; worktrees are concurrency units.
+- At task intake, declare the delivery target: local implementation, pushed
+  branch and PR, merged `main`, or deployment. If the user did not authorize a
+  delivery action, default to local implementation and state that limit.
 - Parallel same-repo work uses one task worktree per task branch under `/Users/martin/Documents/adrez/_worktrees/<repo-name>/<task-slug>`.
 - Dirty files with unclear ownership block branch switching, staging, committing, pulling, pushing, and PR work.
 - Never use `git stash`, `git reset`, `git checkout --`, `git clean`, or file-moving cleanup to juggle unrelated work unless explicitly approved.
 - For non-trivial work, "push", "pushed", "commit and push", or "clean and pushed" means feature branch plus draft PR unless the user explicitly says `no PR`, `jen pushni branch`, `main`, or `directly to main`.
 - Never merge unless the user explicitly says `merge`, `sluč`, or `dej to do main`.
+- Before handoff, fetch and prove current-base ancestry. After push, prove that
+  local HEAD, the remote task branch, and the PR head use the same SHA. After
+  merge, prove the fetched remote `main` SHA against GitHub's merge SHA.
+- Report local changes, remote branch, PR, `main`, deployment, and cleanup as
+  separate states. Never describe local-only or branch-only work as merged or
+  deployed.
+- Never delete a worktree because of age alone. Inventory first. Remove only an
+  owned, clean, remotely recoverable worktree whose completion or abandonment
+  is confirmed. Use `scripts/report_worktree_state.py --summary-only` for the
+  read-only inventory. Cleanup remains a separate explicit action.
 - Use `gh` for CI/logs/checks when needed; run logs are source of truth for CI failures.
 - For private Adrez repos, a GitHub connector `404` can mean connector scope; verify local remote and retry narrow sandbox-failed `gh` commands with `require_escalated`.
 - Detailed branch, worktree, PR, CI, and merge rules live in `repo-pr-handoff` and `repo-worktree-safety`.
