@@ -1,6 +1,6 @@
 # Skills Inventory
 
-Last reviewed: 2026-08-10
+Last reviewed: 2026-08-12
 
 ## Ownership model
 
@@ -33,7 +33,7 @@ Last reviewed: 2026-08-10
 
 | Skill | Verdict | Notes | Next Action |
 | --- | --- | --- | --- |
-| `adrez-agent-orchestration` | tighten | Personal intake layer above tracking and execution skills. Recent work showed excessive multi-wave fan-out. | Start with at most two subagents and require a checkpoint before another wave. |
+| `adrez-agent-orchestration` | tighten | Personal intake layer above tracking and execution skills. It now limits fan-out and declares the delivery target before implementation. | Forward-test delivery checkpoints and exact final-state reporting. |
 | `adrez-linear-workflow` | keep | Default Adrez Linear planning and updates. | No change. |
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |

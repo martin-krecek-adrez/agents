@@ -124,6 +124,21 @@ else
   fail "Concurrent same-repo worktree policy is missing from shared git guidance"
 fi
 
+if grep -q "declare the delivery target" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "local HEAD, the remote task branch, and the PR head" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "Delivery checkpoint" "${AGENTS_REPO}/skills/adrez-agent-orchestration/SKILL.md"; then
+  ok "Delivery target and exact-SHA handoff checkpoints are explicit"
+else
+  fail "Delivery target or exact-SHA handoff checkpoints are missing"
+fi
+
+if [ -x "${SCRIPT_DIR}/report_worktree_state.py" ] \
+  && grep -q "Never delete a worktree because of age alone" "${AGENTS_REPO}/AGENTS.md"; then
+  ok "Read-only worktree inventory and age-safe cleanup policy are configured"
+else
+  fail "Worktree inventory or age-safe cleanup policy is missing"
+fi
+
 if grep -q "This repository is Martin's local control hub" "${README_PATH}" \
   && grep -q "Team members must not run this" "${README_PATH}" \
   && grep -q "repository's sync" "${README_PATH}" \
