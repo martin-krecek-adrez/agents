@@ -1,10 +1,10 @@
 ---
 name: adrez-agent-orchestration
-description: Triage and orchestrate non-trivial Adrez Codex threads into local work, Linear tracking, task branches/worktrees, or explicitly authorized parallel subagent work. Use when the user asks to decide whether a thread is big or small, split work across agents, coordinate multiple repos or phases, create an agent-ready plan, define who does what, or recover from long-session drift and unclear execution ownership.
+description: Triage and orchestrate non-trivial Adrez Codex threads into local work, Linear tracking, task branches/worktrees, or explicitly authorized subagent work. Use when the user asks to size or split work, coordinate repositories or phases, create an agent-ready plan, assign ownership, recover from long-session drift, or move an agreed non-trivial task from discussion into implementation with prompts such as "implementuj", "udělej to", or "pokračuj realizací".
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-08-10
+last_reviewed: 2026-08-13
 ---
 
 # Adrez Agent Orchestration
@@ -92,6 +92,8 @@ skills. It decides the shape of the work before implementation starts.
 - For same-repo concurrency, route execution through `repo-worktree-safety`.
 - Before delivery, route through `repo-pr-handoff` and require exact SHA proof
   for every requested stage.
+- Before handoff, run proportionate validation and inspect the current-task
+  diff.
 - At final handoff, state local, remote branch, PR, `main`, deployment, and
   cleanup separately. If a stage was not requested or reached, say so.
 
