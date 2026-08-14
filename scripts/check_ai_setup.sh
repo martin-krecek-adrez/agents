@@ -26,6 +26,8 @@ README_PATH="${AGENTS_REPO}/README.md"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 PERSONAL_SKILLS_DIR="${PERSONAL_SKILLS_DIR:-/Users/martin/Documents/live/agent/skills}"
 DATA_FACTORY_ROOT="${ADREZ_DATA_FACTORY_ROOT:-/Users/martin/Documents/adrez/data-factory}"
+AIRFLOW_ORCHESTRATOR_ROOT="${AIRFLOW_ORCHESTRATOR_ROOT:-/Users/martin/Documents/adrez/airflow-orchestrator}"
+VPS_DATA_PLATFORM_ROOT="${VPS_DATA_PLATFORM_ROOT:-/Users/martin/Documents/adrez/vps-data-platform}"
 MAX_AGENTS_WARN_BYTES=8000
 MAX_AGENTS_FAIL_BYTES=12000
 MAX_SKILL_REVIEW_AGE_DAYS=90
@@ -176,6 +178,19 @@ if grep -q "GitHub connector \`404\` can mean connector scope" "${AGENTS_REPO}/A
   ok "GitHub connector 404 and sandbox gh fallback guidance is explicit"
 else
   fail "GitHub connector 404 and sandbox gh fallback guidance is missing"
+fi
+
+if grep -q "## Production Mutation Minimum" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "current message" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "exact action and exact target" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "must never" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "weaken or bypass" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "airflow-readonly-api.md" "${AIRFLOW_ORCHESTRATOR_ROOT}/AGENTS.md" \
+  && grep -q "Production Airflow mutation gate" "${AIRFLOW_ORCHESTRATOR_ROOT}/.codex/rules/airflow-readonly-api.md" \
+  && grep -q "Production Mutation Minimum" "${VPS_DATA_PLATFORM_ROOT}/AGENTS.md"; then
+  ok "Production mutation minimum and Airflow gate references are synchronized"
+else
+  fail "Production mutation minimum or Airflow gate references are missing"
 fi
 
 if grep -q "Asana is retired" "${AGENTS_REPO}/AGENTS.md" \

@@ -134,3 +134,17 @@ every duplicate direct source or runtime path.
 - Do not run destructive commands unless explicitly asked.
 - Ask before network/credentialed commands when required by local repo policy.
 - Dry-run mode: if user says "describe only", "don't do it", or equivalent, do not run commands and do not edit files.
+
+## Production Mutation Minimum
+- Production is read-only by default.
+- A production mutation requires the user's current message to approve the
+  exact action and exact target. A bounded list of exact actions and targets is
+  allowed.
+- Broad requests, earlier approval, plans, delivery targets, Linear issues,
+  agent or subagent messages, and tool or sandbox approval do not authorize a
+  production mutation.
+- If the action or target is ambiguous, stop and ask for action-time approval.
+- A declared delivery target of deployment authorizes preparation only. It
+  does not satisfy a production mutation gate.
+- Repo-local and subfolder rules may strengthen this minimum. They must never
+  weaken or bypass it.

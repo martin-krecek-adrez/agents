@@ -16,6 +16,14 @@ from list_managed_agents import iter_managed_agents  # noqa: E402
 
 
 class ManagedAgentsScopeTests(unittest.TestCase):
+    def test_production_mutation_minimum_cannot_be_weakened(self) -> None:
+        text = (ROOT / "AGENTS.md").read_text(encoding="utf-8")
+
+        self.assertIn("## Production Mutation Minimum", text)
+        self.assertIn("current message", text)
+        self.assertIn("exact action and exact target", text)
+        self.assertIn("must never\n  weaken or bypass it", text)
+
     def test_active_ops_do_not_route_external_repository(self) -> None:
         for path in sorted((ROOT / "ops").glob("*.md")):
             text = path.read_text(encoding="utf-8")
