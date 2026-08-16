@@ -148,6 +148,33 @@ def classify(
     return "recent"
 
 
+def canonical_health(
+    *,
+    canonical: bool,
+    dirty_count: int,
+    detached: bool,
+    upstream: str,
+    upstream_divergence: tuple[int, int] | None,
+) -> str:
+    if not canonical:
+        return ""
+    if dirty_count:
+        return "dirty"
+    if detached:
+        return "detached"
+    if not upstream:
+        return "no-upstream"
+    if upstream_divergence:
+        upstream_only, local_only = upstream_divergence
+        if upstream_only and local_only:
+            return "diverged"
+        if upstream_only:
+            return "behind"
+        if local_only:
+            return "ahead"
+    return "clean"
+
+
 def inspect_repository(repo: Path, stale_days: int, now: int) -> list[dict[str, Any]]:
     rows: list[dict[str, Any]] = []
     records = parse_worktrees(repo)
@@ -199,6 +226,13 @@ def inspect_repository(repo: Path, stale_days: int, now: int) -> list[dict[str, 
             stale_days=stale_days,
             prunable=prunable,
         )
+        canonical_state = canonical_health(
+            canonical=canonical,
+            dirty_count=dirty_count,
+            detached=detached,
+            upstream=upstream,
+            upstream_divergence=upstream_divergence,
+        )
         rows.append(
             {
                 "repository": repo.name,
@@ -209,6 +243,7 @@ def inspect_repository(repo: Path, stale_days: int, now: int) -> list[dict[str, 
                 "created_at": metadata.get("created_at", ""),
                 "age_source": "created_at" if created_timestamp is not None else "head_commit",
                 "state": state,
+                "canonical_health": canonical_state,
                 "age_days": age_days,
                 "dirty_paths": dirty_count,
                 "upstream": upstream,
@@ -227,6 +262,7 @@ def render_tsv(rows: list[dict[str, Any]]) -> None:
     columns = (
         "repository",
         "state",
+        "canonical_health",
         "age_days",
         "dirty_paths",
         "branch",
@@ -243,6 +279,17 @@ def render_tsv(rows: list[dict[str, Any]]) -> None:
 
 
 def render_summary(rows: list[dict[str, Any]]) -> None:
+    canonical_rows = [row for row in rows if row["state"] == "canonical"]
+    print("metric\tcount")
+    print(f"total_worktrees\t{len(rows)}")
+    print(f"canonical_worktrees\t{len(canonical_rows)}")
+    print(f"non_canonical_worktrees\t{len(rows) - len(canonical_rows)}")
+    print()
+    health_counts = collections.Counter(row["canonical_health"] for row in canonical_rows)
+    print("canonical_health\tcount")
+    for health, count in sorted(health_counts.items()):
+        print(f"{health}\t{count}")
+    print()
     counts = collections.Counter((row["repository"], row["state"]) for row in rows)
     print("repository\tstate\tcount")
     for (repository, state), count in sorted(counts.items()):
