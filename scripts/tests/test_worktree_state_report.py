@@ -85,9 +85,17 @@ class WorktreeStateReportTests(unittest.TestCase):
             "python3", REPORT, self.workspace, "--summary-only"
         ).stdout
         after = run("git", "status", "--porcelain=v1", cwd=self.task).stdout
+        self.assertIn("total_worktrees\t2", output)
+        self.assertIn("non_canonical_worktrees\t1", output)
+        self.assertIn("clean\t1", output)
         self.assertIn("sample\tcanonical\t1", output)
         self.assertIn("sample\tcleanup-review\t1", output)
         self.assertEqual(before, after)
+
+    def test_dirty_canonical_checkout_is_visible(self) -> None:
+        (self.repo / "uncommitted.txt").write_text("keep me\n", encoding="utf-8")
+        canonical = next(row for row in self.report() if row["state"] == "canonical")
+        self.assertEqual(canonical["canonical_health"], "dirty")
 
     def test_top_level_linked_checkout_does_not_duplicate_repository(self) -> None:
         sibling = self.workspace / "sample-sibling"

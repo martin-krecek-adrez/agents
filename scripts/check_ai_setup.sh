@@ -23,6 +23,7 @@ SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd -P)"
 AGENTS_REPO="$(cd "${SCRIPT_DIR}/.." && pwd -P)"
 SKILLS_DIR="${AGENTS_REPO}/skills"
 README_PATH="${AGENTS_REPO}/README.md"
+REPOSITORY_HYGIENE_DOC="/Users/martin/Documents/adrez/docs/data-platform/repository-hygiene.md"
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 PERSONAL_SKILLS_DIR="${PERSONAL_SKILLS_DIR:-/Users/martin/Documents/live/agent/skills}"
 DATA_FACTORY_ROOT="${ADREZ_DATA_FACTORY_ROOT:-/Users/martin/Documents/adrez/data-factory}"
@@ -139,6 +140,16 @@ if [ -x "${SCRIPT_DIR}/report_worktree_state.py" ] \
   ok "Read-only worktree inventory and age-safe cleanup policy are configured"
 else
   fail "Worktree inventory or age-safe cleanup policy is missing"
+fi
+
+if [ -f "${REPOSITORY_HYGIENE_DOC}" ] \
+  && grep -q "After a PR merge, close a helper-created task lifecycle" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "Codex-app-managed worktree without helper metadata" "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q "Scheduled audits are read-only" "${REPOSITORY_HYGIENE_DOC}" \
+  && grep -q "Age alone never authorizes deletion" "${REPOSITORY_HYGIENE_DOC}"; then
+  ok "Post-merge cleanup and read-only repository audit policy are configured"
+else
+  fail "Post-merge cleanup or read-only repository audit policy is missing"
 fi
 
 if grep -q "This repository is Martin's local control hub" "${README_PATH}" \

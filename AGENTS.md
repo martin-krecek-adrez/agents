@@ -98,9 +98,14 @@ every duplicate direct source or runtime path.
 - Before creating a task branch or worktree, fetch through
   `repo-worktree-safety` and base it on the fetched remote target. Do not use an
   unverified local `main` as the task base.
+- If the current task already runs in a linked or Codex-managed worktree, use
+  it. Do not create a second worktree unless an explicit parallel task needs a
+  separate owner and delivery branch.
 - Pull with `--ff-only` only in a clean checkout when a pull is needed.
 - For implementation tasks, create or switch to a dedicated task branch before editing unless the user explicitly asks to use the current branch.
 - Use `repo-pr-handoff` for non-trivial handoffs: model logic, ingestion, Terraform/platform, CI/deploy, or shared AI context.
+- Use `implementation-review` before every non-trivial commit, push, PR, or
+  merge. Refresh the remote-base proof after the review and before delivery.
 - Use `repo-worktree-safety` when multiple independent tasks are active in the same repository, when branch/worktree state is ambiguous, or when dirty files may belong to another task.
 - Treat shared AI operating-system changes (`AGENTS.md`, skills, routing, task memory, automation prompts) as non-trivial.
 - Do not push unless explicitly asked.
@@ -126,6 +131,20 @@ every duplicate direct source or runtime path.
   owned, clean, remotely recoverable worktree whose completion or abandonment
   is confirmed. Use `scripts/report_worktree_state.py --summary-only` for the
   read-only inventory. Cleanup remains a separate explicit action.
+- Keep canonical checkouts clean and synchronized with their configured
+  upstream. Treat dirty, detached, ahead, behind, or diverged canonical state
+  as an audit finding, not as permission to reset it.
+- After a PR merge, close a helper-created task lifecycle in the same delivery
+  when safe: prove the merge on the actual remote base, fetch and prune, remove
+  the owned clean worktree and local task branch, and verify remote task-branch
+  deletion.
+  Run the `repo-pr-handoff` finish helper in check mode before apply mode. The
+  helper must prove direct ancestry or the exact merged PR head-to-merge map.
+- For a Codex-app-managed worktree without helper metadata, report it ready for
+  task archival. Do not fabricate ownership metadata or force cleanup.
+  Follow `/Users/martin/Documents/adrez/docs/data-platform/repository-hygiene.md`.
+  Remote deletion still requires explicit authorization when repository
+  auto-delete did not handle it.
 - Use `gh` for CI/logs/checks when needed; run logs are source of truth for CI failures.
 - For private Adrez repos, a GitHub connector `404` can mean connector scope; verify local remote and retry narrow sandbox-failed `gh` commands with `require_escalated`.
 - Detailed branch, worktree, PR, CI, and merge rules live in `repo-pr-handoff` and `repo-worktree-safety`.
