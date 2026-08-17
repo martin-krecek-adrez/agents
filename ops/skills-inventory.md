@@ -1,6 +1,6 @@
 # Skills Inventory
 
-Last reviewed: 2026-08-12
+Last reviewed: 2026-08-17
 
 ## Ownership model
 
@@ -33,8 +33,8 @@ Last reviewed: 2026-08-12
 
 | Skill | Verdict | Notes | Next Action |
 | --- | --- | --- | --- |
-| `adrez-agent-orchestration` | tighten | Personal intake layer above tracking and execution skills. It now limits fan-out and declares the delivery target before implementation. | Forward-test delivery checkpoints and exact final-state reporting. |
-| `adrez-linear-workflow` | keep | Default Adrez Linear planning and updates. | No change. |
+| `adrez-agent-orchestration` | tighten | Personal intake layer above tracking and execution skills. It now limits every wave, keeps a task-lifetime ledger, and declares the delivery target before implementation. | Forward-test the three-wave or six-agent stop and exact final-state reporting. |
+| `adrez-linear-workflow` | keep | Default Adrez Linear planning and updates, with a reviewed Data Engineering portfolio routing reference. | Keep the reference aligned with approved portfolio changes. |
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |
 | `asana` | keep | Historical archive lookup only for explicit legacy URLs/GIDs. Never use it as an active queue or routine brief source. | Keep the trigger narrow and archive-only. |

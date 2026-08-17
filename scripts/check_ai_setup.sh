@@ -135,6 +135,15 @@ else
   fail "Delivery target or exact-SHA handoff checkpoints are missing"
 fi
 
+if grep -q "## Task-Lifetime Wave Ledger" "${AGENTS_REPO}/skills/adrez-agent-orchestration/SKILL.md" \
+  && grep -q "at most two subagents in each wave" "${AGENTS_REPO}/skills/adrez-agent-orchestration/SKILL.md" \
+  && grep -q "Carry the ledger across context compaction" "${AGENTS_REPO}/skills/adrez-agent-orchestration/SKILL.md" \
+  && grep -q "three waves or six total spawned agents" "${AGENTS_REPO}/skills/adrez-agent-orchestration/SKILL.md"; then
+  ok "Task-lifetime subagent wave limits and continuity are explicit"
+else
+  fail "Task-lifetime subagent wave limits or continuity are missing"
+fi
+
 if [ -x "${SCRIPT_DIR}/report_worktree_state.py" ] \
   && grep -q "Never delete a worktree because of age alone" "${AGENTS_REPO}/AGENTS.md"; then
   ok "Read-only worktree inventory and age-safe cleanup policy are configured"
