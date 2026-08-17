@@ -4,7 +4,7 @@ description: Use when managing Adrez work in Linear, the only active tool for ta
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-07-15
+last_reviewed: 2026-08-17
 ---
 
 # Adrez Linear Workflow
@@ -13,6 +13,11 @@ last_reviewed: 2026-07-15
 Use Linear as a lightweight task starter and task noter for Adrez work. Keep it useful for humans and agents without turning it into heavy project management.
 
 Default team is `Data Engineering` for almost all Adrez data, analytics, reporting, dbt, ingestion, platform-adjacent, and agent/data-product work. Use another team only when the user explicitly asks or the work is clearly outside this flow.
+
+For Data Engineering work, read
+[`references/data-engineering-portfolio.md`](references/data-engineering-portfolio.md)
+before selecting or changing a project or initiative. Route by the primary
+business outcome or platform capability, not by repository name.
 
 ## Boundary
 - Linear is the only active tool for Adrez task planning and tracking.
@@ -75,6 +80,15 @@ Add a **comment/update** instead of creating a new issue when:
 - The update is operational progress rather than a new unit of work.
 
 Before creating a new project or issue, search existing Linear projects/issues with likely names to avoid duplicates.
+
+For Data Engineering issues:
+- Assign an existing project whenever the work has a clear durable owner.
+- Leave an issue without a project only when it is a small standalone operation
+  or its ownership is genuinely unresolved.
+- When work crosses projects, assign it to the project that owns the primary
+  outcome. Use related or blocking links for the other dependencies.
+- Do not force every project into an initiative. Initiatives are the selected
+  executive-reporting layer, not a required folder for every project.
 
 ## Project Template
 Use this shape for long-running projects. Keep it shorter when the project is simple.

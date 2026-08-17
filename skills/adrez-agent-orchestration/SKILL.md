@@ -4,7 +4,7 @@ description: Triage and orchestrate non-trivial Adrez Codex threads into local w
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-08-13
+last_reviewed: 2026-08-17
 ---
 
 # Adrez Agent Orchestration
@@ -57,7 +57,7 @@ skills. It decides the shape of the work before implementation starts.
 ## Delegation Rules
 - Spawn subagents only when the user explicitly authorizes subagents,
   delegation, or parallel agent work in this thread.
-- Start with at most two subagents in the first wave. Keep one concurrency slot
+- Start with at most two subagents in each wave. Keep one concurrency slot
   free for follow-up work and coordination.
 - Review the first wave before spawning another wave. Spawn more agents only
   when unresolved work is still independent and the expected value is clear.
@@ -77,6 +77,26 @@ skills. It decides the shape of the work before implementation starts.
   alone in the codebase and must not revert unrelated edits.
 - Prefer read-only explorer roles for broad discovery and worker roles for
   bounded patches.
+
+## Task-Lifetime Wave Ledger
+
+When subagents are used, keep one ledger for the full parent task:
+
+`Wave | subagents started | scope | status | evidence reviewed | decision`
+
+- Carry the ledger across context compaction, resumed work, and follow-up
+  turns. Count replacement agents and child-spawned agents in the same totals.
+- Before each later wave, reconcile all prior agents, results, and unresolved
+  scopes. Prefer a follow-up to an existing agent over spawning a replacement.
+- Start another wave only for a distinct unresolved scope with a clear
+  advantage over local work. Do not use another wave to repeat sufficient
+  evidence.
+- Stop after three waves or six total spawned agents. Summarize the evidence
+  and remaining scopes. Continue delegation only after Martin renews
+  authorization in the current thread.
+- After Martin corrects or narrows scope, update the ledger before more tool
+  calls or delegation. Stop and restate the current in-scope and out-of-scope
+  work when repeated corrections show session drift.
 
 ## Standard Role Set
 - **main agent**: owns the critical path, integration, final judgment, and user
@@ -110,6 +130,7 @@ Slices:
 Immediate next action: ...
 Tracking: none / Linear issue / existing issue.
 Required proof: base SHA / remote SHA / PR head / main SHA / deployment ID.
+Wave ledger: none / current wave and cumulative agent count.
 ```
 
 For large ambiguous work, ask at most one clarification question. If a safe
