@@ -144,6 +144,14 @@ else
   fail "Task-lifetime subagent wave limits or continuity are missing"
 fi
 
+if grep -q 'Use `adrez-thread-orchestration`' "${AGENTS_REPO}/skills/adrez-agent-orchestration/SKILL.md" \
+  && grep -q 'Use `adrez-agent-orchestration`' "${AGENTS_REPO}/skills/adrez-thread-orchestration/SKILL.md" \
+  && grep -q 'Standalone sidebar task lifecycle' "${AGENTS_REPO}/AGENTS.md"; then
+  ok "Standalone task and internal subagent orchestration boundaries are explicit"
+else
+  fail "Standalone task or internal subagent orchestration boundary is missing"
+fi
+
 if [ -x "${SCRIPT_DIR}/report_worktree_state.py" ] \
   && grep -q "Never delete a worktree because of age alone" "${AGENTS_REPO}/AGENTS.md"; then
   ok "Read-only worktree inventory and age-safe cleanup policy are configured"

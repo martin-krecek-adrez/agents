@@ -46,6 +46,7 @@ Use these skills when intent clearly matches:
 - Asana historical archive lookup only: `asana`.
 - Linear task/project tracking: `adrez-linear-workflow`.
 - Thread intake / agent orchestration: `adrez-agent-orchestration`.
+- Standalone sidebar task lifecycle under one MAIN task: `adrez-thread-orchestration`.
 - Decision support: `grill-me`, `compare-tech`.
 - Implementation review: `implementation-review`.
 - Git delivery: `write-commit`, `repo-pr-handoff`, `repo-worktree-safety`.
