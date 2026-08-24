@@ -4,7 +4,7 @@ description: Triage and orchestrate non-trivial Adrez Codex threads into local w
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-08-17
+last_reviewed: 2026-08-24
 ---
 
 # Adrez Agent Orchestration

@@ -90,6 +90,7 @@ Main routing is defined in `AGENTS.md`.
 - New document extraction is routed to the owning active source/ingestion repo.
 - Skill routing highlights:
   - Thread intake / agent orchestration -> `adrez-agent-orchestration`
+  - Standalone sidebar task lifecycle -> `adrez-thread-orchestration`
   - Snowflake-related requests -> `snowcli`
   - Explicit legacy Asana lookup -> `asana`
   - Commit message drafting -> `write-commit`
