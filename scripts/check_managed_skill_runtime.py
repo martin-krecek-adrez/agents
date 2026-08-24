@@ -87,6 +87,10 @@ def _unmanaged_adrez_runtime_issues(
             issues.append(
                 f"unmanaged Adrez runtime skill detected for {name}: runtime={path}"
             )
+            continue
+        issues.append(
+            f"unmanaged Adrez runtime directory has no SKILL.md: {path}"
+        )
     return issues
 
 

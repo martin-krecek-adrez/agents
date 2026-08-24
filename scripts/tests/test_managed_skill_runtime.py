@@ -131,6 +131,15 @@ class ManagedSkillRuntimeTests(unittest.TestCase):
         ):
             validate_managed_runtime((self.business, self.personal), self.codex)
 
+    def test_unmanaged_adrez_runtime_directory_without_skill_is_rejected(self) -> None:
+        self.write_manifest()
+        (self.codex / "skills" / "adrez-broken").mkdir()
+
+        with self.assertRaisesRegex(
+            ManagedSkillError, "unmanaged Adrez runtime directory has no SKILL.md"
+        ):
+            validate_managed_runtime((self.business, self.personal), self.codex)
+
     def test_managed_adrez_runtime_skill_passes(self) -> None:
         self.add_skill(self.business, "adrez-thread-orchestration")
         self.write_manifest("adrez-thread-orchestration")
