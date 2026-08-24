@@ -64,6 +64,32 @@ def _read_manifest(path: Path) -> set[str]:
     return set(names)
 
 
+def _unmanaged_adrez_runtime_issues(
+    skills_root: Path, managed_names: set[str]
+) -> list[str]:
+    if not skills_root.exists():
+        return []
+    if skills_root.is_symlink() or not skills_root.is_dir():
+        return [f"runtime skills root must be a real directory: {skills_root}"]
+
+    issues: list[str] = []
+    for path in sorted(skills_root.iterdir()):
+        name = path.name
+        if not name.startswith("adrez-") or name in managed_names:
+            continue
+        if path.is_symlink():
+            issues.append(f"unmanaged Adrez runtime skill is a symlink: {path}")
+            continue
+        if not path.is_dir():
+            issues.append(f"unmanaged Adrez runtime entry is not a directory: {path}")
+            continue
+        if (path / "SKILL.md").is_file() or (path / "SKILL.MD").is_file():
+            issues.append(
+                f"unmanaged Adrez runtime skill detected for {name}: runtime={path}"
+            )
+    return issues
+
+
 def validate_managed_runtime(
     source_roots: tuple[Path, ...], codex_home: Path
 ) -> tuple[str, ...]:
@@ -78,19 +104,33 @@ def validate_managed_runtime(
 
     manifest = _read_manifest(codex_home / ".managed-skills-manifest")
     source_names = set(sources)
+    issues: list[str] = []
     if manifest != source_names:
         missing = sorted(source_names - manifest)
         stale = sorted(manifest - source_names)
-        raise ManagedSkillError(
+        issues.append(
             f"managed skills manifest differs from sources: missing={missing}, stale={stale}"
         )
 
     for name, source in sorted(sources.items()):
         runtime = codex_home / "skills" / name
-        if _tree_digest(source) != _tree_digest(runtime):
-            raise ManagedSkillError(
+        try:
+            source_digest = _tree_digest(source)
+            runtime_digest = _tree_digest(runtime)
+        except (ManagedSkillError, OSError) as exc:
+            issues.append(str(exc))
+            continue
+        if source_digest != runtime_digest:
+            issues.append(
                 f"runtime skill drift detected for {name}: source={source}, runtime={runtime}"
             )
+
+    issues.extend(
+        _unmanaged_adrez_runtime_issues(codex_home / "skills", source_names)
+    )
+    if issues:
+        details = "\n".join(f"- {issue}" for issue in issues)
+        raise ManagedSkillError(f"managed skill runtime validation failed:\n{details}")
     return tuple(sorted(sources))
 
 

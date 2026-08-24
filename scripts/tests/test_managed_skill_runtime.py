@@ -59,6 +59,87 @@ class ManagedSkillRuntimeTests(unittest.TestCase):
         with self.assertRaisesRegex(ManagedSkillError, "life-skill"):
             validate_managed_runtime((self.business, self.personal), self.codex)
 
+    def test_multiple_runtime_drifts_are_reported_together(self) -> None:
+        self.add_skill(self.business, "business-skill")
+        self.add_skill(self.personal, "life-skill")
+        self.write_manifest("business-skill", "life-skill")
+        for name in ("business-skill", "life-skill"):
+            (self.codex / "skills" / name / "SKILL.md").write_text(
+                "changed\n", encoding="utf-8"
+            )
+
+        with self.assertRaises(ManagedSkillError) as raised:
+            validate_managed_runtime((self.business, self.personal), self.codex)
+        message = str(raised.exception)
+        self.assertIn("runtime skill drift detected for business-skill", message)
+        self.assertIn("runtime skill drift detected for life-skill", message)
+
+    def test_manifest_mismatch_and_runtime_drift_are_reported_together(self) -> None:
+        self.add_skill(self.business, "business-skill")
+        self.write_manifest("stale-skill")
+        (self.codex / "skills" / "business-skill" / "SKILL.md").write_text(
+            "changed\n", encoding="utf-8"
+        )
+
+        with self.assertRaises(ManagedSkillError) as raised:
+            validate_managed_runtime((self.business, self.personal), self.codex)
+        message = str(raised.exception)
+        self.assertIn("managed skills manifest differs from sources", message)
+        self.assertIn("runtime skill drift detected for business-skill", message)
+
+    def test_unmanaged_adrez_runtime_skill_is_detected(self) -> None:
+        self.write_manifest()
+        unmanaged = self.codex / "skills" / "adrez-thread-orchestration"
+        unmanaged.mkdir()
+        (unmanaged / "SKILL.md").write_text("# unmanaged\n", encoding="utf-8")
+
+        with self.assertRaisesRegex(
+            ManagedSkillError, "unmanaged Adrez runtime skill detected"
+        ):
+            validate_managed_runtime((self.business, self.personal), self.codex)
+
+    def test_unmanaged_non_adrez_runtime_skill_is_ignored(self) -> None:
+        self.write_manifest()
+        unmanaged = self.codex / "skills" / "unrelated-skill"
+        unmanaged.mkdir()
+        (unmanaged / "SKILL.md").write_text("# unmanaged\n", encoding="utf-8")
+
+        self.assertEqual(
+            validate_managed_runtime((self.business, self.personal), self.codex), ()
+        )
+
+    def test_unmanaged_adrez_runtime_symlink_is_rejected(self) -> None:
+        self.write_manifest()
+        target = self.root / "external-skill"
+        target.mkdir()
+        (target / "SKILL.md").write_text("# external\n", encoding="utf-8")
+        (self.codex / "skills" / "adrez-external").symlink_to(target)
+
+        with self.assertRaisesRegex(
+            ManagedSkillError, "unmanaged Adrez runtime skill is a symlink"
+        ):
+            validate_managed_runtime((self.business, self.personal), self.codex)
+
+    def test_unmanaged_adrez_runtime_file_is_rejected(self) -> None:
+        self.write_manifest()
+        (self.codex / "skills" / "adrez-broken").write_text(
+            "not a directory\n", encoding="utf-8"
+        )
+
+        with self.assertRaisesRegex(
+            ManagedSkillError, "unmanaged Adrez runtime entry is not a directory"
+        ):
+            validate_managed_runtime((self.business, self.personal), self.codex)
+
+    def test_managed_adrez_runtime_skill_passes(self) -> None:
+        self.add_skill(self.business, "adrez-thread-orchestration")
+        self.write_manifest("adrez-thread-orchestration")
+
+        self.assertEqual(
+            validate_managed_runtime((self.business, self.personal), self.codex),
+            ("adrez-thread-orchestration",),
+        )
+
     def test_duplicate_source_name_is_detected(self) -> None:
         self.add_skill(self.business, "duplicate")
         duplicate = self.personal / "duplicate"

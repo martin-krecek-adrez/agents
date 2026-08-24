@@ -1,6 +1,6 @@
 # Skills Inventory
 
-Last reviewed: 2026-08-17
+Last reviewed: 2026-08-24
 
 ## Ownership model
 
@@ -33,7 +33,8 @@ Last reviewed: 2026-08-17
 
 | Skill | Verdict | Notes | Next Action |
 | --- | --- | --- | --- |
-| `adrez-agent-orchestration` | tighten | Personal intake layer above tracking and execution skills. It now limits every wave, keeps a task-lifetime ledger, and declares the delivery target before implementation. | Forward-test the three-wave or six-agent stop and exact final-state reporting. |
+| `adrez-agent-orchestration` | keep | Personal intake layer above tracking and execution skills. It routes separate user-owned sidebar tasks to `adrez-thread-orchestration` and keeps internal subagent work distinct. | Forward-test the three-wave or six-agent stop and exact final-state reporting. |
+| `adrez-thread-orchestration` | keep | Coordinates a bounded set of user-owned sidebar tasks under one MAIN task, with a compact registry and explicit lifecycle mandate. | Keep its sidebar-task boundary distinct from internal subagent orchestration. |
 | `adrez-linear-workflow` | keep | Default Adrez Linear planning and updates, with a reviewed Data Engineering portfolio routing reference. | Keep the reference aligned with approved portfolio changes. |
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |
@@ -61,6 +62,8 @@ released through the `Adrez Tech` marketplace.
   skills.
 - Keep `adrez-agent-orchestration` in `agents`; it may route to plugin-provided
   skills by name but does not own their implementations.
+- Keep `adrez-thread-orchestration` in `agents`; it owns Martin-specific Codex
+  sidebar task lifecycle and must not move into the data-platform plugin.
 - Keep `asana` and `adrez-linear-workflow` separate. Asana is an explicit
   historical archive lookup only; Linear owns all active planning and tracking.
 - Keep Avalanche metadata and Power BI outside plugin V1 until explicitly

@@ -1,0 +1,4 @@
+interface:
+  display_name: "Adrez Thread Orchestration"
+  short_description: "Coordinate related standalone Codex tasks"
+  default_prompt: "Use $adrez-thread-orchestration to guide me through setting up a MAIN project orchestrator; ask only for missing context, then propose the mandate and task split for one-word approval."

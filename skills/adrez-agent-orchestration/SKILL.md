@@ -13,6 +13,9 @@ Use this skill as a light intake layer above normal Adrez repo and delivery
 skills. It decides the shape of the work before implementation starts.
 
 ## Boundary
+- Use `adrez-thread-orchestration` when Martin explicitly asks one MAIN task to
+  create or manage separate user-owned Codex tasks visible in the sidebar. Do
+  not treat those tasks as subagents.
 - Use `adrez-linear-workflow` when the main decision is Linear project/issue
   structure or task updates.
 - Use `implementation-review` when the task is reviewing an existing diff,
@@ -31,6 +34,7 @@ skills. It decides the shape of the work before implementation starts.
    - local only,
    - local plus Linear tracking,
    - task branch/worktree,
+   - managed standalone Codex tasks via `adrez-thread-orchestration`,
    - planned subagent delegation,
    - or follow-up project/issue planning.
 4. Declare the delivery target: local implementation, pushed branch and PR,

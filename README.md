@@ -232,6 +232,7 @@ verify that task loads only the restored direct skills.
 
 Current directly managed Adrez skills:
 - adrez-agent-orchestration
+- adrez-thread-orchestration
 - adrez-linear-workflow
 - asana
 - agent-feedback-capture
