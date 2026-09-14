@@ -258,7 +258,7 @@ def inspect_repository(repo: Path, stale_days: int, now: int) -> list[dict[str, 
     return rows
 
 
-def render_tsv(rows: list[dict[str, Any]]) -> None:
+def tsv_text(rows: list[dict[str, Any]]) -> str:
     columns = (
         "repository",
         "state",
@@ -273,12 +273,78 @@ def render_tsv(rows: list[dict[str, Any]]) -> None:
         "task_only_vs_cached_main",
         "path",
     )
-    print("\t".join(columns))
+    lines = ["\t".join(columns)]
     for row in rows:
-        print("\t".join("" if row[column] is None else str(row[column]) for column in columns))
+        lines.append(
+            "\t".join(
+                "" if row[column] is None else str(row[column]) for column in columns
+            )
+        )
+    return "\n".join(lines) + "\n"
 
 
-def render_summary(rows: list[dict[str, Any]]) -> None:
+def count_metrics(rows: list[dict[str, Any]]) -> dict[str, int]:
+    canonical_rows = [row for row in rows if row["state"] == "canonical"]
+    metrics = {
+        "total_worktrees": len(rows),
+        "canonical_worktrees": len(canonical_rows),
+        "non_canonical_worktrees": len(rows) - len(canonical_rows),
+    }
+    for health, count in collections.Counter(
+        row["canonical_health"] for row in canonical_rows
+    ).items():
+        metrics[f"canonical_health.{health}"] = count
+    for state, count in collections.Counter(row["state"] for row in rows).items():
+        metrics[f"state.{state}"] = count
+    return metrics
+
+
+def report_scope(
+    workspace: Path, repositories: set[str] | None, stale_days: int
+) -> dict[str, Any]:
+    return {
+        "workspace": str(workspace),
+        "repositories": sorted(repositories) if repositories is not None else None,
+        "stale_days": stale_days,
+    }
+
+
+def load_baseline(
+    path: Path, expected_scope: dict[str, Any]
+) -> list[dict[str, Any]]:
+    try:
+        payload = json.loads(path.read_text(encoding="utf-8"))
+    except OSError as error:
+        raise SystemExit(f"cannot read baseline JSON: {path}: {error}") from error
+    except json.JSONDecodeError as error:
+        raise SystemExit(f"invalid baseline JSON: {path}: {error}") from error
+    if not isinstance(payload, dict):
+        raise SystemExit(f"baseline JSON must contain an object: {path}")
+    actual_scope = payload.get("scope")
+    if actual_scope != expected_scope:
+        raise SystemExit(
+            f"baseline JSON scope does not match the current report: {path}"
+        )
+    rows = payload.get("worktrees")
+    if not isinstance(rows, list) or not all(isinstance(row, dict) for row in rows):
+        raise SystemExit(f"baseline JSON must contain a worktrees list: {path}")
+    return rows
+
+
+def metric_deltas(
+    current_rows: list[dict[str, Any]], baseline_rows: list[dict[str, Any]]
+) -> dict[str, int]:
+    current = count_metrics(current_rows)
+    baseline = count_metrics(baseline_rows)
+    return {
+        metric: current.get(metric, 0) - baseline.get(metric, 0)
+        for metric in sorted(current.keys() | baseline.keys())
+    }
+
+
+def render_summary(
+    rows: list[dict[str, Any]], deltas: dict[str, int] | None = None
+) -> None:
     canonical_rows = [row for row in rows if row["state"] == "canonical"]
     print("metric\tcount")
     print(f"total_worktrees\t{len(rows)}")
@@ -294,6 +360,11 @@ def render_summary(rows: list[dict[str, Any]]) -> None:
     print("repository\tstate\tcount")
     for (repository, state), count in sorted(counts.items()):
         print(f"{repository}\t{state}\t{count}")
+    if deltas is not None:
+        print()
+        print("metric_delta\tcount")
+        for metric, count in deltas.items():
+            print(f"{metric}\t{count}")
 
 
 def main() -> None:
@@ -305,25 +376,65 @@ def main() -> None:
     parser.add_argument("--stale-days", type=int, default=7)
     parser.add_argument("--json", action="store_true")
     parser.add_argument("--summary-only", action="store_true")
+    parser.add_argument("--baseline-json", type=Path)
+    parser.add_argument("--max-noncanonical-growth", type=int)
+    parser.add_argument("--tsv-output", type=Path)
+    parser.add_argument("--overwrite-tsv-output", action="store_true")
     args = parser.parse_args()
     if args.stale_days < 0:
         raise SystemExit("--stale-days must be zero or greater")
+    if args.max_noncanonical_growth is not None:
+        if args.max_noncanonical_growth < 0:
+            raise SystemExit("--max-noncanonical-growth must be zero or greater")
+        if args.baseline_json is None:
+            raise SystemExit("--max-noncanonical-growth requires --baseline-json")
+    if args.json and args.summary_only:
+        raise SystemExit("--json and --summary-only cannot be combined")
+    if args.overwrite_tsv_output and args.tsv_output is None:
+        raise SystemExit("--overwrite-tsv-output requires --tsv-output")
 
     workspace = Path(args.workspace).resolve()
     names = set(args.repositories) if args.repositories else None
+    scope = report_scope(workspace, names, args.stale_days)
     rows: list[dict[str, Any]] = []
     now = int(time.time())
     for repo in discover_repositories(workspace, names):
         rows.extend(inspect_repository(repo, args.stale_days, now))
 
-    if args.json and args.summary_only:
-        raise SystemExit("--json and --summary-only cannot be combined")
+    baseline_rows = (
+        load_baseline(args.baseline_json, scope) if args.baseline_json else None
+    )
+    deltas = metric_deltas(rows, baseline_rows) if baseline_rows is not None else None
+
+    if args.tsv_output:
+        mode = "w" if args.overwrite_tsv_output else "x"
+        try:
+            with args.tsv_output.open(mode, encoding="utf-8") as output:
+                output.write(tsv_text(rows))
+        except FileExistsError as error:
+            raise SystemExit(
+                f"TSV output already exists; use --overwrite-tsv-output to replace it: "
+                f"{args.tsv_output}"
+            ) from error
+
     if args.json:
-        print(json.dumps({"workspace": str(workspace), "worktrees": rows}, indent=2))
+        payload: dict[str, Any] = {
+            "workspace": str(workspace),
+            "scope": scope,
+            "worktrees": rows,
+        }
+        if deltas is not None:
+            payload["deltas"] = deltas
+        print(json.dumps(payload, indent=2))
     elif args.summary_only:
-        render_summary(rows)
+        render_summary(rows, deltas)
     else:
-        render_tsv(rows)
+        print(tsv_text(rows), end="")
+
+    if args.max_noncanonical_growth is not None and deltas is not None:
+        growth = deltas["non_canonical_worktrees"]
+        if growth > args.max_noncanonical_growth:
+            raise SystemExit(2)
 
 
 if __name__ == "__main__":

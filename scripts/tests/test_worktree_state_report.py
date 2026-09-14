@@ -92,6 +92,156 @@ class WorktreeStateReportTests(unittest.TestCase):
         self.assertIn("sample\tcleanup-review\t1", output)
         self.assertEqual(before, after)
 
+    def test_summary_can_export_the_full_tsv(self) -> None:
+        output_path = self.workspace / "worktrees.tsv"
+        output = run(
+            "python3",
+            REPORT,
+            self.workspace,
+            "--summary-only",
+            "--tsv-output",
+            output_path,
+        ).stdout
+        tsv = output_path.read_text(encoding="utf-8")
+        self.assertIn("total_worktrees\t2", output)
+        self.assertTrue(tsv.startswith("repository\tstate\tcanonical_health"))
+        self.assertIn(str(self.task), tsv)
+
+    def test_tsv_export_does_not_overwrite_without_explicit_flag(self) -> None:
+        output_path = self.workspace / "worktrees.tsv"
+        output_path.write_text("sentinel\n", encoding="utf-8")
+        result = subprocess.run(
+            [
+                "python3",
+                str(REPORT),
+                str(self.workspace),
+                "--summary-only",
+                "--tsv-output",
+                str(output_path),
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("TSV output already exists", result.stderr)
+        self.assertEqual(output_path.read_text(encoding="utf-8"), "sentinel\n")
+
+        run(
+            "python3",
+            REPORT,
+            self.workspace,
+            "--summary-only",
+            "--tsv-output",
+            output_path,
+            "--overwrite-tsv-output",
+        )
+        self.assertTrue(
+            output_path.read_text(encoding="utf-8").startswith(
+                "repository\tstate\tcanonical_health"
+            )
+        )
+
+    def test_baseline_delta_and_growth_threshold(self) -> None:
+        baseline_path = self.workspace / "baseline.json"
+        baseline_path.write_text(
+            run("python3", REPORT, self.workspace, "--json").stdout,
+            encoding="utf-8",
+        )
+        sibling = self.workspace / "sample-sibling"
+        run(
+            "git",
+            "worktree",
+            "add",
+            sibling,
+            "-b",
+            "feature/sibling",
+            "origin/main",
+            cwd=self.repo,
+        )
+        result = subprocess.run(
+            [
+                "python3",
+                str(REPORT),
+                str(self.workspace),
+                "--summary-only",
+                "--baseline-json",
+                str(baseline_path),
+                "--max-noncanonical-growth",
+                "0",
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        self.assertEqual(result.returncode, 2)
+        self.assertIn("metric_delta\tcount", result.stdout)
+        self.assertIn("non_canonical_worktrees\t1", result.stdout)
+
+    def test_growth_threshold_requires_valid_baseline(self) -> None:
+        result = subprocess.run(
+            [
+                "python3",
+                str(REPORT),
+                str(self.workspace),
+                "--max-noncanonical-growth",
+                "1",
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("requires --baseline-json", result.stderr)
+
+    def test_malformed_baseline_is_rejected(self) -> None:
+        baseline_path = self.workspace / "baseline.json"
+        baseline_path.write_text("not-json\n", encoding="utf-8")
+        result = subprocess.run(
+            [
+                "python3",
+                str(REPORT),
+                str(self.workspace),
+                "--summary-only",
+                "--baseline-json",
+                str(baseline_path),
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("invalid baseline JSON", result.stderr)
+
+    def test_baseline_scope_must_match_current_report(self) -> None:
+        baseline_path = self.workspace / "baseline.json"
+        baseline_path.write_text(
+            run(
+                "python3", REPORT, self.workspace, "--json", "--stale-days", "14"
+            ).stdout,
+            encoding="utf-8",
+        )
+        result = subprocess.run(
+            [
+                "python3",
+                str(REPORT),
+                str(self.workspace),
+                "--summary-only",
+                "--baseline-json",
+                str(baseline_path),
+            ],
+            text=True,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            check=False,
+        )
+        self.assertNotEqual(result.returncode, 0)
+        self.assertIn("scope does not match", result.stderr)
+
     def test_dirty_canonical_checkout_is_visible(self) -> None:
         (self.repo / "uncommitted.txt").write_text("keep me\n", encoding="utf-8")
         canonical = next(row for row in self.report() if row["state"] == "canonical")
