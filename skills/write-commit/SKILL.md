@@ -4,7 +4,7 @@ description: Write well-structured commit messages. Use when the user asks for a
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-06-15
+last_reviewed: 2026-09-14
 ---
 
 # Write Commit

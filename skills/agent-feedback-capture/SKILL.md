@@ -4,7 +4,7 @@ description: Capture reusable Adrez harness feedback as structured inbox items f
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-06-15
+last_reviewed: 2026-09-14
 compatibility: Requires /Users/martin/Documents/adrez/agents/feedback.
 ---
 
