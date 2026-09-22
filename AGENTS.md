@@ -1,7 +1,10 @@
 # AGENTS.md
 
 ## Purpose
-Default control hub for Codex in Adrez. Keep this file routing-focused; repo-specific details belong to each repo `AGENTS.md`.
+This repository manages Martin's personal operating setup and routing.
+Team working rules are owned by `tech-plugins/docs/adrez-working-rules.md`
+and distributed in repository `AGENTS.md` files. Team members do not run this sync.
+Keep repo-specific details in the owning repository.
 
 ## Communication
 - Respond in the user's language unless they explicitly ask otherwise.
@@ -27,6 +30,9 @@ Apply `/Users/martin/AGENTS.md`, this file, then the closest repo/subfolder
 - `avalanche-mcp`: active MCP analytics platform; do not touch unless explicitly requested.
 - `powerbi`: Power BI / Fabric semantic models, reports, and deployment validation.
 - `docs`: VitePress documentation.
+- `reporting`: report apps, generators, decks, and HTML artefacts. Transformations
+  stay in dbt-cloud; Power BI and Fabric stay in powerbi.
+- `tech-plugins`: shared team rules and skills.
 
 ## Archived Repo Boundary
 - `adrez-data-assistant`: replaced by `avalanche-mcp`.
@@ -79,12 +85,12 @@ every duplicate direct source or runtime path.
 - If ADLS landing status is ambiguous, ask one short clarifying question.
 
 ## Common Workflow Defaults
-- For non-trivial Adrez work, consider Linear tracking via `adrez-linear-workflow`. Default team is usually `Data Engineering`. Use Linear as lightweight task starter/noter: project for long-running workstreams, issue for concrete work, child issue for active slices, and comments/updates for operational progress.
+- Create or change Linear objects only when the user requests or authorizes tracking. Use `adrez-linear-workflow` for authorized tracking. Default team is usually `Data Engineering`. Use Linear as lightweight task starter/noter: project for long-running workstreams, issue for concrete work, child issue for active slices, and comments/updates for operational progress.
 - Use repo-local `docs/tasks/` for multi-step, risky, or multi-session work when the repo uses task notes; skip for trivial edits.
 - Temporary filters/workarounds/guardrails need a nearby `TODO` with removal condition and task-note link when relevant.
 
 ## Task Memory
-- Track all active Adrez work in Linear. Asana is retired and must not be
+- Linear is the active tracker when tracking is authorized. Asana is retired and must not be
   scanned routinely, reopened as a work queue, or used for new tracking. Use
   it only when Martin explicitly provides a legacy URL/GID or asks for
   historical context.
