@@ -1,6 +1,6 @@
 # Skills Inventory
 
-Last reviewed: 2026-08-24
+Last reviewed: 2026-09-28
 
 ## Ownership model
 
@@ -39,7 +39,7 @@ Last reviewed: 2026-08-24
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |
 | `asana` | keep | Historical archive lookup only for explicit legacy URLs/GIDs. Never use it as an active queue or routine brief source. | Keep the trigger narrow and archive-only. |
-| `avalanche-metadata-update` | keep | Product-specific metadata refresh remains outside plugin V1. | Reassess for plugin V1.1. |
+| `avalanche-metadata-update` | keep | Product-specific metadata refresh remains outside plugin V1. Its build command matches the current `gpt-5.4-mini` and 1,600-token metadata-builder contract. | Reassess for a later plugin release only if the workflow becomes portable. |
 | `compare-tech` | keep | Generic decision support. | No change. |
 | `grill-me` | keep | Personal plan/design interview workflow. | No change. |
 | `powerbi-report-starter` | keep | Product-specific scaffold remains outside plugin V1. | Reassess for plugin V1.1. |
