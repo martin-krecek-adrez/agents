@@ -4,7 +4,7 @@ description: Rebuild, validate, export, and sync metadata-builder outputs for Av
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-06-16
+last_reviewed: 2026-09-28
 compatibility: Requires /Users/martin/Documents/adrez/metadata-builder and optionally /Users/martin/Documents/adrez/avalanche-mcp.
 ---
 
@@ -31,7 +31,8 @@ cd /Users/martin/Documents/adrez/metadata-builder
 python scripts/build_metadata_artifact.py \
   --product-key l2_base_output \
   --products-config profiles/products.yml \
-  --model gpt-5-mini \
+  --model gpt-5.4-mini \
+  --max-tokens 1600 \
   --api-key-file .secrets/openai_api_key.txt
 ```
 3. Validate contract:

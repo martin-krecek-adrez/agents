@@ -304,12 +304,12 @@ fi
 while IFS= read -r skill_file; do
   [ -n "${skill_file}" ] || continue
   for field in name description status owner last_reviewed; do
-    if ! grep -Eq "^${field}:" "${skill_file}"; then
+    if ! grep -Eq "^[[:space:]]*${field}:" "${skill_file}"; then
       fail "Missing '${field}' in ${skill_file}"
     fi
   done
 
-  last_reviewed="$(awk -F': *' '/^last_reviewed:/ { print $2; exit }' "${skill_file}")"
+  last_reviewed="$(awk -F': *' '/^[[:space:]]*last_reviewed:/ { print $2; exit }' "${skill_file}")"
   if [ -n "${last_reviewed}" ]; then
     if reviewed_epoch="$(date -j -f "%Y-%m-%d" "${last_reviewed}" "+%s" 2>/dev/null)"; then
       now_epoch="$(date "+%s")"
