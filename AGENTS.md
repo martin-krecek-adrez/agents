@@ -131,7 +131,7 @@ every duplicate direct source or runtime path.
 
 ## Delivery Defaults
 - Branches are delivery units; worktrees are concurrency units.
-- At intake, state the delivery target: local implementation, pushed branch
+- At intake, declare the delivery target: local implementation, pushed branch
   and PR, merged `main`, or deployment. Default to local when delivery is not
   authorized and state that limit.
 - Parallel same-repo tasks use one worktree per branch under
@@ -146,25 +146,25 @@ every duplicate direct source or runtime path.
   merge, prove the fetched remote `main` SHA against GitHub's merge SHA.
 - Report local changes, remote branch, PR, `main`, deployment, and cleanup
   separately. Never call local/branch-only work merged or deployed.
-- Never delete a worktree by age alone. First inventory with the read-only
+- Never delete a worktree because of age alone. First inventory with the read-only
   `scripts/report_worktree_state.py --summary-only`. Remove only owned, clean,
   remotely recoverable worktrees with confirmed completion or abandonment.
   Cleanup remains a separate explicit action.
 - Keep canonical checkouts clean and synced with their upstream. Dirty,
   detached, ahead, behind, or diverged state is an audit finding, never reset
   permission.
-- After PR merge, safely close the helper-created lifecycle in the same
+- After a PR merge, close a helper-created task lifecycle safely in the same
   delivery: prove the merge on the actual remote base, fetch/prune, remove the
   owned clean worktree and local branch, and verify remote branch deletion.
   Run `repo-pr-handoff` finish check before apply. It must prove direct ancestry
   or the exact merged PR head-to-merge map.
-- Report Codex-app-managed worktrees without helper metadata ready for archival.
+- Report a Codex-app-managed worktree without helper metadata ready for archival.
   Do not fabricate ownership or force cleanup.
   Follow `/Users/martin/Documents/adrez/docs/data-platform/repository-hygiene.md`.
   Remote deletion still requires explicit authorization when repository
   auto-delete did not handle it.
 - Use `gh` for CI/logs/checks; logs are the CI-failure source of truth.
-- For private repos, connector `404` can mean scope. Verify the local remote;
+- GitHub connector `404` can mean connector scope. Verify the local remote;
   retry narrow sandbox-failed `gh` commands with `require_escalated`.
 - Detailed git rules: `repo-pr-handoff` and `repo-worktree-safety`.
 
