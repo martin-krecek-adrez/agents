@@ -27,7 +27,9 @@ registry, acceptance decisions, and user communication.
   from multiple workers must be combined.
 - Use `adrez-agent-orchestration` for local execution, Linear routing,
   branches, worktrees, or internal subagents.
-- Do not create or change Linear tracking unless Martin explicitly requests it.
+- MAIN owns automatic Linear tracking through `adrez-linear-workflow`.
+  Reuse the owning issue; internal lifecycle actions do not each need a new
+  issue. Respect explicit read-only and no-Linear instructions.
 
 ## Guided Start and Mandate
 
@@ -44,7 +46,8 @@ When Martin invokes this skill without a complete project mandate:
    actions covered by the mandate.
 
 The mandate applies only to the named project. It does not authorize unrelated
-external actions, new product scope, or Linear changes. Use the existing Adrez
+external actions or new product scope. Linear uses Martin's standing tracking
+policy. Use the existing Adrez
 project specified by the mandate. Resolve its project ID before creation; do not
 fall back to a projectless task. Pinning requires a separate explicit request.
 

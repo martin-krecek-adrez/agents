@@ -4,7 +4,7 @@ description: Triage and orchestrate non-trivial Adrez Codex threads into local w
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-08-24
+last_reviewed: 2026-10-02
 ---
 
 # Adrez Agent Orchestration
@@ -43,12 +43,17 @@ skills. It decides the shape of the work before implementation starts.
    role.
 6. Define the immediate next local action. Keep blocking work local instead of
    delegating it away.
+7. For actual work, reuse or create the owning Linear issue through
+   `adrez-linear-workflow`. Do not ask for tracking approval again. Respect an
+   explicit read-only or no-Linear instruction. The main agent owns tracking
+   for internal subagents; do not create one issue per tool call or helper.
 
 ## Triage Levels
-- **1 tiny**: explanation, lookup, command output, or small text edit. No
+- **1 tiny**: explanation, lookup, or command output only. No
   Linear, no branch, no subagent.
 - **2 small**: one repo, clear scope, low risk, likely one short patch or check.
-  Work locally; create a branch only if repo policy requires it.
+  Track actual edits in the owning issue. Work locally; create a branch only
+  if repo policy requires it.
 - **3 tracked**: multi-step, user-facing, data/infra/reporting impact, or likely
   useful across threads. Use `adrez-linear-workflow` unless the user opts out.
 - **4 parallelizable**: independent slices exist, write scopes can be disjoint,

@@ -9,7 +9,10 @@ from pathlib import Path
 EXCLUDED_ROOT_REPOSITORIES = frozenset(
     {"commission-tier-monitoring", "market-overview-analysis"}
 )
-PRUNED_DIRECTORY_NAMES = frozenset({".git", "_worktrees", "adrez-tools", "node_modules", "old"})
+PRUNED_DIRECTORY_NAMES = frozenset(
+    {".git", "_worktrees", ".worktrees", ".sdlc-state", "_local-state",
+     "adrez-tools", "node_modules", "old"}
+)
 
 
 def _is_plugin_template(path: Path) -> bool:

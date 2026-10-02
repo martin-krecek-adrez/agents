@@ -1,0 +1,8 @@
+{
+  "dbt-cloud/AGENTS.md": {
+    "max_bytes": 16000,
+    "owner": "martin",
+    "reviewed_on": "2026-10-02",
+    "reason": "Martin approved retaining the detailed dbt rules. This exact root file has a bounded exception; nested files keep the default limit."
+  }
+}

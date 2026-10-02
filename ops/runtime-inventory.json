@@ -1,0 +1,550 @@
+{
+  "version": 1,
+  "scope": "Source-backed operating map for the listed platform components. Local contract validation is not live health proof. Cadence expressions remain in their owning configuration.",
+  "components": [
+    {
+      "id": "airflow",
+      "repository": "airflow-orchestrator",
+      "runtime": "VPS Docker / Airflow",
+      "trigger": "Airflow schedules and ingestion assets",
+      "outputs": "DAG and task state; orchestration events",
+      "health_check": "Read scheduler heartbeat, DAG import errors, last scheduled run and task failures",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360.py",
+          "required_patterns": [
+            "with DAG",
+            "schedule="
+          ]
+        },
+        {
+          "path": "vps-data-platform/docker-compose.yml",
+          "required_patterns": [
+            "airflow-orchestrator/docker-compose"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mews",
+      "repository": "mews-ingestor",
+      "runtime": "Cloudflare Workflows",
+      "trigger": "Airflow adrez_360_ingest_mews; Worker cron disabled",
+      "outputs": "R2 export objects and completion manifests",
+      "health_check": "Read Airflow run plus Workflow result and latest manifest; fixed lookback alone is not schedule health",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "mews-ingestor/wrangler.jsonc",
+          "required_patterns": [
+            "\"crons\"\\s*:\\s*\\[\\s*\\]"
+          ]
+        },
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_mews.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "workflow_name=\"mews-ingestor-scheduler\""
+          ],
+          "airflow_workflow": {
+            "dag_id": "adrez_360_ingest_mews",
+            "workflow_name": "mews-ingestor-scheduler"
+          }
+        }
+      ]
+    },
+    {
+      "id": "mara",
+      "repository": "airflow-orchestrator",
+      "runtime": "Cloudflare Workflows",
+      "trigger": "Airflow adrez_360_ingest_mara",
+      "outputs": "R2 objects and source completion manifests",
+      "health_check": "Read Airflow task state, Workflow result and source manifest timestamp",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_mara.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "workflow_name="
+          ]
+        }
+      ]
+    },
+    {
+      "id": "ga4",
+      "repository": "airflow-orchestrator",
+      "runtime": "Cloudflare Workflows",
+      "trigger": "Airflow adrez_360_ingest_ga4",
+      "outputs": "R2 objects and source completion manifests",
+      "health_check": "Read Airflow task state, Workflow result and source manifest timestamp",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_ga4.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "workflow_name="
+          ]
+        }
+      ]
+    },
+    {
+      "id": "gsc",
+      "repository": "airflow-orchestrator",
+      "runtime": "Cloudflare Workflows",
+      "trigger": "Airflow adrez_360_ingest_gsc",
+      "outputs": "R2 objects and source completion manifests",
+      "health_check": "Read Airflow task state, Workflow result and source manifest timestamp",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_gsc.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "workflow_name="
+          ]
+        }
+      ]
+    },
+    {
+      "id": "mailbox",
+      "repository": "airflow-orchestrator",
+      "runtime": "Cloudflare Workflows",
+      "trigger": "Airflow adrez_360_ingest_mailbox",
+      "outputs": "R2 objects and source completion manifests",
+      "health_check": "Read Airflow task state, Workflow result and source manifest timestamp",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_mailbox.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "workflow_name="
+          ]
+        }
+      ]
+    },
+    {
+      "id": "runnr",
+      "repository": "airflow-orchestrator",
+      "runtime": "Cloudflare Workflows",
+      "trigger": "Airflow adrez_360_ingest_runnr",
+      "outputs": "R2 objects and source completion manifests",
+      "health_check": "Read Airflow task state, Workflow result and source manifest timestamp",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_runnr.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "workflow_name="
+          ]
+        }
+      ]
+    },
+    {
+      "id": "postgres",
+      "repository": "airflow-orchestrator",
+      "runtime": "VPS ingestion worker",
+      "trigger": "Airflow adrez_360_ingest_postgres",
+      "outputs": "R2 PostgreSQL snapshots; ADLS promotion",
+      "health_check": "Read task completion and source manifest freshness",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_postgres.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "PostgresIngestionOperator"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "sabee",
+      "repository": "airflow-orchestrator",
+      "runtime": "VPS ingestion worker",
+      "trigger": "Airflow adrez_360_ingest_sabee",
+      "outputs": "R2 Sabee snapshots; ADLS promotion",
+      "health_check": "Read task completion and source manifest freshness",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_sabee.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "Sabee"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "spreadsheets",
+      "repository": "extractor-spreadsheets",
+      "runtime": "Azure Functions",
+      "trigger": "Airflow adrez_360_ingest_spreadsheets",
+      "outputs": "ADLS spreadsheet datasets and conversion status",
+      "health_check": "Read external job status, task completion and landed object timestamp",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_spreadsheets.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "run_spreadsheets_ingestor"
+          ]
+        },
+        {
+          "path": "extractor-spreadsheets/host.json",
+          "required_patterns": [
+            "\"version\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "csob",
+      "repository": "airflow-orchestrator",
+      "runtime": "Azure Functions",
+      "trigger": "Airflow adrez_360_ingest_csob",
+      "outputs": "ADLS bank statements",
+      "health_check": "Read Airflow result and statement landing; validate legacy timer state separately",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360_ingest_csob.py",
+          "required_patterns": [
+            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "CSOB"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "r2-adls-importer",
+      "repository": "r2-to-azure-storage-importer",
+      "runtime": "Cloudflare Worker and Queues",
+      "trigger": "R2 object notification events",
+      "outputs": "ADLS copied objects and completion acknowledgements",
+      "health_check": "Read queue failures/backlog and completion acknowledgements; configuration alone is not delivery proof",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "r2-to-azure-storage-importer/wrangler.jsonc",
+          "required_patterns": [
+            "\"queues\"",
+            "\"consumers\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "data-factory",
+      "repository": "data-factory",
+      "runtime": "Azure Functions and Snowflake",
+      "trigger": "Airflow main pipeline external job",
+      "outputs": "Snowflake external table and load configuration",
+      "health_check": "Read external job result and verify the activation manifest target",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "data-factory/production-activation.json",
+          "required_patterns": [
+            "\"configPaths\""
+          ]
+        },
+        {
+          "path": "data-factory/host.json",
+          "required_patterns": [
+            "\"version\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "dbt",
+      "repository": "dbt-cloud",
+      "runtime": "VPS dbt-runner and Snowflake",
+      "trigger": "Airflow main pipeline",
+      "outputs": "L1, L2 and L3 models and audit results",
+      "health_check": "Read last completed model results and source freshness separately",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "vps-data-platform/dbt/docker-compose.yml",
+          "required_patterns": [
+            "dbt-runner"
+          ]
+        },
+        {
+          "path": "dbt-cloud/dbt_project.yml",
+          "required_patterns": [
+            "name:"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "semantic-serving",
+      "repository": "semantic-serving",
+      "runtime": "VPS / Cube and ClickHouse",
+      "trigger": "Airflow semantic refresh stage; continuous serving",
+      "outputs": "Published semantic data copy and Cube endpoints",
+      "health_check": "Read livez/readyz and served execution identity; verify data refresh separately",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "vps-data-platform/docker-compose.yml",
+          "required_patterns": [
+            "semantic-serving-current/docker-compose.vps.yml"
+          ]
+        },
+        {
+          "path": "airflow-orchestrator/dags/adrez_360.py",
+          "required_patterns": [
+            "semantic_refresh_mode"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "reporting",
+      "repository": "reporting",
+      "runtime": "Cloudflare apps; GitHub Actions and VPS refresh jobs",
+      "trigger": "Airflow reporting refresh stage",
+      "outputs": "Published report snapshots",
+      "health_check": "Read latest successful app refresh and published snapshot timestamp",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "reporting/config/reporting-apps.json",
+          "required_patterns": [
+            "\"apps\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "powerbi",
+      "repository": "powerbi",
+      "runtime": "Microsoft Power BI / Fabric",
+      "trigger": "Airflow dataset refresh stage",
+      "outputs": "Refreshed semantic models and reports",
+      "health_check": "Read dataset refresh history and terminal task results",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "airflow-orchestrator/dags/adrez_360.py",
+          "required_patterns": [
+            "skip_power_bi"
+          ]
+        },
+        {
+          "path": "airflow-orchestrator/plugins/operators/adrez_powerbi.py",
+          "required_patterns": [
+            "class AdrezPowerBIDatasetRefreshOperator\\(BaseOperator\\)",
+            "AdrezPowerBIRefreshTrigger"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "data-radar",
+      "repository": "data-observability",
+      "runtime": "Cloudflare Worker and R2; refresh container",
+      "trigger": "Dedicated Airflow refresh DAG or explicit refresh; verify activation separately",
+      "outputs": "Radar and property snapshots",
+      "health_check": "Read production/latest.json and snapshot timestamps; expected stale threshold 36h",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "data-observability/scripts/refresh-radar.mjs",
+          "required_patterns": [
+            "catalogAuditSql"
+          ]
+        },
+        {
+          "path": "data-observability/README.md",
+          "required_patterns": [
+            "36 hours"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "avalanche",
+      "repository": "avalanche-mcp",
+      "runtime": "Cloudflare Worker",
+      "trigger": "Authenticated MCP requests",
+      "outputs": "Catalog-backed analytics responses",
+      "health_check": "Read catalog/search and a bounded authorized read-only query",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "avalanche-mcp/wrangler.jsonc",
+          "required_patterns": [
+            "\"name\"\\s*:\\s*\"avalanche-mcp\"",
+            "\"main\"\\s*:\\s*\"src/index.ts\"",
+            "\"binding\"\\s*:\\s*\"SEMANTIC_LAYER_BUCKET\""
+          ]
+        }
+      ]
+    },
+    {
+      "id": "metadata",
+      "repository": "metadata-builder",
+      "runtime": "Metadata build/export scripts",
+      "trigger": "Approved metadata refresh workflow",
+      "outputs": "Main and AI catalog artifacts",
+      "health_check": "Read generated_at, validate contracts and inspect time/relationship semantics",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "metadata-builder/scripts/run_ai_metadata_refresh.sh",
+          "required_patterns": [
+            "catalog_ai.json"
+          ]
+        },
+        {
+          "path": "metadata-builder/scripts/export_mcp_metadata_json.py",
+          "required_patterns": [
+            "infer_time_semantic"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "email-analytics",
+      "repository": "email-analytics",
+      "runtime": "Mac worker / launchd; Snowflake state; Cloudflare delivery",
+      "trigger": "launchd cz.adrez.emails-pipeline",
+      "outputs": "Enriched email analytics and published app data",
+      "health_check": "Read service status, latest completed run and publication timestamp; do not invoke run/update",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "email-analytics/deploy/worker/cz.adrez.emails-pipeline.plist",
+          "required_patterns": [
+            "StartCalendarInterval"
+          ]
+        },
+        {
+          "path": "email-analytics/deploy/worker/run_update.sh",
+          "required_patterns": [
+            "STATE_BACKEND=snowflake"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "booking-scrapers",
+      "repository": "booking-data",
+      "runtime": "Azure Container Apps Jobs",
+      "trigger": "Azure scheduled orchestrators and manual jobs",
+      "outputs": "Booking and Agoda scrape outputs in Azure storage",
+      "health_check": "Read execution results and completed/expected work counts; provisioning success is not run success",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "booking-data/Competition_Data/infra/main.tf",
+          "required_patterns": [
+            "resource \"azurerm_container_registry\" \"main\"",
+            "resource \"azurerm_storage_account\" \"main\""
+          ]
+        },
+        {
+          "path": "booking-data/docs/monitoring/azure-container-apps.md",
+          "required_patterns": [
+            "job execution list"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "extranet",
+      "repository": "extranet-scraper",
+      "runtime": "Browser acquisition and local parser/export runner",
+      "trigger": "Installed local schedule or explicit ingestion",
+      "outputs": "Extranet and market_stats ADLS datasets",
+      "health_check": "Read module watermarks against their own cadence and installed scheduler state",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "extranet-scraper/scripts/install_schedule.py",
+          "required_patterns": [
+            "launchd"
+          ]
+        },
+        {
+          "path": "extranet-scraper/skill/booking-analytics-scraper/scripts/cron.py",
+          "required_patterns": [
+            "ADLS"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "monitoring",
+      "repository": "vps-data-platform",
+      "runtime": "VPS / Prometheus, exporters and Alertmanager",
+      "trigger": "Continuous scrapes and alert evaluation",
+      "outputs": "Infrastructure metrics and notifications",
+      "health_check": "Read target health, exporter/container status and configured receivers; check delivery separately",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "vps-data-platform/monitoring/docker-compose.yml",
+          "required_patterns": [
+            "prometheus:",
+            "alertmanager:"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "backups",
+      "repository": "vps-data-platform",
+      "runtime": "VPS backup runner",
+      "trigger": "Host backup schedule; verify installed timer separately",
+      "outputs": "Restic backup snapshots",
+      "health_check": "Read last successful backup log and snapshot inventory; restore is a separate test",
+      "owner": "Data Engineering",
+      "reviewed_on": "2026-10-02",
+      "source_refs": [
+        {
+          "path": "vps-data-platform/backup/docker-compose.yml",
+          "required_patterns": [
+            "backup-runner:",
+            "RESTIC_REPOSITORY"
+          ]
+        }
+      ]
+    }
+  ]
+}
