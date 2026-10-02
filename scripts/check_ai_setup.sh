@@ -29,8 +29,6 @@ PERSONAL_SKILLS_DIR="${PERSONAL_SKILLS_DIR:-/Users/martin/Documents/live/agent/s
 DATA_FACTORY_ROOT="${ADREZ_DATA_FACTORY_ROOT:-/Users/martin/Documents/adrez/data-factory}"
 AIRFLOW_ORCHESTRATOR_ROOT="${AIRFLOW_ORCHESTRATOR_ROOT:-/Users/martin/Documents/adrez/airflow-orchestrator}"
 VPS_DATA_PLATFORM_ROOT="${VPS_DATA_PLATFORM_ROOT:-/Users/martin/Documents/adrez/vps-data-platform}"
-MAX_AGENTS_WARN_BYTES=8000
-MAX_AGENTS_FAIL_BYTES=12000
 MAX_SKILL_REVIEW_AGE_DAYS=90
 AGENTS_SCOPE_LISTER="${SCRIPT_DIR}/list_managed_agents.py"
 
@@ -97,15 +95,27 @@ else
   fail "data-factory AGENTS.md has stale or incomplete production activation guidance"
 fi
 
-while IFS= read -r agents_file; do
-  [ -n "${agents_file}" ] || continue
-  size_bytes="$(wc -c < "${agents_file}" | tr -d ' ')"
-  if [ "${size_bytes}" -gt "${MAX_AGENTS_FAIL_BYTES}" ]; then
-    fail "AGENTS.md exceeds ${MAX_AGENTS_FAIL_BYTES} bytes (${size_bytes}): ${agents_file}"
-  elif [ "${size_bytes}" -gt "${MAX_AGENTS_WARN_BYTES}" ]; then
-    warn "AGENTS.md exceeds ${MAX_AGENTS_WARN_BYTES} bytes (${size_bytes}): ${agents_file}"
-  fi
-done <<< "${managed_agents}"
+if python3 "${SCRIPT_DIR}/check_agents_size.py" /Users/martin/Documents/adrez; then
+  ok "AGENTS.md sizes respect exact reviewed budgets"
+else
+  fail "AGENTS.md size policy failed"
+fi
+
+if python3 "${SCRIPT_DIR}/check_runtime_inventory.py" /Users/martin/Documents/adrez; then
+  ok "Source-backed runtime inventory contracts passed (not a live health check)"
+else
+  fail "Runtime inventory has missing or changed source contracts"
+fi
+
+if grep -q 'Track actual Adrez work automatically in Linear' "${ROOT_AGENTS}" \
+  && grep -q 'Track actual Adrez work automatically in Linear' "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q 'Martin has authorized automatic tracking' "${SKILLS_DIR}/adrez-linear-workflow/SKILL.md" \
+  && grep -q 'Do not ask for tracking approval again' "${SKILLS_DIR}/adrez-agent-orchestration/SKILL.md" \
+  && ! grep -q 'Chces z toho udelat Linear issue' "${SKILLS_DIR}/adrez-linear-workflow/SKILL.md"; then
+  ok "Automatic Linear tracking and explicit opt-out policy are aligned"
+else
+  fail "Automatic Linear tracking policy is missing or still opt-in"
+fi
 
 if grep -q "/Users/martin/Documents/adrez/docs/data-platform" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
   ok "dbt-cloud AGENTS.md routes durable data-platform docs"

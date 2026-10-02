@@ -1,10 +1,10 @@
 ---
 name: adrez-linear-workflow
-description: Use when managing Adrez work in Linear, the only active tool for task planning/tracking. Use for creating or updating Linear projects, issues, child issues, comments, or updates; converting legacy Asana/task context into Linear; drafting agent-ready task descriptions; or recording task updates for Adrez work.
+description: Track actual Adrez work in Linear automatically. Use at the start, material progress, and handoff of implementation, investigation, or deliverable work; reuse or create the owning issue and maintain its assignee and state. Also use for explicit Linear requests. Skip pure questions and respect explicit read-only or no-Linear instructions.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-08-17
+last_reviewed: 2026-10-02
 ---
 
 # Adrez Linear Workflow
@@ -36,25 +36,39 @@ business outcome or platform capability, not by repository name.
 - User gives a loose spoken/written requirement and wants help turning it into an actionable task.
 - Work produces a PR, dbt model, report, ingestion config, infrastructure change, analysis deliverable, or multi-step handoff.
 
-Skip Linear for small one-off questions, quick explanations, or trivial edits unless the user asks.
+Skip Linear for pure questions, explanations, and one-off lookups that produce
+no work deliverable. Small implementation edits still use the owning issue.
+An explicit read-only or no-Linear instruction overrides automatic tracking.
 
 ## Thread Intake
-At the start of non-trivial Adrez work, decide whether Linear tracking is needed.
+Martin has authorized automatic tracking for actual Adrez work. Do not ask
+whether to create an issue or post a routine work update.
 
-Continue without asking when:
-- The user already provided a Linear issue or project.
-- The work is small and clear.
-- The user asks only for an explanation, lookup, or quick local check.
+1. Resolve the owning issue in this order: an issue ID/URL from the user or
+   current thread; an issue linked to the exact branch/worktree or PR; a search
+   by repository and the concrete outcome. Inspect matches before creating.
+2. Reuse the matching issue. Create one only when no matching issue exists.
+   If ownership remains ambiguous, continue independent local work and ask one
+   focused ownership question. Do not create a competing issue by default.
+3. Use `Data Engineering` and the existing project that owns the outcome.
+   Assign new or unassigned work to Martin. Preserve another existing assignee
+   unless the user explicitly asks to transfer ownership.
+4. Move work to `In Progress` when execution starts. Keep the issue URL in the
+   task handoff. The main agent owns tracking for internal subagents.
+5. Post one concise update for material progress: completed validation,
+   a blocker, a scope or ownership change, or a delivery link. Do not post on
+   every tool call and do not repeat an unchanged update.
+6. Use `In Review` while user review or the agreed delivery is pending. Use
+   `Done` only when the issue acceptance criteria and agreed delivery are met.
+   Never present a local patch as pushed, merged, or deployed. Preserve the
+   terminal state of historical issues; use a linked follow-up for new work.
 
-Ask at most one short question when:
-- It is unclear whether to track the work.
-- It is unclear which existing project/issue owns the work.
-- The user describes a new larger request and the task shape needs confirmation.
-
-Preferred question:
-> Chces z toho udelat Linear issue? Pokud ano, pouziju defaultne `Data Engineering`; napis existujici project/issue, nebo rekni "new project".
-
-If the user asks to create the Linear object directly and the scope is clear, do it without an extra approval round.
+After an ambiguous create/update result, read Linear to reconcile the outcome
+before retrying. Never retry creation blindly. If Linear is unavailable,
+continue safe local work and report the tracking gap; do not claim it was saved.
+Automatic tracking does not authorize new scope, production mutations, or
+messages outside the owning Linear issue. Explicit read-only and no-Linear
+instructions always take precedence.
 
 ## Project Vs Issue Vs Child Issue
 Create a **project** when:

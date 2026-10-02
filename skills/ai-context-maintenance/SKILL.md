@@ -4,7 +4,7 @@ description: Audit and maintain the Adrez AI operating system. Use when the user
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-07-15
+last_reviewed: 2026-10-02
 compatibility: Requires /Users/martin/Documents/adrez/agents and the Adrez workspace repositories.
 ---
 
@@ -101,6 +101,12 @@ Rules:
 - Nested `AGENTS.md`: only where local rules materially differ.
 - Warning threshold: over 8 KB.
 - Failure threshold: over 12 KB.
+- Exact reviewed exceptions are in `agents/ops/agents-size-budgets.json`.
+  Use `scripts/check_agents_size.py` for the effective limit. Do not truncate
+  useful instructions only to clear a size warning.
+- `agents/ops/runtime-inventory.json` is the compact operating map. Validate
+  source references with `scripts/check_runtime_inventory.py`; use `--overview`
+  to print it. Passing local contracts does not prove live service health.
 
 ## Task Notes vs Durable Docs
 - Keep task execution, validation SQL, and WIP investigation in repo

@@ -42,6 +42,10 @@ class ManagedAgentsScopeTests(unittest.TestCase):
                 workspace / "market-overview-analysis" / "AGENTS.md",
                 workspace / "old" / "AGENTS.md",
                 workspace / "_worktrees" / "repo" / "task" / "AGENTS.md",
+                workspace / ".sdlc-state" / "pilot" / "AGENTS.md",
+                workspace / "owned-repo" / ".worktrees" / "task" / "AGENTS.md",
+                workspace / "owned-repo" / "_local-state" / "AGENTS.md",
+                workspace / "owned-repo" / "node_modules" / "package" / "AGENTS.md",
                 workspace
                 / "tech-plugins"
                 / "plugins"
