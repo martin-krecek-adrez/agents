@@ -80,6 +80,11 @@ every duplicate direct source or runtime path.
   `~/.ssh/adrez_vps_hostinger`. Follow the repo-local
   `.codex/rules/airflow-readonly-api.md` rule. Do not use the 1Password-backed
   Airflow REST API unless the user explicitly requests that access path.
+- `test on local Airflow`, `otestuj na airflow local`, and equivalent requests:
+  route to `<workspace>/airflow-orchestrator/docs/test-airflow-locally.md`. Use
+  its exact production-parity runtime procedure and the standard read-only
+  1Password service account. Do not replace it with unit tests or a different
+  local Airflow installation.
 - Avalanche MCP/current agent behavior: `avalanche-mcp`.
 - Avalanche metadata/catalog rebuild: `metadata-builder`.
 - If ADLS landing status is ambiguous, ask one short clarifying question.
@@ -160,6 +165,9 @@ every duplicate direct source or runtime path.
 - Do not run destructive commands unless explicitly asked.
 - Ask before network/credentialed commands when required by local repo policy.
 - Dry-run mode: if user says "describe only", "don't do it", or equivalent, do not run commands and do not edit files.
+- For local read-only access to Adrez 1Password secrets, follow
+  `ops/1password-agent-access.md`. The service account is limited to the
+  `Data Platform` and `API Users` vaults. Never print, log, or commit its token.
 
 ## Production Mutation Minimum
 - Production is read-only by default.
