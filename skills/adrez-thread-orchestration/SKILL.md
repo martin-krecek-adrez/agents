@@ -5,7 +5,7 @@ metadata:
   scope: business
   status: active
   owner: martin
-  last_reviewed: 2026-09-22
+  last_reviewed: 2026-10-04
   compatibility: Requires Codex app task-management tools.
 ---
 
@@ -27,9 +27,9 @@ registry, acceptance decisions, and user communication.
   from multiple workers must be combined.
 - Use `adrez-agent-orchestration` for local execution, Linear routing,
   branches, worktrees, or internal subagents.
-- MAIN owns automatic Linear tracking through `adrez-linear-workflow`.
-  Reuse the owning issue; internal lifecycle actions do not each need a new
-  issue. Respect explicit read-only and no-Linear instructions.
+- MAIN uses the substantial independent work threshold in `adrez-linear-workflow`.
+  Reuse the owning issue. Workers, minor fixes, and lifecycle actions do not
+  each need a new issue. Respect explicit read-only and no-Linear instructions.
 
 ## Guided Start and Mandate
 

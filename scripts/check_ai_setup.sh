@@ -107,14 +107,18 @@ else
   fail "Runtime inventory has missing or changed source contracts"
 fi
 
-if grep -q 'Track actual Adrez work automatically in Linear' "${ROOT_AGENTS}" \
-  && grep -q 'Track actual Adrez work automatically in Linear' "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q 'Martin has authorized automatic tracking' "${SKILLS_DIR}/adrez-linear-workflow/SKILL.md" \
-  && grep -q 'Do not ask for tracking approval again' "${SKILLS_DIR}/adrez-agent-orchestration/SKILL.md" \
-  && ! grep -q 'Chces z toho udelat Linear issue' "${SKILLS_DIR}/adrez-linear-workflow/SKILL.md"; then
-  ok "Automatic Linear tracking and explicit opt-out policy are aligned"
+if grep -q 'Create new Linear issues automatically only for substantial independent work' "${ROOT_AGENTS}" \
+  && grep -q 'Create new Linear issues automatically only for substantial independent work' "${AGENTS_REPO}/AGENTS.md" \
+  && grep -q 'Create new issues automatically only for substantial independent work' "${SKILLS_DIR}/adrez-linear-workflow/SKILL.md" \
+  && grep -q 'For minor work without a direct owner, skip Linear' "${SKILLS_DIR}/adrez-linear-workflow/SKILL.md" \
+  && grep -q 'Explicit read-only and no-Linear instructions take precedence' "${SKILLS_DIR}/adrez-linear-workflow/SKILL.md" \
+  && grep -q 'No new Linear issue unless explicitly requested' "${SKILLS_DIR}/adrez-agent-orchestration/SKILL.md" \
+  && grep -q 'substantial independent work threshold' "${SKILLS_DIR}/adrez-thread-orchestration/SKILL.md" \
+  && ! grep -Eq 'Small implementation edits still use|For small clear tasks, creating directly is fine|authorized automatic tracking for actual' "${SKILLS_DIR}/adrez-linear-workflow/SKILL.md" \
+  && ! grep -q 'Track actual Adrez work automatically in Linear' "${ROOT_AGENTS}" "${AGENTS_REPO}/AGENTS.md"; then
+  ok "Linear issue threshold, minor-work exemption, and explicit opt-out are aligned"
 else
-  fail "Automatic Linear tracking policy is missing or still opt-in"
+  fail "Linear issue threshold is missing or still requires all-work tracking"
 fi
 
 if grep -q "/Users/martin/Documents/adrez/docs/data-platform" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then

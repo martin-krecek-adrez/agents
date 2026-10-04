@@ -4,7 +4,7 @@ description: Triage and orchestrate non-trivial Adrez Codex threads into local w
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-10-02
+last_reviewed: 2026-10-04
 ---
 
 # Adrez Agent Orchestration
@@ -43,19 +43,20 @@ skills. It decides the shape of the work before implementation starts.
    role.
 6. Define the immediate next local action. Keep blocking work local instead of
    delegating it away.
-7. For actual work, reuse or create the owning Linear issue through
-   `adrez-linear-workflow`. Do not ask for tracking approval again. Respect an
-   explicit read-only or no-Linear instruction. The main agent owns tracking
-   for internal subagents; do not create one issue per tool call or helper.
+7. Create new Linear issues automatically only for substantial independent work.
+   Apply the threshold in `adrez-linear-workflow`; minor fixes reuse a directly
+   supplied or linked issue, or stay untracked. Respect read-only/no-Linear.
+   The main agent owns tracking; helpers and tool calls need no separate issue.
 
 ## Triage Levels
 - **1 tiny**: explanation, lookup, or command output only. No
   Linear, no branch, no subagent.
 - **2 small**: one repo, clear scope, low risk, likely one short patch or check.
-  Track actual edits in the owning issue. Work locally; create a branch only
-  if repo policy requires it.
+  No new Linear issue unless explicitly requested. Reuse a directly supplied
+  or linked issue when applicable. Work locally and follow repo branch policy.
 - **3 tracked**: multi-step, user-facing, data/infra/reporting impact, or likely
-  useful across threads. Use `adrez-linear-workflow` unless the user opts out.
+  useful across threads. Apply the substantial independent work threshold in
+  `adrez-linear-workflow`; multiple steps alone do not qualify.
 - **4 parallelizable**: independent slices exist, write scopes can be disjoint,
   or read-only exploration can run beside local work. Propose or use subagents
   only when the user explicitly asks for agents, delegation, or parallel work.

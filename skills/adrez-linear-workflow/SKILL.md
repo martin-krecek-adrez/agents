@@ -1,10 +1,10 @@
 ---
 name: adrez-linear-workflow
-description: Track actual Adrez work in Linear automatically. Use at the start, material progress, and handoff of implementation, investigation, or deliverable work; reuse or create the owning issue and maintain its assignee and state. Also use for explicit Linear requests. Skip pure questions and respect explicit read-only or no-Linear instructions.
+description: Track substantial independent Adrez work in Linear. Create issues automatically only for work that spans sessions, needs coordination, or has significant business/production impact. Reuse applicable issues for minor fixes; do not create issues for routine small edits. Also use for explicit Linear requests. Respect read-only and no-Linear instructions.
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-10-02
+last_reviewed: 2026-10-04
 ---
 
 # Adrez Linear Workflow
@@ -30,45 +30,64 @@ business outcome or platform capability, not by repository name.
   when Martin has authorized tracking, and keep the Asana item archival.
 
 ## When To Use
-- User asks to create, update, organize, or inspect Linear projects/issues.
-- User asks to migrate, summarize, or link Asana/task context into Linear.
-- User starts non-trivial Adrez work that likely needs tracking across threads.
-- User gives a loose spoken/written requirement and wants help turning it into an actionable task.
-- Work produces a PR, dbt model, report, ingestion config, infrastructure change, analysis deliverable, or multi-step handoff.
+- User explicitly asks to inspect, update, organize, or create Linear objects.
+  Inspection or update requests do not authorize creating a new issue.
+- User starts substantial independent Adrez work that needs tracking.
+- Minor work already has a directly supplied or linked owning issue.
 
-Skip Linear for pure questions, explanations, and one-off lookups that produce
-no work deliverable. Small implementation edits still use the owning issue.
-An explicit read-only or no-Linear instruction overrides automatic tracking.
+Pure questions, explanations, and one-off lookups need no issue.
+
+## New Issue Threshold
+Create new issues automatically only for substantial independent work.
+The work must have its own meaningful outcome and at least one of these:
+- It is likely to span multiple sessions.
+- It needs coordination or a handoff between people, threads, or repositories.
+- It has significant business or production impact.
+
+Minor fixes, routine bugs, rechecks, text edits, and small changes completed in
+one session need no new issue. A commit, PR, branch, report, or other artifact
+alone does not qualify. The number of tool calls or implementation steps does
+not determine task size. A bug can qualify when its impact is significant.
+
+Keep follow-up fixes, review findings, and validation under the same objective.
+Do not create one issue per user message, bug, helper, or daily check.
+An explicit request to create an issue overrides the size threshold.
+Explicit read-only and no-Linear instructions take precedence.
+If size is uncertain, continue without a new issue; reassess if scope grows.
 
 ## Thread Intake
-Martin has authorized automatic tracking for actual Adrez work. Do not ask
-whether to create an issue or post a routine work update.
+Martin has authorized automatic issue creation for substantial independent
+work only. Do not ask for routine tracking approval when the threshold is met.
 
-1. Resolve the owning issue in this order: an issue ID/URL from the user or
-   current thread; an issue linked to the exact branch/worktree or PR; a search
-   by repository and the concrete outcome. Inspect matches before creating.
-2. Reuse the matching issue. Create one only when no matching issue exists.
-   If ownership remains ambiguous, continue independent local work and ask one
-   focused ownership question. Do not create a competing issue by default.
-3. Use `Data Engineering` and the existing project that owns the outcome.
-   Assign new or unassigned work to Martin. Preserve another existing assignee
-   unless the user explicitly asks to transfer ownership.
-4. Move work to `In Progress` when execution starts. Keep the issue URL in the
-   task handoff. The main agent owns tracking for internal subagents.
-5. Post one concise update for material progress: completed validation,
-   a blocker, a scope or ownership change, or a delivery link. Do not post on
-   every tool call and do not repeat an unchanged update.
-6. Use `In Review` while user review or the agreed delivery is pending. Use
-   `Done` only when the issue acceptance criteria and agreed delivery are met.
-   Never present a local patch as pushed, merged, or deployed. Preserve the
-   terminal state of historical issues; use a linked follow-up for new work.
+1. Check for an issue ID/URL supplied in the current thread or linked to the
+   exact branch/worktree or PR. Reuse it when it owns the same objective.
+2. For minor work without a direct owner, skip Linear unless the user explicitly
+   requests issue creation. Otherwise, do not run a broad tracking search or
+   create a new issue.
+3. For qualifying work or an explicit creation request without a direct owner,
+   search by concrete outcome and repository. Inspect matches before creating.
+   Create only if no matching issue exists. If ownership is ambiguous, continue
+   independent work and ask one focused ownership question; do not create a
+   competing issue.
+4. Use `Data Engineering` and the project that owns the outcome. Assign new or
+   unassigned tracked work to Martin. Preserve another existing assignee unless
+   the user explicitly asks to transfer ownership.
+5. Move tracked work to `In Progress` when execution starts. The main agent
+   owns tracking for internal subagents. Keep the issue URL in the handoff.
+6. Post concise updates only for material progress on existing tracked work:
+   completed validation, a blocker, a scope change, or a delivery link.
+   Minor corrections need at most one useful update, not routine status churn.
+7. Use `In Review` while agreed review or delivery is pending. Use `Done` only
+   when acceptance criteria and agreed delivery are met. Never present a local
+   patch as pushed, merged, or deployed. Preserve terminal issue states.
+   A bounded correction may be noted on its originating completed issue.
+   Create a linked follow-up only if it independently meets the threshold or
+   the user explicitly requests it.
 
-After an ambiguous create/update result, read Linear to reconcile the outcome
-before retrying. Never retry creation blindly. If Linear is unavailable,
-continue safe local work and report the tracking gap; do not claim it was saved.
-Automatic tracking does not authorize new scope, production mutations, or
-messages outside the owning Linear issue. Explicit read-only and no-Linear
-instructions always take precedence.
+After an ambiguous create/update result, read Linear before retrying. Never
+retry creation blindly. If Linear is unavailable, continue safe local work and
+report the tracking gap. Tracking does not authorize new scope, production
+mutations, or messages outside the owning issue.
 
 ## Project Vs Issue Vs Child Issue
 Create a **project** when:
@@ -77,12 +96,14 @@ Create a **project** when:
 - Multiple future threads/agents will need the same context.
 - Historical links, status, milestones, or project updates should live in one place.
 
-Create an **issue** when:
+Create an **issue** only when the New Issue Threshold is met or the user
+explicitly requests creation, and:
 - There is a concrete task or slice with a clear outcome.
 - A human or agent can work it independently.
 - It belongs under an existing project or is a standalone operational task.
 
-Create a **child issue** when:
+Create a **child issue** only when it independently meets the same threshold
+or the user explicitly requests it, and:
 - A parent issue already exists.
 - The child is a concrete implementation slice.
 - The parent would become too broad or noisy.
@@ -182,10 +203,13 @@ Acceptance criteria:
 Open questions:
 ```
 
-For small clear tasks, creating directly is fine.
+For clear tasks that meet the threshold, create directly. For small tasks,
+create only when the user explicitly asks for an issue.
 
 ## Comments And Updates
-Add a Linear comment or project update when the thread produces meaningful operational state.
+For existing tracked work, add a comment or project update only when the
+thread produces meaningful operational state. These update triggers do not
+authorize creation of a new issue.
 
 Use this compact update template:
 
@@ -246,7 +270,9 @@ When converting Asana context:
 - Link the original Asana task in Linear.
 - Preserve useful historical notes, but summarize instead of copying everything verbatim.
 - If an Asana parent has many subtasks, create one Linear parent-style issue first unless the user asks for child issues.
-- Put possible future child issues in the description as a list, then split only when work actually starts.
+- Put possible future child issues in the description as a list. Split only
+  when work starts and each slice meets the New Issue Threshold, or when
+  the user explicitly requests child issues.
 - Put legacy Asana links at project level when the project may need historical lookup later.
 
 ## Do Not Over-PM

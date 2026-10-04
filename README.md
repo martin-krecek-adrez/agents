@@ -106,6 +106,10 @@ Main routing is defined in `AGENTS.md`.
   - New Power BI report/model scaffold -> `powerbi-report-starter`
   - Rebuild/export Avalanche metadata -> `avalanche-metadata-update`
 
+Linear creates new issues automatically only for substantial independent work.
+Minor fixes reuse an applicable issue or remain untracked. A PR alone does not
+qualify. See `skills/adrez-linear-workflow/SKILL.md` for the threshold.
+
 ## Ops Memory
 
 Cross-repo operating state for Codex coordination lives in:

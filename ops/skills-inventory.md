@@ -35,7 +35,7 @@ Last reviewed: 2026-09-28
 | --- | --- | --- | --- |
 | `adrez-agent-orchestration` | keep | Personal intake layer above tracking and execution skills. It routes separate user-owned sidebar tasks to `adrez-thread-orchestration` and keeps internal subagent work distinct. | Forward-test the three-wave or six-agent stop and exact final-state reporting. |
 | `adrez-thread-orchestration` | keep | Coordinates a bounded set of user-owned sidebar tasks under one MAIN task, with a compact registry and explicit lifecycle mandate. | Keep its sidebar-task boundary distinct from internal subagent orchestration. |
-| `adrez-linear-workflow` | keep | Default Adrez Linear planning and updates, with a reviewed Data Engineering portfolio routing reference. | Keep the reference aligned with approved portfolio changes. |
+| `adrez-linear-workflow` | keep | Reviewed 2026-10-04: new issues only for substantial independent work; minor fixes reuse an issue or stay untracked. Portfolio routing is unchanged. | Observe issue volume under the new threshold. |
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |
 | `asana` | keep | Historical archive lookup only for explicit legacy URLs/GIDs. Never use it as an active queue or routine brief source. | Keep the trigger narrow and archive-only. |

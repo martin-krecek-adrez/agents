@@ -90,17 +90,18 @@ every duplicate direct source or runtime path.
 - If ADLS landing status is ambiguous, ask one short clarifying question.
 
 ## Common Workflow Defaults
-- Track actual Adrez work automatically in Linear via `adrez-linear-workflow`.
-  Reuse the owning issue before creating one. Assign new or unassigned work to
-  Martin, move active work to `In Progress`, and record material progress and
-  delivery. Pure questions and explanations need no issue. Explicit read-only
-  or no-Linear instructions override this default. Tracking does not authorize
-  production changes, deployment, or messages to other people.
+- Create new Linear issues automatically only for substantial independent work:
+  multiple sessions, coordination, or significant business/production impact.
+  Minor fixes and small edits need no new issue; reuse an applicable issue.
+  A commit or PR alone does not qualify. Use `adrez-linear-workflow`.
+  Explicit creation requests override it; read-only/no-Linear wins.
+  Assign new/unassigned issues to Martin. Record material state.
+  This replaces all-work tracking; no production or outside messages.
 - Use repo-local `docs/tasks/` for multi-step, risky, or multi-session work when the repo uses task notes; skip for trivial edits.
 - Temporary filters/workarounds/guardrails need a nearby `TODO` with removal condition and task-note link when relevant.
 
 ## Task Memory
-- Linear is the active tracker for actual work. Asana is retired and must not be
+- Linear is the active tracker for substantial work. Asana is retired and must not be
   scanned routinely, reopened as a work queue, or used for new tracking. Use
   it only when Martin explicitly provides a legacy URL/GID or asks for
   historical context.
