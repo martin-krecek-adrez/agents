@@ -35,6 +35,7 @@ Last reviewed: 2026-09-28
 | --- | --- | --- | --- |
 | `adrez-agent-orchestration` | keep | Personal intake layer above tracking and execution skills. It routes separate user-owned sidebar tasks to `adrez-thread-orchestration` and keeps internal subagent work distinct. | Forward-test the three-wave or six-agent stop and exact final-state reporting. |
 | `adrez-thread-orchestration` | keep | Coordinates a bounded set of user-owned sidebar tasks under one MAIN task, with a compact registry and explicit lifecycle mandate. | Keep its sidebar-task boundary distinct from internal subagent orchestration. |
+| `adrez-thread-handoff` | keep | Reviewed 2026-10-05. Source: `skills/adrez-thread-handoff`. Six independent handoff scenarios passed after refinement. Creates a destination only on an explicit request. | Observe real handoffs. Keep project coordination in `adrez-thread-orchestration`. Install through the standard source-to-runtime sync. |
 | `adrez-linear-workflow` | keep | Reviewed 2026-10-04: new issues only for substantial independent work; minor fixes reuse an issue or stay untracked. Portfolio routing is unchanged. | Observe issue volume under the new threshold. |
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |

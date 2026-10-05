@@ -1,0 +1,7 @@
+interface:
+  display_name: "Adrez Thread Handoff"
+  short_description: "Carry verified Adrez work into a clean chat"
+  default_prompt: "Use $adrez-thread-handoff to prepare a concise, verified handoff for the remaining work in this chat."
+
+policy:
+  allow_implicit_invocation: true
