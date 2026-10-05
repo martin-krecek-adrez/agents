@@ -20,7 +20,7 @@ Do not use this folder for implementation details that belong in repo
 | `pipeline-watch.md` | Pipeline/status email patterns and watch items. |
 | `people-followups.md` | People and threads that likely need a reply. |
 | `decisions.md` | Stable operating decisions that affect future brief behavior. |
-| `thread-handoff-template.md` | Prompt template for starting a focused new Codex thread. |
+| `thread-handoff-template.md` | Compatibility link to the bundled `adrez-thread-handoff` prompt. |
 
 ## Chief Of Staff Brief Contract
 
