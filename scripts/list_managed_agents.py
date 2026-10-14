@@ -10,9 +10,24 @@ EXCLUDED_ROOT_REPOSITORIES = frozenset(
     {"commission-tier-monitoring", "market-overview-analysis"}
 )
 PRUNED_DIRECTORY_NAMES = frozenset(
-    {".git", "_worktrees", ".worktrees", ".sdlc-state", "_local-state",
+    {".git", "_handoffs", "_worktrees", ".worktrees", ".sdlc-state", "_local-state",
      "adrez-tools", "node_modules", "old"}
 )
+
+
+# Instruction-source scope only. Do not reuse these exclusions for runtime data.
+EXCLUDED_INSTRUCTION_SUBTREES = (
+    ("docs", ".vitepress", "dist"),
+    ("extractor-documents",),
+    ("adrez-data-assistant",),
+    ("adrez-metadata-sql-agent",),
+    ("booking-data", "Competition_Data", "archive"),
+)
+
+
+def _is_excluded_instruction_subtree(path: Path) -> bool:
+    return any(path.parts[:len(prefix)] == prefix
+               for prefix in EXCLUDED_INSTRUCTION_SUBTREES)
 
 
 def _is_plugin_template(path: Path) -> bool:
@@ -27,7 +42,7 @@ def _is_plugin_template(path: Path) -> bool:
 
 
 def iter_managed_agents(workspace_root: Path) -> list[Path]:
-    """Return AGENTS.md files owned by the managed Adrez workspace."""
+    """Return current managed AGENTS.md sources, excluding frozen snapshots."""
     root = workspace_root.expanduser().resolve(strict=True)
     found: list[Path] = []
     for current, directories, filenames in os.walk(root, followlinks=False):
@@ -36,7 +51,7 @@ def iter_managed_agents(workspace_root: Path) -> list[Path]:
         if relative.parts and relative.parts[0] in EXCLUDED_ROOT_REPOSITORIES:
             directories.clear()
             continue
-        if _is_plugin_template(relative):
+        if _is_plugin_template(relative) or _is_excluded_instruction_subtree(relative):
             directories.clear()
             continue
 
@@ -48,6 +63,7 @@ def iter_managed_agents(workspace_root: Path) -> list[Path]:
                 not relative.parts and name in EXCLUDED_ROOT_REPOSITORIES
             )
             and not _is_plugin_template(relative / name)
+            and not _is_excluded_instruction_subtree(relative / name)
         )
         if "AGENTS.md" in filenames:
             found.append(current_path / "AGENTS.md")

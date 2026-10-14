@@ -58,15 +58,17 @@ skills. It decides the shape of the work before implementation starts.
   useful across threads. Apply the substantial independent work threshold in
   `adrez-linear-workflow`; multiple steps alone do not qualify.
 - **4 parallelizable**: independent slices exist, write scopes can be disjoint,
-  or read-only exploration can run beside local work. Propose or use subagents
-  only when the user explicitly asks for agents, delegation, or parallel work.
+  or read-only exploration can run beside local work. General delegation
+  requires explicit user authorization. A required independent reviewer is
+  governed by the repository review rule.
 - **5 project**: long-running area, more than three likely issues, cross-repo
   coordination, or uncertain business scope. Use `adrez-linear-workflow` to
   draft a project/parent issue and avoid starting broad implementation first.
 
 ## Delegation Rules
-- Spawn subagents only when the user explicitly authorizes subagents,
-  delegation, or parallel agent work in this thread.
+- Spawn subagents only when the user explicitly authorizes delegation or an
+  applicable repository rule requires an independent reviewer. A required
+  reviewer does not authorize additional workers or parallel implementation.
 - Start with at most two subagents in each wave. Keep one concurrency slot
   free for follow-up work and coordination.
 - Review the first wave before spawning another wave. Spawn more agents only
