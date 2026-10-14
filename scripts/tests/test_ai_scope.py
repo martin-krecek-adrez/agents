@@ -36,11 +36,22 @@ class ManagedAgentsScopeTests(unittest.TestCase):
     def test_external_and_generated_repositories_are_excluded(self) -> None:
         with tempfile.TemporaryDirectory(prefix="adrez-agents-scope-") as temp:
             workspace = Path(temp).resolve()
-            included = [workspace / "AGENTS.md", workspace / "owned-repo" / "AGENTS.md"]
+            included = [
+                workspace / "AGENTS.md",
+                workspace / "owned-repo" / "AGENTS.md",
+                workspace / "owned-repo" / "archive" / "AGENTS.md",
+                workspace / "dbt-cloud" / "models" / "l2_base" / "AGENTS.md",
+            ]
             excluded = [
                 workspace / "commission-tier-monitoring" / "AGENTS.md",
                 workspace / "market-overview-analysis" / "AGENTS.md",
                 workspace / "old" / "AGENTS.md",
+                workspace / "_handoffs" / "packet" / "AGENTS.md",
+                workspace / "docs" / ".vitepress" / "dist" / "poster" / "AGENTS.md",
+                workspace / "extractor-documents" / "AGENTS.md",
+                workspace / "adrez-data-assistant" / "AGENTS.md",
+                workspace / "adrez-metadata-sql-agent" / "AGENTS.md",
+                workspace / "booking-data" / "Competition_Data" / "archive" / "price_scraper_v3" / "AGENTS.md",
                 workspace / "_worktrees" / "repo" / "task" / "AGENTS.md",
                 workspace / ".sdlc-state" / "pilot" / "AGENTS.md",
                 workspace / "owned-repo" / ".worktrees" / "task" / "AGENTS.md",
@@ -59,7 +70,12 @@ class ManagedAgentsScopeTests(unittest.TestCase):
                 path.parent.mkdir(parents=True, exist_ok=True)
                 path.write_text("# test\n", encoding="utf-8")
 
-            self.assertEqual(iter_managed_agents(workspace), sorted(included))
+            target = workspace / "booking-data" / "audio_recording" / "CLAUDE.md"
+            target.parent.mkdir(parents=True, exist_ok=True)
+            target.write_text("# current instructions\n", encoding="utf-8")
+            linked = target.with_name("AGENTS.md")
+            linked.symlink_to(target.name)
+            self.assertEqual(iter_managed_agents(workspace), sorted(included + [linked]))
 
     def test_task_note_report_prunes_external_repository(self) -> None:
         with tempfile.TemporaryDirectory(prefix="adrez-task-note-scope-") as temp:
