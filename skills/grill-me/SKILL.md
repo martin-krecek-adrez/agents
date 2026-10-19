@@ -4,7 +4,7 @@ description: Interview the user relentlessly about a plan or design until reachi
 scope: business
 status: active
 owner: martin
-last_reviewed: 2026-06-16
+last_reviewed: 2026-10-19
 ---
 
 Interview me relentlessly about every aspect of this plan until we reach a shared understanding. Walk down each branch of the design tree, resolving dependencies between decisions one-by-one. For each question, provide your recommended answer.

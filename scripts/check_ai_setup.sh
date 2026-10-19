@@ -238,13 +238,17 @@ fi
 if grep -q "Asana is retired" "${AGENTS_REPO}/AGENTS.md" \
   && grep -q "Do not query Asana in routine briefs" "${AGENTS_REPO}/ops/README.md" \
   && grep -q "create one only with explicit Martin" "${AGENTS_REPO}/ops/README.md" \
-  && grep -q "Never change assignee, title, due/start dates, notes" "${AGENTS_REPO}/skills/asana/SKILL.md" \
-  && grep -q 'archival comment or `completed=true`' "${AGENTS_REPO}/skills/asana/SKILL.md" \
-  && grep -q "create or update Linear only" "${AGENTS_REPO}/skills/asana/SKILL.md" \
+  && [ ! -e "${AGENTS_REPO}/skills/asana" ] \
   && grep -q "Linear is the only active Adrez task tracker" "${AGENTS_REPO}/ops/decisions.md"; then
-  ok "Asana retirement and Linear-only active tracking are explicit"
+  ok "Asana retirement, archived skill state, and Linear-only active tracking are explicit"
 else
   fail "Asana retirement policy is missing from shared or morning-brief guidance"
+fi
+
+if python3 "${SCRIPT_DIR}/report_session_thresholds.py" --help >/dev/null; then
+  ok "Read-only Codex session threshold report is available"
+else
+  fail "Read-only Codex session threshold report is unavailable"
 fi
 
 if [ -d "${AGENTS_REPO}/feedback/inbox" ] \

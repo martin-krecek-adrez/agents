@@ -1,6 +1,6 @@
 # Skills Inventory
 
-Last reviewed: 2026-09-28
+Last reviewed: 2026-10-19
 
 ## Ownership model
 
@@ -39,12 +39,23 @@ Last reviewed: 2026-09-28
 | `adrez-linear-workflow` | keep | Reviewed 2026-10-04: new issues only for substantial independent work; minor fixes reuse an issue or stay untracked. Portfolio routing is unchanged. | Observe issue volume under the new threshold. |
 | `agent-feedback-capture` | keep | Captures raw reusable harness feedback. | No change. |
 | `ai-context-maintenance` | keep | Owns AGENTS, inventory, sync, and context governance. | Enforce plugin boundary. |
-| `asana` | keep | Historical archive lookup only for explicit legacy URLs/GIDs. Never use it as an active queue or routine brief source. | Keep the trigger narrow and archive-only. |
 | `avalanche-metadata-update` | keep | Product-specific metadata refresh remains outside plugin V1. Its build command matches the current `gpt-5.4-mini` and 1,600-token metadata-builder contract. | Reassess for a later plugin release only if the workflow becomes portable. |
-| `compare-tech` | keep | Generic decision support. | No change. |
-| `grill-me` | keep | Personal plan/design interview workflow. | No change. |
-| `powerbi-report-starter` | keep | Product-specific scaffold remains outside plugin V1. | Reassess for plugin V1.1. |
+| `grill-me` | keep | Reviewed 2026-10-19. Martin still uses the focused one-question-at-a-time plan and design interview workflow. | Keep the narrow trigger and do not merge it into generic decision support. |
 | `write-commit` | keep | Generic commit-message wording. | No change. |
+
+## Archived skill decisions
+
+- `asana` — **archive**, 2026-10-19. Asana is retired, and an active skill adds
+  a stale trigger surface. Git history preserves the former explicit legacy
+  lookup workflow. The source and runtime copy are removed. Historical Asana
+  provenance remains read-only.
+- `compare-tech` — **archive**, 2026-10-19. The generic comparison workflow is
+  no longer a known recurring Adrez workflow. Git history preserves it if
+  demand returns. The source and runtime copy are removed.
+- `powerbi-report-starter` — **archive**, 2026-10-19. Adrez no longer plans to
+  use Power BI for new report work. Git history preserves the scaffold
+  workflow. The source and runtime copy are removed. Historical Power BI
+  repositories are unchanged.
 
 ## Plugin-owned skills
 
@@ -65,10 +76,9 @@ released through the `Adrez Tech` marketplace.
   skills by name but does not own their implementations.
 - Keep `adrez-thread-orchestration` in `agents`; it owns Martin-specific Codex
   sidebar task lifecycle and must not move into the data-platform plugin.
-- Keep `asana` and `adrez-linear-workflow` separate. Asana is an explicit
-  historical archive lookup only; Linear owns all active planning and tracking.
-- Keep Avalanche metadata and Power BI outside plugin V1 until explicitly
-  promoted.
+- Keep retired Asana references as historical provenance only. Linear owns all
+  active planning and tracking.
+- Keep Avalanche metadata outside plugin V1 until explicitly promoted.
 
 ## Health checks
 

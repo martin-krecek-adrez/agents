@@ -145,9 +145,10 @@ class CutoverTests(unittest.TestCase):
         result = run(["bash", SYNC], self.env, check=True)
         self.assertEqual(result.returncode, 0)
         self.assertFalse(legacy.exists())
-        self.assertTrue((self.home / "skills" / "asana" / "SKILL.md").is_file())
+        self.assertTrue((self.home / "skills" / "grill-me" / "SKILL.md").is_file())
         manifest = (self.home / ".managed-skills-manifest").read_text().splitlines()
-        self.assertIn("asana", manifest)
+        self.assertIn("grill-me", manifest)
+        self.assertNotIn("asana", manifest)
         self.assertNotIn("plugin-alpha", manifest)
 
     def test_unmanaged_plugin_copy_is_never_removed_by_sync(self) -> None:
@@ -192,7 +193,7 @@ class CutoverTests(unittest.TestCase):
         unrelated.write_text("preserve\n")
         skills = self.home / "skills"
         skills.mkdir()
-        (skills / "asana").symlink_to(external, target_is_directory=True)
+        (skills / "grill-me").symlink_to(external, target_is_directory=True)
         result = run(["bash", SYNC], self.env)
         self.assertNotEqual(result.returncode, 0)
         self.assertTrue(unrelated.is_file())

@@ -23,8 +23,8 @@ business outcome or platform capability, not by repository name.
 - Linear is the only active tool for Adrez task planning and tracking.
 - Asana is retired. Do not create tasks/subtasks, reopen work, or scan it as an
   active queue.
-- Use `asana` only when Martin explicitly provides a legacy URL/GID or asks
-  for historical context.
+- Inspect legacy Asana context only when Martin explicitly provides the
+  relevant evidence or asks for historical context. Do not scan Asana.
 - If legacy Asana context reveals active work, first find any existing Linear
   tracking. Propose migration when none exists; create or update Linear only
   when Martin has authorized tracking, and keep the Asana item archival.

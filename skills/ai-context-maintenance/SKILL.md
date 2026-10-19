@@ -58,7 +58,13 @@ Rules:
 ```bash
 /Users/martin/Documents/adrez/agents/scripts/report_task_note_promotion_candidates.sh
 ```
-3. Inspect changed or stale context surfaces:
+3. For a lightweight review of recent Codex usage, run the read-only session
+   threshold report. It reports event counts and tool names only. It never
+   reports prompt content or tool inputs:
+```bash
+python3 /Users/martin/Documents/adrez/agents/scripts/report_session_thresholds.py
+```
+4. Inspect changed or stale context surfaces:
    - `/Users/martin/Documents/adrez/AGENTS.md`
    - `/Users/martin/Documents/adrez/agents/AGENTS.md`
    - repo-local `AGENTS.md` files in active repos
@@ -67,32 +73,32 @@ Rules:
    - `/Users/martin/Documents/adrez/agents/feedback/inbox/*.md`
    - repo-local `docs/tasks/`
    - `/Users/martin/Documents/adrez/docs/data-platform`
-4. Classify findings:
+5. Classify findings:
    - **Blocking**: broken setup, missing required files, malformed skill
      metadata, oversized critical `AGENTS.md`.
    - **Maintenance**: stale `last_reviewed`, duplicated routing, weak docs
      routing, long task notes that should be promoted.
    - **Follow-up**: useful improvements that are not needed immediately.
-5. For skill findings, classify each skill as:
+6. For skill findings, classify each skill as:
    - **keep**: useful as-is.
    - **tighten**: useful, but trigger description, boundaries, or workflow should be clearer.
    - **split**: one skill covers multiple materially different workflows.
    - **merge**: duplicates another skill and should be folded into it.
    - **archive**: obsolete or no longer worth triggering.
    - **source-fix**: source/runtime/inventory wiring is wrong.
-6. If edits are requested, keep scope narrow:
+7. If edits are requested, keep scope narrow:
    - update one skill,
    - or one repo `AGENTS.md` hierarchy,
    - or one docs routing improvement,
    - or one automation/check improvement.
-7. Process feedback inbox when requested:
+8. Process feedback inbox when requested:
    - group items by area and repeated failure mode,
    - decide disposition: promote, create Linear follow-up, keep for more evidence,
      reject as one-off,
    - move processed items to `feedback/promoted/` or `feedback/rejected/` only
      after the decision is reflected in the summary,
    - add `check_ai_setup.sh` guards for promoted critical rules when practical.
-8. Summarize exact paths changed and whether `check_ai_setup.sh` passes.
+9. Summarize exact paths changed and whether `check_ai_setup.sh` passes.
 
 ## AGENTS.md Heuristics
 - Root workspace `AGENTS.md`: routing only.
