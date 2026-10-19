@@ -48,17 +48,15 @@ Team members install the plugin; they must not run Martin's local sync.
 
 Use these skills when intent clearly matches:
 - Snowflake: `snowcli`.
-- Asana historical archive lookup only: `asana`.
 - Linear task/project tracking: `adrez-linear-workflow`.
 - Thread intake / agent orchestration: `adrez-agent-orchestration`.
 - Standalone sidebar task lifecycle under one MAIN task: `adrez-thread-orchestration`.
-- Decision support: `grill-me`, `compare-tech`.
+- Decision review: `grill-me`.
 - Implementation review: `implementation-review`.
 - Git delivery: `write-commit`, `repo-pr-handoff`, `repo-worktree-safety`.
 - Docs/context: `write-docs`, `ai-context-maintenance`, `agent-feedback-capture`.
 - Spreadsheet/data onboarding: `entity-spreadsheet-ingestion`, `entity-extractor-spreadsheets`, `entity-data-factory`.
 - dbt: `entity-dbt-cloud`.
-- Power BI: `powerbi-report-starter`.
 - Avalanche metadata: `avalanche-metadata-update`.
 
 The installed plugin's `skill-inventory.txt` defines ownership. Local sync must
@@ -71,7 +69,6 @@ validate it and reject duplicate direct source or runtime skills.
 - Already-landed ADLS/lake/raw source, external-table config, or Snowflake exposure only: `entity-data-factory`.
 - Expedia payout/remittance PDF extraction: `extranet-scraper`.
 - New document extraction: route to the owning active source/ingestion repo; do not revive `extractor-documents` without an explicit migration decision.
-- New Power BI report/model: `powerbi-report-starter`.
 - "check dbt": `dbt-cloud`.
 - Airflow status, DAG runs, task instances, logs, and approved control actions:
   route to `airflow-orchestrator` and use SSH to the VPS with the local key

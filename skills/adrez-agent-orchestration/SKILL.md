@@ -22,7 +22,7 @@ skills. It decides the shape of the work before implementation starts.
   branch, PR, milestone, or implementation artifact.
 - Use repo/domain skills for execution once the path is clear:
   `entity-spreadsheet-ingestion`, `entity-data-factory`,
-  `entity-dbt-cloud`, `powerbi-report-starter`, `repo-pr-handoff`,
+  `entity-dbt-cloud`, `repo-pr-handoff`,
   `repo-worktree-safety`, and similar focused skills.
 - Do not use this skill for small one-off questions, simple lookups, or
   obvious single-file edits unless the user explicitly asks for orchestration.

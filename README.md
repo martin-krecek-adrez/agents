@@ -93,18 +93,15 @@ Main routing is defined in `AGENTS.md`.
   - Standalone sidebar task lifecycle -> `adrez-thread-orchestration`
   - One task continued in a clean chat -> `adrez-thread-handoff`
   - Snowflake-related requests -> `snowcli`
-  - Explicit legacy Asana lookup -> `asana`
   - Commit message drafting -> `write-commit`
   - Documentation requests -> `write-docs`
   - Reusable harness/process feedback -> `agent-feedback-capture`
-  - Tech comparisons -> `compare-tech`
   - Implementation diff/milestone review -> `implementation-review`
   - Parallel repo branches / dirty worktree safety -> `repo-worktree-safety`
   - End-to-end spreadsheet onboarding -> `entity-spreadsheet-ingestion`
   - Add/update spreadsheet entity -> `entity-extractor-spreadsheets`
   - Add/update external-table entity -> `entity-data-factory`
   - Add/update dbt entity/model -> `entity-dbt-cloud`
-  - New Power BI report/model scaffold -> `powerbi-report-starter`
   - Rebuild/export Avalanche metadata -> `avalanche-metadata-update`
 
 Linear creates new issues automatically only for substantial independent work.
@@ -241,13 +238,10 @@ Current directly managed Adrez skills:
 - adrez-thread-orchestration
 - adrez-thread-handoff
 - adrez-linear-workflow
-- asana
 - agent-feedback-capture
 - ai-context-maintenance
-- compare-tech
 - avalanche-metadata-update
 - grill-me
-- powerbi-report-starter
 - write-commit
 
 ## Credits
