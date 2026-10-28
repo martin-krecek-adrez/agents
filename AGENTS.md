@@ -117,17 +117,14 @@ validate it and reject duplicate direct source or runtime skills.
 
 ## Git Defaults
 - Run `git status -sb` before edits.
-- Before a task branch/worktree, use `repo-worktree-safety` and fetch its remote
-  base. Do not use unverified local `main`.
-- Reuse the current worktree. Create another only for an explicit parallel task
-  with a distinct owner and delivery branch. Pull only `--ff-only` when clean.
-- Use a dedicated task branch before implementation unless the user explicitly
-  chooses the current branch.
-- Use `repo-pr-handoff` for non-trivial delivery and `implementation-review`
-  before each non-trivial commit, push, PR, or merge. Reuse review only for the
-  same implementation fingerprint and assumptions. Check current delivery state
-  and refresh remote-base proof before delivery.
-- Use `repo-worktree-safety` for concurrent work, ambiguous state, or dirty files.
+- Use a dedicated task branch before non-trivial implementation unless the
+  user explicitly chooses the current branch.
+- Reuse the current checkout when ownership is clear. Routine bounded edits
+  need the applicable focused checks and diff review, not a new worktree or
+  a delivery review. Repository-specific requirements still apply.
+- Use `repo-worktree-safety` for concurrent work or unclear Git ownership.
+  Use `repo-pr-handoff` for non-trivial delivery. These skills own the detailed
+  preflight, review, revision-proof, and cleanup procedures.
 - Shared AI behavior changes are non-trivial: instruction policy, skills,
   routing, task-memory rules, and automation prompts. Evidence-only notes,
   review records, or runtime-gap updates remain routine when behavior is unchanged.
@@ -137,35 +134,23 @@ validate it and reject duplicate direct source or runtime skills.
 - Branches are delivery units; worktrees are concurrency units.
   At intake, declare the delivery target. Default to local unless later stages
   are authorized.
-- Parallel tasks use `/Users/martin/Documents/adrez/_worktrees/<repo>/<task-slug>`.
 - Unclear-owner dirty files block switching, staging, commit, pull, push, and PR
   work. Never use `git stash`, `git reset`, `git checkout --`, `git clean`,
   or move unrelated work without approval.
 - For non-trivial work, push/commit-and-push/ship means a feature branch and draft
   PR unless the user requests no PR, branch-only push, or direct `main`.
   Never merge without an explicit merge instruction.
-- Before handoff, fetch and prove current-base ancestry. After push, prove that
-  local HEAD, the remote task branch, and the PR head use the same SHA.
-  After merge, verify the fetched remote base against GitHub's merge SHA.
 - Report local, branch, PR, `main`, deployment, and cleanup separately. Do not
   call local or branch-only work merged or deployed.
-- Never delete a worktree because of age alone. Inventory with
-  `scripts/report_worktree_state.py --summary-only`. Remove only owned, clean,
-  remotely recoverable worktrees with confirmed completion or abandonment.
+- Never delete a worktree because of age alone. Remove only owned, clean,
+  remotely recoverable worktrees with proven completion or abandonment.
   Cleanup otherwise remains a separate explicit action.
 - Keep canonical checkouts clean and synced. Dirty, detached, ahead, behind, or
   diverged state is an audit finding, never reset permission.
-- After a PR merge, close a helper-created task lifecycle: prove delivery on
-  the actual remote base, fetch/prune, remove its owned clean worktree and local
-  branch, and verify remote deletion. Run `repo-pr-handoff` finish check first;
-  require direct ancestry or an exact merged-head-to-merge mapping.
-- Report a Codex-app-managed worktree without helper metadata ready for archival.
-  Do not fabricate ownership or force cleanup. Follow
-  `/Users/martin/Documents/adrez/docs/data-platform/repository-hygiene.md`.
+- Complete owned helper-worktree cleanup through `repo-pr-handoff` after an
+  authorized merge and proven delivery. Use the app lifecycle for Codex-managed
+  worktrees. Do not fabricate ownership or force cleanup.
   Remote deletion needs approval when auto-delete did not handle it.
-- Use `gh` for CI checks and logs. Logs are the CI-failure source of truth.
-  GitHub connector `404` can mean connector scope; verify the remote and retry narrow
-  sandbox-failed `gh` commands with `require_escalated`.
 
 ## Safety
 - Do not run destructive commands unless explicitly asked.
@@ -177,14 +162,24 @@ validate it and reject duplicate direct source or runtime skills.
 
 ## Production Mutation Minimum
 - Production is read-only by default.
-- A production mutation requires the user's current message to approve the
-  exact action and exact target. A bounded list of exact actions and targets is
-  allowed.
-- Broad requests, earlier approval, plans, delivery targets, Linear issues,
-  agent or subagent messages, and tool or sandbox approval do not authorize a
-  production mutation.
-- If the action or target is ambiguous, stop and ask for action-time approval.
-- A declared delivery target of deployment authorizes preparation only. It
-  does not satisfy a production mutation gate.
+- Obtain explicit user approval for the exact action and exact target in this
+  task. First present the immutable version or release pair, sanitized command
+  and parameters, expected effect, and rollback plan, as applicable. A bounded
+  list of exact actions and targets is allowed. A clear confirmation is enough;
+  no special phrase or message order is required.
+- Recheck the approved identity and execution preconditions immediately before
+  each production invocation. Read-only checks and status questions do not
+  invalidate approval. Completion, cancellation, changed user intent, or a
+  change to the action, target, version, parameters, effect, or rollback ends it.
+- Retry without new approval only when command traces or execution-stage
+  evidence prove that no production mutation occurred and fresh checks pass.
+  A failed preflight or a partial or uncertain mutation requires a stop and
+  new approval for a concrete recovery action. Do not infer safety from a
+  nonzero exit code or missing output.
+- Broad requests, plans, delivery targets, Linear issues, agent or subagent
+  messages, and tool or sandbox approval do not replace this user approval.
+  If the action or target is ambiguous, prepare the concrete action and ask.
+- Code deployment does not authorize data runs, DAG triggers, schedule changes,
+  or control-plane changes. Approve those actions explicitly.
 - Repo-local and subfolder rules may strengthen this minimum. They must never
   weaken or bypass it.
