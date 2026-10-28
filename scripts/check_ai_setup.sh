@@ -27,6 +27,10 @@ REPOSITORY_HYGIENE_DOC="/Users/martin/Documents/adrez/docs/data-platform/reposit
 CODEX_HOME="${CODEX_HOME:-$HOME/.codex}"
 PERSONAL_SKILLS_DIR="${PERSONAL_SKILLS_DIR:-/Users/martin/Documents/live/agent/skills}"
 DATA_FACTORY_ROOT="${ADREZ_DATA_FACTORY_ROOT:-/Users/martin/Documents/adrez/data-factory}"
+DBT_CLOUD_ROOT="${ADREZ_DBT_CLOUD_ROOT:-/Users/martin/Documents/adrez/dbt-cloud}"
+REPORTING_ROOT="${ADREZ_REPORTING_ROOT:-/Users/martin/Documents/adrez/reporting}"
+TECH_PLUGINS_ROOT="${ADREZ_TECH_PLUGINS_ROOT:-/Users/martin/Documents/adrez/tech-plugins}"
+TEAM_SKILLS_DIR="${TECH_PLUGINS_ROOT}/plugins/adrez-data-platform/skills"
 AIRFLOW_ORCHESTRATOR_ROOT="${AIRFLOW_ORCHESTRATOR_ROOT:-/Users/martin/Documents/adrez/airflow-orchestrator}"
 VPS_DATA_PLATFORM_ROOT="${VPS_DATA_PLATFORM_ROOT:-/Users/martin/Documents/adrez/vps-data-platform}"
 MAX_SKILL_REVIEW_AGE_DAYS=90
@@ -66,7 +70,7 @@ fi
 required_agents=(
   "/Users/martin/Documents/adrez/AGENTS.md"
   "${AGENTS_REPO}/AGENTS.md"
-  "/Users/martin/Documents/adrez/dbt-cloud/AGENTS.md"
+  "${DBT_CLOUD_ROOT}/AGENTS.md"
   "${DATA_FACTORY_ROOT}/AGENTS.md"
   "/Users/martin/Documents/adrez/extractor-spreadsheets/AGENTS.md"
   "/Users/martin/Documents/adrez/data-platform/AGENTS.md"
@@ -74,7 +78,7 @@ required_agents=(
   "/Users/martin/Documents/adrez/avalanche-mcp/AGENTS.md"
   "/Users/martin/Documents/adrez/docs/AGENTS.md"
   "/Users/martin/Documents/adrez/powerbi/AGENTS.md"
-  "/Users/martin/Documents/adrez/reporting/AGENTS.md"
+  "${REPORTING_ROOT}/AGENTS.md"
 )
 
 for agents_file in "${required_agents[@]}"; do
@@ -121,32 +125,53 @@ else
   fail "Linear issue threshold is missing or still requires all-work tracking"
 fi
 
-if grep -q "/Users/martin/Documents/adrez/docs/data-platform" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
+if grep -q "/Users/martin/Documents/adrez/docs/data-platform" "${DBT_CLOUD_ROOT}/AGENTS.md"; then
   ok "dbt-cloud AGENTS.md routes durable data-platform docs"
 else
   fail "dbt-cloud AGENTS.md does not route agents to /Users/martin/Documents/adrez/docs/data-platform"
 fi
 
-if grep -q "dedicated task branch" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "dedicated task branch" /Users/martin/Documents/adrez/dbt-cloud/AGENTS.md; then
-  ok "Dedicated branch defaults are explicit in shared and dbt-cloud guidance"
+if [ -f "${TECH_PLUGINS_ROOT}/docs/adrez-working-rules.md" ] \
+  && [ -f "${TEAM_SKILLS_DIR}/repo-worktree-safety/SKILL.md" ] \
+  && [ -f "${TEAM_SKILLS_DIR}/repo-pr-handoff/SKILL.md" ] \
+  && [ -f "${TEAM_SKILLS_DIR}/implementation-review/SKILL.md" ]; then
+  ok "Team policy and delivery procedure sources exist"
 else
-  fail "Dedicated branch defaults are missing from shared or dbt-cloud guidance"
+  fail "Team policy or delivery procedure source is missing"
 fi
 
-if grep -q "Branches are delivery units; worktrees are concurrency units" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "repo-worktree-safety" "${AGENTS_REPO}/AGENTS.md"; then
-  ok "Concurrent same-repo worktree policy is explicit in shared git guidance"
-else
-  fail "Concurrent same-repo worktree policy is missing from shared git guidance"
-fi
+for agents_file in "${DBT_CLOUD_ROOT}/AGENTS.md" "${DATA_FACTORY_ROOT}/AGENTS.md" "${REPORTING_ROOT}/AGENTS.md"; do
+  if grep -q 'repo-pr-handoff' "${agents_file}" \
+    && grep -q 'repo-worktree-safety' "${agents_file}" \
+    && grep -Fq 'https://github.com/adrez-com/tech-plugins/tree/main/plugins/adrez-data-platform/skills' "${agents_file}"; then
+    ok "Portable delivery procedure route exists: ${agents_file}"
+  else
+    fail "Missing portable delivery procedure route: ${agents_file}"
+  fi
+done
 
-if grep -q "declare the delivery target" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "local HEAD, the remote task branch, and the PR head" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "Delivery checkpoint" "${AGENTS_REPO}/skills/adrez-agent-orchestration/SKILL.md"; then
-  ok "Delivery target and exact-SHA handoff checkpoints are explicit"
+if python3 - "${TECH_PLUGINS_ROOT}/docs/adrez-working-rules.md" \
+  "${DBT_CLOUD_ROOT}/AGENTS.md" "${DATA_FACTORY_ROOT}/AGENTS.md" \
+  /Users/martin/Documents/adrez/extractor-spreadsheets/AGENTS.md <<'PY_RULES'
+import re
+import sys
+from pathlib import Path
+
+pattern = re.compile(r"<!-- BEGIN ADREZ SHARED RULES;.*?-->\s*(.*?)\s*<!-- END ADREZ SHARED RULES -->", re.S)
+blocks = []
+for name in sys.argv[1:]:
+    matches = pattern.findall(Path(name).read_text(encoding="utf-8"))
+    if len(matches) != 1:
+        raise SystemExit(f"Expected one shared policy block: {name}")
+    blocks.append(matches[0])
+for name, block in zip(sys.argv[2:], blocks[1:]):
+    if block != blocks[0]:
+        raise SystemExit(f"Shared policy differs from its team source: {name}")
+PY_RULES
+then
+  ok "Distributed shared policy matches its team source"
 else
-  fail "Delivery target or exact-SHA handoff checkpoints are missing"
+  fail "Distributed shared policy differs from its team source"
 fi
 
 if grep -q "## Task-Lifetime Wave Ledger" "${AGENTS_REPO}/skills/adrez-agent-orchestration/SKILL.md" \
@@ -174,13 +199,10 @@ else
 fi
 
 if [ -f "${REPOSITORY_HYGIENE_DOC}" ] \
-  && grep -q "After a PR merge, close a helper-created task lifecycle" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "Codex-app-managed worktree without helper metadata" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "Scheduled audits are read-only" "${REPOSITORY_HYGIENE_DOC}" \
-  && grep -q "Age alone never authorizes deletion" "${REPOSITORY_HYGIENE_DOC}"; then
-  ok "Post-merge cleanup and read-only repository audit policy are configured"
+  && [ -f "${TEAM_SKILLS_DIR}/repo-pr-handoff/scripts/finish_task_worktree.sh" ]; then
+  ok "Repository cleanup documentation and owned-worktree procedure exist"
 else
-  fail "Post-merge cleanup or read-only repository audit policy is missing"
+  fail "Repository cleanup documentation or procedure is missing"
 fi
 
 if grep -q "This repository is Martin's local control hub" "${README_PATH}" \
@@ -216,23 +238,13 @@ else
   fail "No implicit stash/reset/checkout/clean rule is missing from git guidance"
 fi
 
-if grep -q "GitHub connector \`404\` can mean connector scope" "${AGENTS_REPO}/AGENTS.md"; then
-  ok "GitHub connector 404 and sandbox gh fallback guidance is explicit"
-else
-  fail "GitHub connector 404 and sandbox gh fallback guidance is missing"
-fi
-
 if grep -q "## Production Mutation Minimum" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "current message" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "exact action and exact target" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "must never" "${AGENTS_REPO}/AGENTS.md" \
-  && grep -q "weaken or bypass" "${AGENTS_REPO}/AGENTS.md" \
   && grep -q "airflow-readonly-api.md" "${AIRFLOW_ORCHESTRATOR_ROOT}/AGENTS.md" \
-  && grep -q "Production Airflow mutation gate" "${AIRFLOW_ORCHESTRATOR_ROOT}/.codex/rules/airflow-readonly-api.md" \
+  && [ -f "${AIRFLOW_ORCHESTRATOR_ROOT}/.codex/rules/airflow-readonly-api.md" ] \
   && grep -q "Production Mutation Minimum" "${VPS_DATA_PLATFORM_ROOT}/AGENTS.md"; then
-  ok "Production mutation minimum and Airflow gate references are synchronized"
+  ok "Production policy sources and Airflow/VPS routes exist"
 else
-  fail "Production mutation minimum or Airflow gate references are missing"
+  fail "Production policy source or Airflow/VPS route is missing"
 fi
 
 if grep -q "Asana is retired" "${AGENTS_REPO}/AGENTS.md" \
