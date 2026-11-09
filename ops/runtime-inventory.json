@@ -304,22 +304,24 @@
       "id": "semantic-serving",
       "repository": "semantic-serving",
       "runtime": "VPS / Cube and ClickHouse",
-      "trigger": "Airflow semantic refresh stage; continuous serving",
+      "trigger": "Continuous serving; adrez_360 refresh temporarily removed, with semantic phases retained in adrez_360_test",
       "outputs": "Published semantic data copy and Cube endpoints",
       "health_check": "Read livez/readyz and served execution identity; verify data refresh separately",
       "owner": "Data Engineering",
-      "reviewed_on": "2026-10-02",
+      "reviewed_on": "2026-11-09",
       "source_refs": [
         {
-          "path": "vps-data-platform/docker-compose.yml",
+          "path": "semantic-serving/docker-compose.vps.yml",
           "required_patterns": [
-            "semantic-serving-current/docker-compose.vps.yml"
+            "^  clickhouse:$",
+            "^  cube-api:$"
           ]
         },
         {
           "path": "airflow-orchestrator/dags/adrez_360.py",
           "required_patterns": [
-            "semantic_refresh_mode"
+            "pipeline_dag_options\\(semantic_enabled=False\\)",
+            "attach_default_pipeline\\(dag=dag, semantic_enabled=False\\)"
           ]
         }
       ]
@@ -345,24 +347,18 @@
     {
       "id": "powerbi",
       "repository": "powerbi",
-      "runtime": "Microsoft Power BI / Fabric",
-      "trigger": "Airflow dataset refresh stage",
-      "outputs": "Refreshed semantic models and reports",
-      "health_check": "Read dataset refresh history and terminal task results",
+      "runtime": "Retired; historical repository only",
+      "trigger": "None; Power BI is retired",
+      "outputs": "Historical report definitions and Git history",
+      "health_check": "Verify the retirement marker and check current reporting health separately",
       "owner": "Data Engineering",
-      "reviewed_on": "2026-10-02",
+      "reviewed_on": "2026-11-09",
       "source_refs": [
         {
-          "path": "airflow-orchestrator/dags/adrez_360.py",
+          "path": "powerbi/README.md",
           "required_patterns": [
-            "skip_power_bi"
-          ]
-        },
-        {
-          "path": "airflow-orchestrator/plugins/operators/adrez_powerbi.py",
-          "required_patterns": [
-            "class AdrezPowerBIDatasetRefreshOperator\\(BaseOperator\\)",
-            "AdrezPowerBIRefreshTrigger"
+            "^# Power BI \\(Retired\\)$",
+            "Power BI is retired and has been replaced"
           ]
         }
       ]
