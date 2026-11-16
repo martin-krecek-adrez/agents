@@ -38,7 +38,7 @@ def has_scheduled_workflow(text: str, dag_id: str, workflow_name: str) -> bool:
                 continue
             keywords = {entry.arg: entry.value for entry in call.keywords}
             schedule = keywords.get("schedule")
-            if literal(keywords.get("dag_id")) != dag_id or not isinstance(schedule, ast.Call) or name(schedule.func) != "CronTriggerTimetable":
+            if literal(keywords.get("dag_id")) != dag_id or not isinstance(schedule, ast.Call) or name(schedule.func) not in {"CronTriggerTimetable", "MultipleCronTriggerTimetable"}:
                 continue
             for statement in block.body:
                 operator = getattr(statement, "value", None)

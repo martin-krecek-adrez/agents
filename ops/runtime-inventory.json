@@ -46,7 +46,7 @@
         {
           "path": "airflow-orchestrator/dags/adrez_360_ingest_mews.py",
           "required_patterns": [
-            "schedule\\s*=\\s*CronTriggerTimetable\\(",
+            "schedule\\s*=\\s*MultipleCronTriggerTimetable\\(",
             "workflow_name=\"mews-ingestor-scheduler\""
           ],
           "airflow_workflow": {
@@ -320,7 +320,12 @@
         {
           "path": "airflow-orchestrator/dags/adrez_360.py",
           "required_patterns": [
-            "pipeline_dag_options\\(semantic_enabled=False\\)",
+            "pipeline_dag_options\\(semantic_enabled=False\\)"
+          ]
+        },
+        {
+          "path": "airflow-orchestrator/plugins/dag_factories/adrez_360_processing.py",
+          "required_patterns": [
             "attach_default_pipeline\\(dag=dag, semantic_enabled=False\\)"
           ]
         }
