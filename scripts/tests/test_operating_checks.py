@@ -97,6 +97,9 @@ with DAG(dag_id=DAG_ID, schedule=CronTriggerTimetable("0 0 * * *")):
     task = CloudflareWorkflowOperator(workflow_name="mews-scheduler")
 '''
         self.assertTrue(has_scheduled_workflow(source, "mews", "mews-scheduler"))
+        multiple = source.replace("CronTriggerTimetable", "MultipleCronTriggerTimetable")
+        self.assertTrue(has_scheduled_workflow(multiple, "mews", "mews-scheduler"))
+        self.assertFalse(has_scheduled_workflow(source.replace("CronTriggerTimetable", "UnknownTimetable"), "mews", "mews-scheduler"))
         self.assertFalse(has_scheduled_workflow(source.replace('schedule=CronTriggerTimetable("0 0 * * *")', 'schedule=None'), "mews", "mews-scheduler"))
         self.assertFalse(has_scheduled_workflow(source.replace('    task =', '    pass\ntask ='), "mews", "mews-scheduler"))
         self.assertFalse(has_scheduled_workflow(source, "other-dag", "mews-scheduler"))
