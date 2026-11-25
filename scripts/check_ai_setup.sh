@@ -277,10 +277,10 @@ fi
 
 AVALANCHE_METADATA_SKILL="${AGENTS_REPO}/skills/avalanche-metadata-update/SKILL.md"
 if grep -q -- "--product-key l2_base_output" "${AVALANCHE_METADATA_SKILL}" \
-  && grep -q "profiles_output_ai/l2_base_output" "${AVALANCHE_METADATA_SKILL}" \
+  && grep -q "l3_avalanche" "${AVALANCHE_METADATA_SKILL}" \
   && grep -q "mcp_metadata_bundle/catalog.json" "${AVALANCHE_METADATA_SKILL}" \
-  && grep -q "mcp_metadata_bundle_ai/catalog_ai.json" "${AVALANCHE_METADATA_SKILL}" \
-  && grep -q "scripts/run_ai_metadata_refresh.sh" "${AVALANCHE_METADATA_SKILL}" \
+  && grep -q "mcp_metadata_bundle_avalanche/catalog_avalanche.json" "${AVALANCHE_METADATA_SKILL}" \
+  && grep -q "scripts/run_avalanche_metadata_refresh.py" "${AVALANCHE_METADATA_SKILL}" \
   && grep -q "npm run validate-catalog -- --file" "${AVALANCHE_METADATA_SKILL}" \
   && grep -q "rsync -ani --delete" "${AVALANCHE_METADATA_SKILL}"; then
   ok "Avalanche metadata skill uses product-scoped build, both catalogs, validation, and sync dry-run guidance"

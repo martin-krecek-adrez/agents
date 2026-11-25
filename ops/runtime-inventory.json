@@ -417,15 +417,15 @@
       "repository": "metadata-builder",
       "runtime": "Metadata build/export scripts",
       "trigger": "Approved metadata refresh workflow",
-      "outputs": "Main and AI catalog artifacts",
+      "outputs": "Technical and Avalanche 2.0 catalog artifacts",
       "health_check": "Read generated_at, validate contracts and inspect time/relationship semantics",
       "owner": "Data Engineering",
       "reviewed_on": "2026-10-02",
       "source_refs": [
         {
-          "path": "metadata-builder/scripts/run_ai_metadata_refresh.sh",
+          "path": "metadata-builder/scripts/run_avalanche_metadata_refresh.py",
           "required_patterns": [
-            "catalog_ai.json"
+            "catalog_avalanche.json"
           ]
         },
         {
