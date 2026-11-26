@@ -12,78 +12,30 @@ compatibility: Requires /Users/martin/Documents/adrez/metadata-builder and optio
 
 Use this skill when the task is to refresh Avalanche metadata from `metadata-builder`.
 
-## Default scope
-- Primary source repo: `/Users/martin/Documents/adrez/metadata-builder`
-- Primary consumer repo: `/Users/martin/Documents/adrez/avalanche-mcp`
-- Main outputs:
-  - `mcp_metadata_bundle/catalog.json`
-  - `mcp_metadata_bundle_ai/catalog_ai.json`
-  - `mcp_metadata_bundle/metadata/*.json`
+## Catalogs
+
+| Profile | Builder product | Local catalog | R2 object |
+| --- | --- | --- | --- |
+| Technical Avalanche | `l2_base_output` | `mcp_metadata_bundle/catalog.json` | `catalog.json` |
+| Avalanche 2.0 | `l3_avalanche` | `mcp_metadata_bundle_avalanche/catalog_avalanche.json` | `catalog_avalanche_v2.json` |
 
 ## Workflow
-1. Open:
-   - `/Users/martin/Documents/adrez/metadata-builder/AGENTS.md`
-   - `/Users/martin/Documents/adrez/metadata-builder/README.md`
-   - `/Users/martin/Documents/adrez/avalanche-mcp/AGENTS.md` before touching or validating consumer repo files.
-2. Build metadata artifact:
-```bash
-cd /Users/martin/Documents/adrez/metadata-builder
-python scripts/build_metadata_artifact.py \
-  --product-key l2_base_output \
-  --products-config profiles/products.yml \
-  --model gpt-5.4-mini \
-  --max-tokens 1600 \
-  --api-key-file .secrets/openai_api_key.txt
-```
-3. Validate contract:
-```bash
-python scripts/validate_metadata_contract.py \
-  --metadata-dir profiles_output_ai/l2_base_output \
-  --review-governance-dir contracts/agent
-```
-4. Export MCP bundle:
-```bash
-python3 scripts/export_mcp_metadata_json.py \
-  --tables-dir profiles_output_ai/l2_base_output \
-  --global-dir metadata/global \
-  --output-dir mcp_metadata_bundle
-```
-5. Build and export the AI catalog too:
-```bash
-scripts/run_ai_metadata_refresh.sh
-```
-6. Validate both catalog files against the Avalanche catalog schema:
-```bash
-cd /Users/martin/Documents/adrez/avalanche-mcp
-npm run validate-catalog -- --file /Users/martin/Documents/adrez/metadata-builder/mcp_metadata_bundle/catalog.json
-npm run validate-catalog -- --file /Users/martin/Documents/adrez/metadata-builder/mcp_metadata_bundle_ai/catalog_ai.json
-```
-7. Before syncing local Avalanche metadata files, verify the target repo and review a dry run:
-```bash
-git -C /Users/martin/Documents/adrez/avalanche-mcp status -sb
-test -d /Users/martin/Documents/adrez/metadata-builder/mcp_metadata_bundle/metadata
-test -f /Users/martin/Documents/adrez/metadata-builder/mcp_metadata_bundle/catalog.json
-test -f /Users/martin/Documents/adrez/metadata-builder/mcp_metadata_bundle_ai/catalog_ai.json
 
+1. Read the owning repositories' `AGENTS.md` and identify the environment and profile.
+2. For technical metadata, use the [Metadata Builder README](https://github.com/adrez-com/metadata-builder/blob/main/README.md). Run `scripts/build_metadata_artifact.py --product-key l2_base_output` with the maintained product configuration and the approved profiling scope. Validate the profiles with `scripts/validate_metadata_contract.py` before export.
+3. For Avalanche 2.0, use [the catalog guide](https://github.com/adrez-com/metadata-builder/blob/main/docs/avalanche-pilot.md). Run `scripts/run_avalanche_metadata_refresh.py` with `l3_avalanche` and the dbt manifest for the same environment and revision.
+4. Validate each generated catalog from the Avalanche MCP repo with `npm run validate-catalog -- --file <catalog-path>`. Record the catalog path, entity count and dbt revision.
+5. For scheduled builds and R2 publication, use the [Airflow runbook](https://github.com/adrez-com/metadata-builder/blob/main/docs/airflow-metadata-refresh.md) and verify the intended object key after the approved write.
+
+## Optional local sync
+
+Check the target repository and run a dry run before syncing technical metadata to a local consumer.
+
+```bash
+git -C "$AVALANCHE_MCP_REPO" status -sb
 rsync -ani --delete \
-  /Users/martin/Documents/adrez/metadata-builder/mcp_metadata_bundle/metadata/ \
-  /Users/martin/Documents/adrez/avalanche-mcp/metadata/
+  "$METADATA_BUILDER_REPO/mcp_metadata_bundle/metadata/" \
+  "$AVALANCHE_MCP_REPO/metadata/"
 ```
-8. Sync local Avalanche metadata files only when the dry run matches the intended scope:
-```bash
-rsync -a --delete \
-  /Users/martin/Documents/adrez/metadata-builder/mcp_metadata_bundle/metadata/ \
-  /Users/martin/Documents/adrez/avalanche-mcp/metadata/
-```
-9. If the task includes publishing or seeding catalogs, update both Avalanche catalog objects (`catalog.json` and `catalog_ai.json`) using current `avalanche-mcp` repo guidance. Do not use stale `docs/catalog.json` or `seed-catalog` paths.
 
-## Done checklist
-- `profiles_output_ai/l2_base_output` rebuilt.
-- `profiles_output_ai/l2_base_output_ai` rebuilt when AI catalog refresh is in scope.
-- Contract validation passed.
-- `mcp_metadata_bundle/catalog.json` regenerated.
-- `mcp_metadata_bundle_ai/catalog_ai.json` regenerated.
-- Both catalogs validated with `npm run validate-catalog -- --file ...`.
-- Avalanche sync dry run reviewed before any `rsync --delete`.
-- Avalanche local metadata sync completed when in scope.
-- Any skipped step is called out explicitly in handoff.
+Apply the sync only when its scope matches the requested changes.
